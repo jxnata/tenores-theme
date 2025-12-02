@@ -1,0 +1,26 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+
+This is a WordPress theme made with TailPress. It is developed using Vite and Tailwind v4, and then built to produce the WordPress theme files.
+
+Whenever possible, use tailwind to style theme components.
+
+Use the colors defined for the theme to maintain consistency:
+
+-   primary (orange color that appears on some buttons and highlighted text)
+-   secondary (secondary blue color that appears on some buttons and text)
+-   dark (main site background color, dark blue)
+-   light (light color for some components and sections)
+
+Use lucide to render icons.
+
+To display theme images, always load them using the get_theme_image_url() helper so that it works correctly in production.
+
+At the end of the changes, add a summary of what was done to the CHANGELOG.md file, always checking the theme version (based on style.css) and the current date (run a script to obtain the current date). Add what was done below the version and date, for example:
+
+## 0.0.1 - 2025-12-02
+
+-   List of changes here
