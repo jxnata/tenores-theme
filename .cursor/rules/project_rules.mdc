@@ -4,23 +4,76 @@ globs:
 alwaysApply: true
 ---
 
-This is a WordPress theme made with TailPress. It is developed using Vite and Tailwind v4, and then built to produce the WordPress theme files.
+# Tenores WordPress Theme - Project Context
 
-Whenever possible, use tailwind to style theme components.
+## Overview
 
-Use the colors defined for the theme to maintain consistency:
+WordPress theme built with **TailPress** framework, using **Vite** for asset compilation and **Tailwind CSS v4** for styling. The theme features a modular landing page design with organized code structure.
 
--   primary (orange color that appears on some buttons and highlighted text)
--   secondary (secondary blue color that appears on some buttons and text)
--   dark (main site background color, dark blue)
--   light (light color for some components and sections)
+## Technology Stack
 
-Use lucide to render icons.
+-   **WordPress** (theme development)
+-   **TailPress Framework** (WordPress + Tailwind integration)
+-   **Tailwind CSS v4** (utility-first CSS framework)
+-   **Vite** (build tool and dev server)
+-   **Lucide Icons** (icon library loaded via CDN)
+-   **PHP 8+** (backend logic)
 
-To display theme images, always load them using the get_theme_image_url() helper so that it works correctly in production.
+## Project Structure
 
-At the end of the changes, add a summary of what was done to the CHANGELOG.md file, always checking the theme version (based on style.css) and the current date (run a script to obtain the current date). Add what was done below the version and date, for example:
+### Root Files
 
-## 0.0.1 - 2025-12-02
+-   `functions.php` - Main theme bootstrap, loads organized modules
+-   `front-page.php` - Homepage template that loads modular sections
+-   `header.php` / `footer.php` - Theme header and footer
+-   `style.css` - Theme metadata
+-   `theme.json` - WordPress theme configuration (colors, typography)
 
--   List of changes here
+### Organized Modules (`/inc/`)
+
+-   `helpers.php` - Utility functions (e.g., `get_theme_image_url()`)
+-   `theme-settings.php` - Theme options page and settings API
+-   `custom-post-types.php` - Custom post type registrations
+
+### Template Parts (`/template-parts/`)
+
+-   `home/` - Modular homepage sections:
+    -   `hero.php` - Hero section with headline
+    -   `webinar-banner.php` - Webinar promotion banner
+    -   `voice-gold.php` - "Sua Voz é uma Mina de Ouro" section
+    -   `benefits.php` - Benefits grid section
+    -   `testimonial.php` - Testimonials section
+    -   `offer.php` - Pricing/offer section
+    -   `articles.php` - Articles/blog section
+
+### Assets (`/resources/`)
+
+-   `css/` - Stylesheets (app.css, theme.css, utilities.css, custom.css)
+-   `js/` - JavaScript files (app.js)
+-   `images/` - Theme images and icons (SVG, PNG)
+
+## Theme Configuration
+
+### Color Palette (defined in `theme.json`)
+
+-   **primary**: `#FF6A00` (orange)
+-   **secondary**: `#40E0D0` (teal/cyan)
+-   **dark**: `#001123` (dark blue - main background)
+-   **light**: `#F4F4F5` (light gray)
+
+## Development Workflow
+
+1. **Images:** Always use `get_theme_image_url()` helper for images
+2. **Icons:** Use Lucide icons with `data-lucide` attribute (auto-initialized)
+3. **Changelog:** At the end of the changes, add a summary of what was done to the CHANGELOG.md file, always checking the theme version (based on style.css) and the current date (run a script to obtain the current date). Add what was done below the version and date, for example:
+
+	## 0.0.1 - 2025-12-02
+
+	-   List of changes here
+
+## Code Organization Principles
+
+-   **Modular:** Each homepage section is a separate template part
+-   **Organized:** Related functionality grouped in `/inc/` modules
+-   **Consistent:** Follow Tailwind utility classes, use theme colors
+-   **WordPress Standards:** Follow WordPress coding standards and best practices

@@ -15,14 +15,18 @@ function tenores_get_theme_settings(): array
 	}
 
 	$defaults = [
-		'banner'          => '',
-		'headline'        => '',
-		'contact_email'   => '',
-		'contact_phone'   => '',
-		'cto_url'         => '',
-		'webinar_enabled' => 0,
-		'webinar_date'    => '',
-		'webinar_url'     => '',
+		'banner'            => '',
+		'headline'          => '',
+		'contact_email'     => '',
+		'contact_phone'     => '',
+		'cto_url'           => '',
+		'social_linkedin'   => '',
+		'social_facebook'   => '',
+		'social_instagram'  => '',
+		'social_youtube'    => '',
+		'webinar_enabled'   => 0,
+		'webinar_date'      => '',
+		'webinar_url'       => '',
 	];
 
 	return array_merge($defaults, $settings);
@@ -107,6 +111,58 @@ function tenores_register_theme_settings(): void
 			'key'         => 'cto_url',
 			'type'        => 'url',
 			'placeholder' => 'https://exemplo.com/inscricao',
+		]
+	);
+
+	add_settings_field(
+		'tenores_social_linkedin',
+		__('URL do LinkedIn', 'tenores'),
+		'tenores_render_text_field',
+		'tenores_theme_settings',
+		'tenores_theme_main_section',
+		[
+			'key'         => 'social_linkedin',
+			'type'        => 'url',
+			'placeholder' => 'https://linkedin.com/in/seu-perfil',
+		]
+	);
+
+	add_settings_field(
+		'tenores_social_facebook',
+		__('URL do Facebook', 'tenores'),
+		'tenores_render_text_field',
+		'tenores_theme_settings',
+		'tenores_theme_main_section',
+		[
+			'key'         => 'social_facebook',
+			'type'        => 'url',
+			'placeholder' => 'https://facebook.com/sua-pagina',
+		]
+	);
+
+	add_settings_field(
+		'tenores_social_instagram',
+		__('URL do Instagram', 'tenores'),
+		'tenores_render_text_field',
+		'tenores_theme_settings',
+		'tenores_theme_main_section',
+		[
+			'key'         => 'social_instagram',
+			'type'        => 'url',
+			'placeholder' => 'https://instagram.com/seu-perfil',
+		]
+	);
+
+	add_settings_field(
+		'tenores_social_youtube',
+		__('URL do YouTube', 'tenores'),
+		'tenores_render_text_field',
+		'tenores_theme_settings',
+		'tenores_theme_main_section',
+		[
+			'key'         => 'social_youtube',
+			'type'        => 'url',
+			'placeholder' => 'https://youtube.com/seu-canal',
 		]
 	);
 
@@ -282,14 +338,18 @@ function tenores_sanitize_theme_settings($input): array
 		'p'      => ['class' => [], 'style' => []],
 	];
 
-	$output['banner']          = isset($input['banner']) ? sanitize_text_field($input['banner']) : '';
-	$output['headline']        = isset($input['headline']) ? wp_kses($input['headline'], $allowed_html) : '';
-	$output['contact_email']   = isset($input['contact_email']) ? sanitize_email($input['contact_email']) : '';
-	$output['contact_phone']   = isset($input['contact_phone']) ? sanitize_text_field($input['contact_phone']) : '';
-	$output['cto_url']         = isset($input['cto_url']) ? esc_url_raw($input['cto_url']) : '';
-	$output['webinar_enabled'] = !empty($input['webinar_enabled']) ? 1 : 0;
-	$output['webinar_date']    = isset($input['webinar_date']) ? sanitize_text_field($input['webinar_date']) : '';
-	$output['webinar_url']     = isset($input['webinar_url']) ? esc_url_raw($input['webinar_url']) : '';
+	$output['banner']           = isset($input['banner']) ? sanitize_text_field($input['banner']) : '';
+	$output['headline']         = isset($input['headline']) ? wp_kses($input['headline'], $allowed_html) : '';
+	$output['contact_email']    = isset($input['contact_email']) ? sanitize_email($input['contact_email']) : '';
+	$output['contact_phone']    = isset($input['contact_phone']) ? sanitize_text_field($input['contact_phone']) : '';
+	$output['cto_url']          = isset($input['cto_url']) ? esc_url_raw($input['cto_url']) : '';
+	$output['social_linkedin']  = isset($input['social_linkedin']) ? esc_url_raw($input['social_linkedin']) : '';
+	$output['social_facebook']  = isset($input['social_facebook']) ? esc_url_raw($input['social_facebook']) : '';
+	$output['social_instagram'] = isset($input['social_instagram']) ? esc_url_raw($input['social_instagram']) : '';
+	$output['social_youtube']   = isset($input['social_youtube']) ? esc_url_raw($input['social_youtube']) : '';
+	$output['webinar_enabled']  = !empty($input['webinar_enabled']) ? 1 : 0;
+	$output['webinar_date']     = isset($input['webinar_date']) ? sanitize_text_field($input['webinar_date']) : '';
+	$output['webinar_url']      = isset($input['webinar_url']) ? esc_url_raw($input['webinar_url']) : '';
 
 	return $output;
 }
