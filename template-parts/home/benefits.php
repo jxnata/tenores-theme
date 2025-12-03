@@ -62,7 +62,7 @@
 
                 foreach ($benefits as $benefit): ?>
                     <div class="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 flex flex-row">
-                        <div class="rounded-2xl text-dark px-5 pb-6 pt-6 flex flex-col gap-4 shadow-lg shadow-black/20 space-y-2 bg-light w-full ml-8 mr-8 sm:ml-4 sm:mr-4">
+                        <div class="rounded-2xl text-dark px-5 pb-6 pt-6 flex flex-col gap-4 shadow-lg shadow-black/20 space-y-2 bg-light w-full mx-8 sm:mx-4">
                             <h3 class="text-sm font-black uppercase tracking-widest text-primary">
                                 <?php echo esc_html($benefit['title']); ?>
                             </h3>
