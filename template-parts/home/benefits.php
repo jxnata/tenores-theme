@@ -23,7 +23,6 @@
             id="benefits-carousel"
             class="mt-10"
             data-carousel="true"
-            data-carousel-visible="4"
             data-carousel-step="1"
             data-carousel-interval="6000">
             <div class="flex flex-row transition-transform duration-500 ease-out will-change-transform" data-carousel-track>

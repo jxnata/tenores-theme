@@ -8,7 +8,8 @@ class Carousel {
 		const stepFromData = parseInt(rootElement.dataset.carouselStep || '', 10)
 		const intervalFromData = parseInt(rootElement.dataset.carouselInterval || '', 10)
 
-		this.defaultVisibleItems = !Number.isNaN(visibleFromData) ? visibleFromData : options.visibleItems || 1
+		this.hasFixedVisibleItems = !Number.isNaN(visibleFromData)
+		this.defaultVisibleItems = this.hasFixedVisibleItems ? visibleFromData : options.visibleItems || 1
 		this.visibleItems = this.defaultVisibleItems
 		this.step = !Number.isNaN(stepFromData) ? stepFromData : options.step || 1
 		this.interval = !Number.isNaN(intervalFromData) ? intervalFromData : options.interval || 5000
@@ -36,11 +37,14 @@ class Carousel {
 	}
 
 	initialize() {
-		this.updateResponsiveVisibleItems()
+		if (!this.hasFixedVisibleItems) {
+			this.updateResponsiveVisibleItems()
+		}
 		this.maxIndex = Math.max(0, this.totalItems - this.visibleItems)
 
 		this.items.forEach((item) => {
-			item.style.flex = `0 0 ${100 / this.visibleItems}%`
+			const flexBasis = this.visibleItems === 1 ? '100%' : `${100 / this.visibleItems}%`
+			item.style.flex = `0 0 ${flexBasis}`
 		})
 
 		this.createPagination()
@@ -56,6 +60,10 @@ class Carousel {
 		})
 
 		window.addEventListener('resize', () => {
+			if (this.hasFixedVisibleItems) {
+				return
+			}
+
 			const previousVisibleItems = this.visibleItems
 			this.updateResponsiveVisibleItems()
 
@@ -68,7 +76,8 @@ class Carousel {
 			}
 
 			this.items.forEach((item) => {
-				item.style.flex = `0 0 ${100 / this.visibleItems}%`
+				const flexBasis = this.visibleItems === 1 ? '100%' : `${100 / this.visibleItems}%`
+				item.style.flex = `0 0 ${flexBasis}`
 			})
 			this.update()
 		})
