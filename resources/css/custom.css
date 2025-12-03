@@ -2,6 +2,28 @@ body {
 	font-family: 'Montserrat', sans-serif;
 }
 
+.carousel-dot {
+	width: 0.75rem;
+	height: 0.75rem;
+	border-radius: 9999px;
+	border-width: 1px;
+	border-style: solid;
+	border-color: rgba(148, 163, 184, 1);
+	background-color: transparent;
+	transition-property: background-color, border-color, transform;
+	transition-duration: 200ms;
+}
+
+.carousel-dot:hover {
+	transform: scale(1.05);
+	border-color: rgba(251, 146, 60, 1);
+}
+
+.carousel-dot.is-active {
+	background-color: rgba(251, 146, 60, 1);
+	border-color: rgba(251, 146, 60, 1);
+}
+
 .entry-content,
 .block-editor-block-list__layout {
 	color: var(--color-zinc-950);
