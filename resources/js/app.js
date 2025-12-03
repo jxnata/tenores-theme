@@ -173,6 +173,8 @@ class Carousel {
 }
 
 window.addEventListener('load', () => {
+	lucide.createIcons()
+
 	const mainNavigation = document.getElementById('primary-navigation')
 	const mainNavigationToggle = document.getElementById('primary-menu-toggle')
 

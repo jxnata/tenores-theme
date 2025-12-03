@@ -16,5 +16,6 @@ Todas as principais alterações no tema serão documentadas nesse arquivo
 -	Implementada a seção de webinar
 -	Implementada a seção de CTO
 -	Implementada a seção de benefícios
--   Implementado componente de carousel JavaScript reutilizável.
--   Aplicado o carousel à seção de benefícios da home, exibindo até 4 itens por vez com navegação em slide e paginação.
+-   Implementado componente de carousel JavaScript reutilizável
+-   Aplicado o carousel à seção de benefícios da home, exibindo até 4 itens por vez com navegação em slide e paginação
+-   Implementada a seção de depoimentos com carousel
