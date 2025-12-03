@@ -19,3 +19,4 @@ Todas as principais alterações no tema serão documentadas nesse arquivo
 -   Implementado componente de carousel JavaScript reutilizável
 -   Aplicado o carousel à seção de benefícios da home, exibindo até 4 itens por vez com navegação em slide e paginação
 -   Implementada a seção de depoimentos com carousel
+-   Implementada a seção de oferta
