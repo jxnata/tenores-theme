@@ -15,18 +15,20 @@ function tenores_get_theme_settings(): array
 	}
 
 	$defaults = [
-		'banner'            => '',
-		'headline'          => '',
-		'contact_email'     => '',
-		'contact_phone'     => '',
-		'cto_url'           => '',
-		'social_linkedin'   => '',
-		'social_facebook'   => '',
-		'social_instagram'  => '',
-		'social_youtube'    => '',
-		'webinar_enabled'   => 0,
-		'webinar_date'      => '',
-		'webinar_url'       => '',
+		'banner'              => '',
+		'headline'            => '',
+		'contact_email'       => '',
+		'contact_phone'       => '',
+		'cto_url'             => '',
+		'social_linkedin'     => '',
+		'social_facebook'     => '',
+		'social_instagram'    => '',
+		'social_youtube'      => '',
+		'footer_menu_primary' => '',
+		'footer_menu_secondary' => '',
+		'webinar_enabled'     => 0,
+		'webinar_date'        => '',
+		'webinar_url'         => '',
 	];
 
 	return array_merge($defaults, $settings);
@@ -163,6 +165,28 @@ function tenores_register_theme_settings(): void
 			'key'         => 'social_youtube',
 			'type'        => 'url',
 			'placeholder' => 'https://youtube.com/seu-canal',
+		]
+	);
+
+	add_settings_field(
+		'tenores_footer_menu_primary',
+		__('Menu Principal do Footer', 'tenores'),
+		'tenores_render_menu_select_field',
+		'tenores_theme_settings',
+		'tenores_theme_main_section',
+		[
+			'key' => 'footer_menu_primary',
+		]
+	);
+
+	add_settings_field(
+		'tenores_footer_menu_secondary',
+		__('Menu Secundário do Footer', 'tenores'),
+		'tenores_render_menu_select_field',
+		'tenores_theme_settings',
+		'tenores_theme_main_section',
+		[
+			'key' => 'footer_menu_secondary',
 		]
 	);
 
@@ -321,6 +345,46 @@ function tenores_render_checkbox_field(array $args): void
 	);
 }
 
+function tenores_render_menu_select_field(array $args): void
+{
+	$settings = tenores_get_theme_settings();
+	$key      = $args['key'] ?? '';
+	$value    = isset($settings[$key]) ? (string) $settings[$key] : '';
+	$menus    = wp_get_nav_menus();
+
+	printf(
+		'<select id="%1$s" name="%2$s[%1$s]" class="regular-text">',
+		esc_attr($key),
+		esc_attr(TENORES_SETTINGS_OPTION)
+	);
+
+	printf(
+		'<option value="">%s</option>',
+		esc_html__('-- Selecione um menu --', 'tenores')
+	);
+
+	foreach ($menus as $menu) {
+		printf(
+			'<option value="%1$s" %2$s>%3$s</option>',
+			esc_attr($menu->term_id),
+			selected($value, $menu->term_id, false),
+			esc_html($menu->name)
+		);
+	}
+
+	echo '</select>';
+	echo '<p class="description">';
+	printf(
+		esc_html__('Crie ou gerencie menus em %s.', 'tenores'),
+		sprintf(
+			'<a href="%s">%s</a>',
+			esc_url(admin_url('nav-menus.php')),
+			esc_html__('Aparência > Menus', 'tenores')
+		)
+	);
+	echo '</p>';
+}
+
 function tenores_sanitize_theme_settings($input): array
 {
 	if (!is_array($input)) {
@@ -338,18 +402,20 @@ function tenores_sanitize_theme_settings($input): array
 		'p'      => ['class' => [], 'style' => []],
 	];
 
-	$output['banner']           = isset($input['banner']) ? sanitize_text_field($input['banner']) : '';
-	$output['headline']         = isset($input['headline']) ? wp_kses($input['headline'], $allowed_html) : '';
-	$output['contact_email']    = isset($input['contact_email']) ? sanitize_email($input['contact_email']) : '';
-	$output['contact_phone']    = isset($input['contact_phone']) ? sanitize_text_field($input['contact_phone']) : '';
-	$output['cto_url']          = isset($input['cto_url']) ? esc_url_raw($input['cto_url']) : '';
-	$output['social_linkedin']  = isset($input['social_linkedin']) ? esc_url_raw($input['social_linkedin']) : '';
-	$output['social_facebook']  = isset($input['social_facebook']) ? esc_url_raw($input['social_facebook']) : '';
-	$output['social_instagram'] = isset($input['social_instagram']) ? esc_url_raw($input['social_instagram']) : '';
-	$output['social_youtube']   = isset($input['social_youtube']) ? esc_url_raw($input['social_youtube']) : '';
-	$output['webinar_enabled']  = !empty($input['webinar_enabled']) ? 1 : 0;
-	$output['webinar_date']     = isset($input['webinar_date']) ? sanitize_text_field($input['webinar_date']) : '';
-	$output['webinar_url']      = isset($input['webinar_url']) ? esc_url_raw($input['webinar_url']) : '';
+	$output['banner']              = isset($input['banner']) ? sanitize_text_field($input['banner']) : '';
+	$output['headline']            = isset($input['headline']) ? wp_kses($input['headline'], $allowed_html) : '';
+	$output['contact_email']       = isset($input['contact_email']) ? sanitize_email($input['contact_email']) : '';
+	$output['contact_phone']       = isset($input['contact_phone']) ? sanitize_text_field($input['contact_phone']) : '';
+	$output['cto_url']             = isset($input['cto_url']) ? esc_url_raw($input['cto_url']) : '';
+	$output['social_linkedin']     = isset($input['social_linkedin']) ? esc_url_raw($input['social_linkedin']) : '';
+	$output['social_facebook']     = isset($input['social_facebook']) ? esc_url_raw($input['social_facebook']) : '';
+	$output['social_instagram']    = isset($input['social_instagram']) ? esc_url_raw($input['social_instagram']) : '';
+	$output['social_youtube']      = isset($input['social_youtube']) ? esc_url_raw($input['social_youtube']) : '';
+	$output['footer_menu_primary'] = isset($input['footer_menu_primary']) ? absint($input['footer_menu_primary']) : '';
+	$output['footer_menu_secondary'] = isset($input['footer_menu_secondary']) ? absint($input['footer_menu_secondary']) : '';
+	$output['webinar_enabled']     = !empty($input['webinar_enabled']) ? 1 : 0;
+	$output['webinar_date']        = isset($input['webinar_date']) ? sanitize_text_field($input['webinar_date']) : '';
+	$output['webinar_url']         = isset($input['webinar_url']) ? esc_url_raw($input['webinar_url']) : '';
 
 	return $output;
 }

@@ -21,3 +21,13 @@ Todas as principais alterações no tema serão documentadas nesse arquivo
 -   Implementada a seção de depoimentos com carousel
 -   Implementada a seção de oferta
 -   Implementada a seção de artigos
+
+## 0.0.3 - 2025-12-04
+
+-   Header fixo com background transparente, posicionado sobre o banner hero
+-   Substituição do texto do link da página inicial por ícone home (Lucide) no menu de navegação
+
+## 0.0.4 - 2025-12-09
+
+-   Adicionados campos de seleção de menu principal e menu secundário do footer na página de configurações do tema
+-   Implementada renderização dinâmica dos menus do footer baseada na seleção feita nas configurações

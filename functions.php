@@ -50,3 +50,21 @@ tailpress();
 require_once __DIR__ . '/inc/helpers.php';
 require_once __DIR__ . '/inc/theme-settings.php';
 require_once __DIR__ . '/inc/custom-post-types.php';
+
+/**
+ * Substitui o texto do link da página inicial por um ícone home (Lucide).
+ */
+function tenores_replace_home_menu_icon($title, $item, $args, $depth)
+{
+    if (isset($args->theme_location) && $args->theme_location === 'primary') {
+        $home_url = home_url('/');
+        
+        if ($item->url === $home_url || $item->url === trailingslashit($home_url)) {
+            return '<i data-lucide="home" class="size-5"></i>';
+        }
+    }
+    
+    return $title;
+}
+
+add_filter('nav_menu_item_title', 'tenores_replace_home_menu_icon', 10, 4);

@@ -6,7 +6,7 @@
  * @package Tenores
  */
 
-$settings        = tenores_get_theme_settings();
+$settings = tenores_get_theme_settings();
 ?>
 
 <?php if ($settings['webinar_enabled'] === 1) : ?>
