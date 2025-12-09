@@ -31,3 +31,15 @@ Todas as principais alterações no tema serão documentadas nesse arquivo
 
 -   Adicionados campos de seleção de menu principal e menu secundário do footer na página de configurações do tema
 -   Implementada renderização dinâmica dos menus do footer baseada na seleção feita nas configurações
+
+## 0.0.5 - 2025-12-09
+
+-   Header com transparência apenas na página inicial, fundo preto em outras páginas
+-   Criado template page.php para exibir imagem destacada no estilo hero quando disponível
+-   Posts individuais: título em extrabold e uppercase, largura do conteúdo aumentada, autor removido
+-   Página do blog: autor removido, imagem destacada exibida, título em uppercase com cor text-dark, botão "Ler artigo" sem fundo e com underline
+
+## 0.0.6 - 2025-12-09
+
+-   Criado shortcode [tenores_oferta] para exibir a seção de oferta em qualquer página ou post
+-   Adicionada seção "Shortcodes Disponíveis" na página de configurações do tema com informações sobre o shortcode

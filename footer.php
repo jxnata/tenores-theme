@@ -15,7 +15,7 @@
 
 <?php do_action('tailpress_content_after'); ?>
 
-<footer id="colophon" class="bg-dark pt-12 text-white font-semibold" role="contentinfo">
+<footer id="colophon" class="bg-dark <?php echo is_front_page() ? 'pt-12' : 'mt-12'; ?> text-white font-semibold" role="contentinfo">
 
     <div class="w-full">
         <div class="container mx-auto py-8">

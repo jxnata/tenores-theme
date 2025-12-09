@@ -268,6 +268,33 @@ function tenores_render_theme_settings_page(): void
 			submit_button();
 			?>
 		</form>
+
+		<hr class="wp-header-end" style="margin: 30px 0;">
+
+		<div class="card" style="max-width: 800px;">
+			<h2><?php esc_html_e('Shortcodes Disponíveis', 'tenores'); ?></h2>
+			<p><?php esc_html_e('Use os shortcodes abaixo para inserir seções do tema em qualquer página ou post:', 'tenores'); ?></p>
+
+			<table class="form-table" role="presentation">
+				<tbody>
+					<tr>
+						<th scope="row">
+							<label><?php esc_html_e('Seção de Oferta', 'tenores'); ?></label>
+						</th>
+						<td>
+							<code>[tenores_oferta]</code>
+							<p class="description">
+								<?php esc_html_e('Exibe a seção de oferta com preços e benefícios. Use este shortcode em qualquer página ou post onde desejar mostrar a oferta.', 'tenores'); ?>
+							</p>
+							<p class="description" style="margin-top: 10px;">
+								<strong><?php esc_html_e('Exemplo de uso:', 'tenores'); ?></strong><br>
+								<code>[tenores_oferta]</code>
+							</p>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	</div>
 <?php
 }

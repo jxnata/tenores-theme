@@ -17,17 +17,17 @@
     <?php wp_head(); ?>
 </head>
 
-<body <?php body_class('bg-dark text-white antialiased'); ?>>
+<body <?php body_class('bg-white text-zinc-900 antialiased'); ?>>
     <?php do_action('tailpress_site_before'); ?>
 
     <div id="page" class="min-h-screen flex flex-col">
         <?php do_action('tailpress_header'); ?>
 
-        <header class="fixed top-0 left-0 right-0 z-50 bg-transparent">
-            <div class="container mx-auto py-6">
-                <div class="md:flex md:justify-between md:items-center">
+        <header class="fixed top-0 left-0 right-0 z-50 <?php echo is_front_page() ? 'bg-black/40 backdrop-blur-sm' : 'bg-black'; ?>">
+            <div class="max-w-7xl mx-auto p-4">
+                <div class="lg:flex lg:justify-between lg:items-center">
                     <div class="flex justify-between items-center">
-                        <div>
+                        <div class="[&_img]:max-h-12 [&_img]:w-auto">
                             <?php if (has_custom_logo()): ?>
                                 <?php the_custom_logo(); ?>
                             <?php else: ?>
@@ -44,7 +44,7 @@
                         </div>
 
                         <?php if (has_nav_menu('primary')): ?>
-                            <div class="md:hidden">
+                            <div class="lg:hidden">
                                 <button type="button" aria-label="Toggle navigation" id="primary-menu-toggle" class="text-white">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
@@ -54,9 +54,9 @@
                         <?php endif; ?>
                     </div>
 
-                    <div id="primary-navigation" class="hidden md:flex md:bg-transparent gap-6 items-center border border-white/20 md:border-none rounded-xl p-4 md:p-0">
+                    <div id="primary-navigation" class="hidden lg:flex lg:bg-transparent gap-6 items-center border border-white/20 lg:border-none rounded-xl p-4 lg:p-0">
 
-                        <div class="inline-block mt-4 md:mt-0 [&_input]:text-white [&_input]:border-none [&_input]:rounded-none border-b-2 border-white/60 [&_input]:placeholder:text-white/70 [&_input]:bg-transparent [&_svg]:text-white/70"><?php get_search_form(); ?></div>
+                        <div class="inline-block w-full lg:w-auto mt-2 lg:mt-0 [&_input]:text-white [&_input]:border-none [&_input]:rounded-none border-b-2 border-white/60 [&_input]:placeholder:text-white/70 [&_input]:bg-transparent [&_svg]:text-white/70"><?php get_search_form(); ?></div>
 
                         <nav>
                             <?php if (current_user_can('administrator') && !has_nav_menu('primary')): ?>
@@ -65,10 +65,10 @@
                                 <?php
                                 wp_nav_menu([
                                     'container_id'    => 'primary-menu',
-                                    'container_class' => '',
-                                    'menu_class'      => 'md:flex md:-mx-4 [&_a]:!no-underline [&_a]:text-white uppercase font-bold text-sm [&_a]:hover:text-secondary [&_a]:transition-colors [&_a]:duration-300',
+                                    'container_class' => 'py-4 lg:py-0',
+                                    'menu_class'      => 'flex flex-col gap-2 lg:gap-6 lg:flex-row [&_a]:!no-underline [&_a]:text-white uppercase font-bold text-sm [&_a]:hover:text-secondary [&_a]:transition-colors [&_a]:duration-300',
                                     'theme_location'  => 'primary',
-                                    'li_class'        => 'md:mx-4',
+                                    'li_class'        => '',
                                     'fallback_cb'     => false,
                                 ]);
                                 ?>

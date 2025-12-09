@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Main template file for displaying posts.
  *
@@ -8,9 +9,15 @@
 get_header();
 ?>
 
-<div class="container mx-auto space-y-24 lg:space-y-32">
+<div class="container mx-auto space-y-6 lg:space-y-12 mb-12 lg:mb-24">
 	<?php if (!is_singular()): ?>
-		<?php if (is_archive()): ?>
+		<?php if (is_home() && !is_paged()): ?>
+			<header class="my-24">
+				<h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold uppercase">
+					ARTIGOS RECENTES
+				</h1>
+			</header>
+		<?php elseif (is_archive()): ?>
 			<header class="mb-8">
 				<h1 class="text-3xl font-semibold">
 					<?php the_archive_title(); ?>
@@ -67,13 +74,13 @@ get_header();
 		<?php endif; ?>
 	<?php endif; ?>
 
-    <?php if (have_posts()): ?>
-        <?php while (have_posts()): the_post(); ?>
-            <?php get_template_part('template-parts/content', is_singular() ? 'single' : ''); ?>
-        <?php endwhile; ?>
+	<?php if (have_posts()): ?>
+		<?php while (have_posts()): the_post(); ?>
+			<?php get_template_part('template-parts/content', is_singular() ? 'single' : ''); ?>
+		<?php endwhile; ?>
 
-        <?php TailPress\Pagination::render(); ?>
-    <?php endif; ?>
+		<?php TailPress\Pagination::render(); ?>
+	<?php endif; ?>
 </div>
 
 <?php
