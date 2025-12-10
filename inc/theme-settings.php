@@ -55,13 +55,11 @@ function tenores_register_theme_settings(): void
 	add_settings_field(
 		'tenores_banner',
 		__('Banner', 'tenores'),
-		'tenores_render_text_field',
+		'tenores_render_image_upload_field',
 		'tenores_theme_settings',
 		'tenores_theme_main_section',
 		[
-			'key'         => 'banner',
-			'type'        => 'text',
-			'placeholder' => __('Texto do banner principal', 'tenores'),
+			'key' => 'banner',
 		]
 	);
 
@@ -286,10 +284,6 @@ function tenores_render_theme_settings_page(): void
 							<p class="description">
 								<?php esc_html_e('Exibe a seção de oferta com preços e benefícios. Use este shortcode em qualquer página ou post onde desejar mostrar a oferta.', 'tenores'); ?>
 							</p>
-							<p class="description" style="margin-top: 10px;">
-								<strong><?php esc_html_e('Exemplo de uso:', 'tenores'); ?></strong><br>
-								<code>[tenores_oferta]</code>
-							</p>
 						</td>
 					</tr>
 				</tbody>
@@ -412,6 +406,96 @@ function tenores_render_menu_select_field(array $args): void
 	echo '</p>';
 }
 
+function tenores_render_image_upload_field(array $args): void
+{
+	$settings = tenores_get_theme_settings();
+	$key      = $args['key'] ?? '';
+	$value    = isset($settings[$key]) ? absint($settings[$key]) : 0;
+	$image_url = '';
+
+	if ($value) {
+		$image_url = wp_get_attachment_image_url($value, 'full');
+	}
+
+	wp_enqueue_media();
+?>
+	<div class="tenores-image-upload-wrapper">
+		<input type="hidden" id="<?php echo esc_attr($key); ?>" name="<?php echo esc_attr(TENORES_SETTINGS_OPTION); ?>[<?php echo esc_attr($key); ?>]" value="<?php echo esc_attr($value); ?>" />
+
+		<div id="<?php echo esc_attr($key); ?>_preview" class="tenores-image-preview" style="margin-bottom: 10px;">
+			<?php if ($image_url) : ?>
+				<img src="<?php echo esc_url($image_url); ?>" style="max-width: 300px; height: auto; display: block;" />
+			<?php endif; ?>
+		</div>
+
+		<button type="button" class="button tenores-upload-image-button" data-target="<?php echo esc_attr($key); ?>">
+			<?php echo $value ? esc_html__('Alterar imagem', 'tenores') : esc_html__('Selecionar imagem', 'tenores'); ?>
+		</button>
+
+		<?php if ($value) : ?>
+			<button type="button" class="button tenores-remove-image-button" data-target="<?php echo esc_attr($key); ?>" style="margin-left: 5px;">
+				<?php esc_html_e('Remover imagem', 'tenores'); ?>
+			</button>
+		<?php endif; ?>
+
+		<p class="description">
+			<?php esc_html_e('Selecione uma imagem para usar como background do banner. Se nenhuma imagem for selecionada, será usada a imagem padrão do tema.', 'tenores'); ?>
+		</p>
+	</div>
+
+	<script>
+		jQuery(document).ready(function($) {
+			var file_frame;
+
+			$(document).on('click', '.tenores-upload-image-button', function(e) {
+				e.preventDefault();
+
+				var button = $(this);
+				var target = button.data('target');
+
+				if (file_frame) {
+					file_frame.open();
+					return;
+				}
+
+				file_frame = wp.media({
+					title: '<?php esc_html_e('Selecionar imagem', 'tenores'); ?>',
+					button: {
+						text: '<?php esc_html_e('Usar esta imagem', 'tenores'); ?>'
+					},
+					multiple: false
+				});
+
+				file_frame.on('select', function() {
+					var attachment = file_frame.state().get('selection').first().toJSON();
+					$('#' + target).val(attachment.id);
+					$('#' + target + '_preview').html('<img src="' + attachment.url + '" style="max-width: 300px; height: auto; display: block;" />');
+					button.text('<?php esc_html_e('Alterar imagem', 'tenores'); ?>');
+
+					if (!$('.tenores-remove-image-button[data-target="' + target + '"]').length) {
+						button.after('<button type="button" class="button tenores-remove-image-button" data-target="' + target + '" style="margin-left: 5px;"><?php esc_html_e('Remover imagem', 'tenores'); ?></button>');
+					}
+				});
+
+				file_frame.open();
+			});
+
+			$(document).on('click', '.tenores-remove-image-button', function(e) {
+				e.preventDefault();
+
+				var button = $(this);
+				var target = button.data('target');
+
+				$('#' + target).val('');
+				$('#' + target + '_preview').html('');
+				$('.tenores-upload-image-button[data-target="' + target + '"]').text('<?php esc_html_e('Selecionar imagem', 'tenores'); ?>');
+				button.remove();
+			});
+		});
+	</script>
+<?php
+}
+
 function tenores_sanitize_theme_settings($input): array
 {
 	if (!is_array($input)) {
@@ -429,7 +513,7 @@ function tenores_sanitize_theme_settings($input): array
 		'p'      => ['class' => [], 'style' => []],
 	];
 
-	$output['banner']              = isset($input['banner']) ? sanitize_text_field($input['banner']) : '';
+	$output['banner']              = isset($input['banner']) ? absint($input['banner']) : 0;
 	$output['headline']            = isset($input['headline']) ? wp_kses($input['headline'], $allowed_html) : '';
 	$output['contact_email']       = isset($input['contact_email']) ? sanitize_email($input['contact_email']) : '';
 	$output['contact_phone']       = isset($input['contact_phone']) ? sanitize_text_field($input['contact_phone']) : '';

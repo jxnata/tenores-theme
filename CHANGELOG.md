@@ -43,3 +43,9 @@ Todas as principais alterações no tema serão documentadas nesse arquivo
 
 -   Criado shortcode [tenores_oferta] para exibir a seção de oferta em qualquer página ou post
 -   Adicionada seção "Shortcodes Disponíveis" na página de configurações do tema com informações sobre o shortcode
+
+## 0.0.7 - 2025-12-10
+
+-   Alterado campo "Banner" nas configurações do tema de campo de texto para upload de imagem
+-   Implementada função de upload de imagem com preview e botões de seleção/remoção
+-   Atualizada seção hero para usar imagem das configurações ou imagem padrão do tema como fallback

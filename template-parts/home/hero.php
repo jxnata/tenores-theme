@@ -6,8 +6,11 @@
  * @package Tenores
  */
 
-$hero_background = get_theme_image_url('banner.png');
 $settings        = tenores_get_theme_settings();
+$banner_image_id = !empty($settings['banner']) ? absint($settings['banner']) : 0;
+$hero_background = $banner_image_id
+    ? wp_get_attachment_image_url($banner_image_id, 'full')
+    : get_theme_image_url('banner.png');
 $headline        = !empty($settings['headline']) ? $settings['headline'] : 'Fala autêntica<br><span class="text-secondary">Resultados reais</span>';
 ?>
 
