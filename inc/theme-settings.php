@@ -38,6 +38,11 @@ function tenores_get_theme_settings(): array
 	return array_merge($defaults, $settings);
 }
 
+function tenores_can_manage_theme_settings(): bool
+{
+	return current_user_can('manage_options') || current_user_can('edit_others_posts');
+}
+
 function tenores_register_theme_settings(): void
 {
 	register_setting(
@@ -46,6 +51,7 @@ function tenores_register_theme_settings(): void
 		[
 			'type'              => 'array',
 			'sanitize_callback' => 'tenores_sanitize_theme_settings',
+			'capability'        => 'edit_others_posts',
 		]
 	);
 
@@ -298,7 +304,7 @@ function tenores_add_theme_settings_page(): void
 	add_theme_page(
 		__('Configurações do Tema', 'tenores'),
 		__('Configurações do Tema', 'tenores'),
-		'manage_options',
+		'edit_others_posts',
 		'tenores-theme-settings',
 		'tenores_render_theme_settings_page'
 	);
@@ -308,8 +314,8 @@ add_action('admin_menu', 'tenores_add_theme_settings_page');
 
 function tenores_render_theme_settings_page(): void
 {
-	if (!current_user_can('manage_options')) {
-		return;
+	if (!tenores_can_manage_theme_settings()) {
+		wp_die(__('Você não tem permissão para acessar esta página.', 'tenores'));
 	}
 
 	$settings = tenores_get_theme_settings();
