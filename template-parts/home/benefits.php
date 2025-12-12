@@ -62,7 +62,7 @@
 
                 foreach ($benefits as $benefit): ?>
                     <div class="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 flex flex-row">
-                        <div class="rounded-2xl text-dark px-5 pb-6 pt-6 flex flex-col gap-4 shadow-lg shadow-black/20 space-y-2 bg-light w-full mx-8 sm:mx-4">
+                        <div class="rounded-2xl text-dark px-5 pb-6 pt-6 flex flex-col gap-4 shadow-lg shadow-black/20 space-y-2 bg-light w-full mx-8 sm:mx-4 transition-all duration-300 hover:scale-105 hover:shadow-xl">
                             <h3 class="text-sm font-black uppercase tracking-widest text-primary">
                                 <?php echo esc_html($benefit['title']); ?>
                             </h3>
@@ -70,7 +70,7 @@
                                 <?php echo esc_html($benefit['text']); ?>
                             </p>
                             <div class="flex items-center justify-center my-3">
-                                <img src="<?php echo esc_url($benefit['icon']); ?>" alt="<?php echo esc_attr($benefit['title']); ?>" class="w-30 h-30">
+                                <img src="<?php echo esc_url($benefit['icon']); ?>" alt="<?php echo esc_attr($benefit['title']); ?>" class="w-30 h-30 transition-transform duration-300">
                             </div>
                         </div>
                     </div>

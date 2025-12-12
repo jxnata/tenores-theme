@@ -35,7 +35,7 @@ $articles_query = new WP_Query([
                     <?php while ($articles_query->have_posts()) : $articles_query->the_post(); ?>
                         <div class="w-full h-full aspect-[3/4] sm:w-1/2 md:w-1/3 lg:w-1/4 flex flex-row">
                             <article
-                                class="rounded-2xl text-dark p-4 flex flex-col gap-4 shadow-lg shadow-black/20 space-y-2 bg-light w-full mx-8 sm:mx-4"
+                                class="rounded-2xl text-dark p-4 flex flex-col gap-4 shadow-lg shadow-black/20 space-y-2 bg-light w-full mx-8 sm:mx-4 transition-all duration-300 hover:scale-105 hover:shadow-xl"
                                 style="background-image: url('<?php echo esc_url(get_the_post_thumbnail_url(get_the_ID(), 'large')); ?>'); background-size: cover; background-position: center;">
                                 <div class="flex flex-1 flex-col gap-3 pt-4">
                                     <h3 class="text-base font-bold leading-snug text-primary uppercase tracking-widest">
@@ -45,7 +45,7 @@ $articles_query = new WP_Query([
                                         <?php echo wp_kses_post(wp_trim_words(get_the_excerpt(), 18)); ?>
                                     </p>
                                     <div class="mt-auto pt-3 mx-auto">
-                                        <a href="<?php the_permalink(); ?>" class="primary-button">
+                                        <a href="<?php the_permalink(); ?>" class="primary-button transition-all duration-300 hover:scale-110">
                                             Explorar artigo
                                         </a>
                                     </div>

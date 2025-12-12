@@ -20,7 +20,7 @@ $headline        = !empty($settings['headline']) ? $settings['headline'] : 'Fala
     <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/60 to-black/80"></div>
 
     <div class="relative container mx-auto">
-        <h1 class="text-3xl md:text-5xl lg:text-6xl font-black tracking-widest leading-tight uppercase">
+        <h1 class="text-3xl md:text-5xl lg:text-6xl font-black tracking-widest leading-tight uppercase animate-fade-in">
             <?php echo wp_kses($headline, [
                 'strong' => ['class' => [], 'style' => []],
                 'em'     => ['class' => [], 'style' => []],
@@ -32,6 +32,6 @@ $headline        = !empty($settings['headline']) ? $settings['headline'] : 'Fala
     </div>
 
     <div class="absolute inset-x-0 bottom-8 flex justify-center">
-        <img src="<?php echo esc_url(get_theme_image_url('icon_scroll.svg')); ?>" alt="Arrow down" class="size-8">
+        <img src="<?php echo esc_url(get_theme_image_url('icon_scroll.svg')); ?>" alt="Arrow down" class="size-8 animate-bounce">
     </div>
 </section>

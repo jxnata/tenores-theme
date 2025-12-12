@@ -20,7 +20,7 @@
     <div class="w-full">
         <div class="container mx-auto py-8">
             <?php do_action('tailpress_footer'); ?>
-            <div class="text-sm flex items-center justify-center">
+            <div class="text-sm flex items-center justify-center [&_img]:max-h-16 [&_img]:w-auto">
                 <?php if (has_custom_logo()): ?>
                     <?php the_custom_logo(); ?>
                 <?php else: ?>

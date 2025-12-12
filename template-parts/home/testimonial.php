@@ -41,10 +41,10 @@ $testimonial_query = new WP_Query([
                 <div class="flex flex-row transition-transform duration-500 ease-out will-change-transform" data-carousel-track>
                     <?php while ($testimonial_query->have_posts()) : $testimonial_query->the_post(); ?>
                         <div class="px-2 w-full">
-                            <div class="bg-[#121E2B] p-8 lg:p-10 w-full">
+                            <div class="bg-[#121E2B] p-8 lg:p-10 w-full transition-all duration-300 hover:shadow-2xl">
                                 <div class="flex flex-col md:flex-row gap-8 items-center">
                                     <div class="shrink-0">
-                                        <div class="size-48 rounded-full overflow-hidden border border-light/20 bg-light/10 flex items-center justify-center text-dark">
+                                        <div class="size-48 rounded-full overflow-hidden border border-light/20 bg-light/10 flex items-center justify-center text-dark transition-transform duration-300">
                                             <?php if (has_post_thumbnail()) : ?>
                                                 <?php the_post_thumbnail('medium', ['class' => 'h-full w-full object-cover']); ?>
                                             <?php else : ?>

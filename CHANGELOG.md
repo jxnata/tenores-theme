@@ -2,6 +2,16 @@
 
 Todas as principais alterações no tema serão documentadas nesse arquivo
 
+## 0.0.11 - 2025-12-12
+
+-   Adicionadas animações simples usando classes do Tailwind CSS
+-   Implementada animação fade-in no título da seção hero
+-   Adicionada animação bounce no indicador de scroll
+-   Implementados hover effects com scale nos cards de benefícios e artigos
+-   Adicionada animação pulse no desconto "50% OFF" da seção de ofertas
+-   Implementados hover effects simples nos cards de depoimentos
+-   Todas as animações usam apenas classes utilitárias do Tailwind para melhor performance
+
 ## 0.0.10 - 2025-12-12
 
 -   Alteradas permissões de acesso às configurações do tema para permitir que administradores e editores possam acessar e modificar as configurações

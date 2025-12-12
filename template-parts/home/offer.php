@@ -15,10 +15,10 @@ $settings = tenores_get_theme_settings();
             Aproveite esta oferta exclusiva hoje e garanta:
         </p>
 
-        <div class="mt-8 rounded-3xl bg-tertiary text-light px-8 py-10 lg:px-10 lg:py-12 shadow-2xl shadow-black/30 w-full">
+        <div class="mt-8 rounded-3xl bg-tertiary text-light px-8 py-10 lg:px-10 lg:py-12 shadow-2xl shadow-black/30 w-full transition-all duration-300 hover:shadow-3xl">
             <div class="flex flex-col lg:flex-row gap-12 lg:gap-8 items-center">
                 <div class="w-full flex flex-col gap-2 flex-1 items-center lg:items-start">
-                    <p class="w-fit text-6xl lg:text-7xl xl:text-8xl font-black leading-tight tracking-widest border-b border-light/60">
+                    <p class="w-fit text-6xl lg:text-7xl xl:text-8xl font-black leading-tight tracking-widest border-b border-light/60 animate-pulse">
                         50% OFF
                     </p>
                     <p class="mt-4 text-sm md:text-lg font-semibold tracking-wider">
