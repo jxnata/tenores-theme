@@ -51,6 +51,7 @@ require_once __DIR__ . '/inc/helpers.php';
 require_once __DIR__ . '/inc/theme-settings.php';
 require_once __DIR__ . '/inc/custom-post-types.php';
 require_once __DIR__ . '/inc/shortcodes.php';
+require_once __DIR__ . '/inc/woocommerce.php';
 
 /**
  * Substitui o texto do link da página inicial por um ícone home (Lucide) em telas maiores que md.

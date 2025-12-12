@@ -51,6 +51,7 @@ WordPress theme built with **TailPress** framework, using **Vite** for asset com
 -   `css/` - Stylesheets (app.css, theme.css, utilities.css, custom.css)
 -   `js/` - JavaScript files (app.js)
 -   `images/` - Theme images and icons (SVG, PNG)
+-   Use `primary-button` to primary buttons (orange), and `secondary-button` to secondary
 
 ## Theme Configuration
 

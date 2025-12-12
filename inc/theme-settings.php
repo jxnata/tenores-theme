@@ -15,20 +15,24 @@ function tenores_get_theme_settings(): array
 	}
 
 	$defaults = [
-		'banner'              => '',
-		'headline'            => '',
-		'contact_email'       => '',
-		'contact_phone'       => '',
-		'cto_url'             => '',
-		'social_linkedin'     => '',
-		'social_facebook'     => '',
-		'social_instagram'    => '',
-		'social_youtube'      => '',
-		'footer_menu_primary' => '',
-		'footer_menu_secondary' => '',
-		'webinar_enabled'     => 0,
-		'webinar_date'        => '',
-		'webinar_url'         => '',
+		'banner'                      => '',
+		'headline'                    => '',
+		'contact_email'               => '',
+		'contact_phone'               => '',
+		'cto_url'                     => '',
+		'social_linkedin'             => '',
+		'social_facebook'             => '',
+		'social_instagram'            => '',
+		'social_youtube'              => '',
+		'footer_menu_primary'         => '',
+		'footer_menu_secondary'       => '',
+		'webinar_enabled'             => 0,
+		'webinar_date'                => '',
+		'webinar_url'                 => '',
+		'featured_course_product'     => '',
+		'featured_course_banner'      => '',
+		'featured_course_title'       => '',
+		'featured_course_subtitle'    => '',
 	];
 
 	return array_merge($defaults, $settings);
@@ -231,6 +235,60 @@ function tenores_register_theme_settings(): void
 			'placeholder' => 'https://exemplo.com/webinar',
 		]
 	);
+
+	add_settings_section(
+		'tenores_theme_featured_course_section',
+		__('Curso em Destaque', 'tenores'),
+		'__return_false',
+		'tenores_theme_settings'
+	);
+
+	add_settings_field(
+		'tenores_featured_course_product',
+		__('Produto em destaque', 'tenores'),
+		'tenores_render_product_select_field',
+		'tenores_theme_settings',
+		'tenores_theme_featured_course_section',
+		[
+			'key' => 'featured_course_product',
+		]
+	);
+
+	add_settings_field(
+		'tenores_featured_course_banner',
+		__('Banner promocional', 'tenores'),
+		'tenores_render_image_upload_field',
+		'tenores_theme_settings',
+		'tenores_theme_featured_course_section',
+		[
+			'key' => 'featured_course_banner',
+		]
+	);
+
+	add_settings_field(
+		'tenores_featured_course_title',
+		__('Título', 'tenores'),
+		'tenores_render_text_field',
+		'tenores_theme_settings',
+		'tenores_theme_featured_course_section',
+		[
+			'key'         => 'featured_course_title',
+			'type'        => 'text',
+			'placeholder' => __('Destrave Sua Voz, Liberte Seu Potencial', 'tenores'),
+		]
+	);
+
+	add_settings_field(
+		'tenores_featured_course_subtitle',
+		__('Subtítulo', 'tenores'),
+		'tenores_render_textarea_field',
+		'tenores_theme_settings',
+		'tenores_theme_featured_course_section',
+		[
+			'key'         => 'featured_course_subtitle',
+			'placeholder' => __('Aprenda a falar com confiança, emoção e presença em qualquer situação.', 'tenores'),
+		]
+	);
 }
 
 add_action('admin_init', 'tenores_register_theme_settings');
@@ -406,6 +464,59 @@ function tenores_render_menu_select_field(array $args): void
 	echo '</p>';
 }
 
+function tenores_render_product_select_field(array $args): void
+{
+	$settings = tenores_get_theme_settings();
+	$key      = $args['key'] ?? '';
+	$value    = isset($settings[$key]) ? (string) $settings[$key] : '';
+
+	if (!class_exists('WooCommerce')) {
+		echo '<p class="description" style="color: #d63638;">';
+		esc_html_e('WooCommerce não está ativo. Ative o plugin para selecionar um produto.', 'tenores');
+		echo '</p>';
+		return;
+	}
+
+	$products = wc_get_products([
+		'status' => 'publish',
+		'limit'  => -1,
+		'orderby' => 'title',
+		'order'   => 'ASC',
+	]);
+
+	printf(
+		'<select id="%1$s" name="%2$s[%1$s]" class="regular-text">',
+		esc_attr($key),
+		esc_attr(TENORES_SETTINGS_OPTION)
+	);
+
+	printf(
+		'<option value="">%s</option>',
+		esc_html__('-- Selecione um produto --', 'tenores')
+	);
+
+	foreach ($products as $product) {
+		printf(
+			'<option value="%1$s" %2$s>%3$s</option>',
+			esc_attr($product->get_id()),
+			selected($value, $product->get_id(), false),
+			esc_html($product->get_name())
+		);
+	}
+
+	echo '</select>';
+	echo '<p class="description">';
+	printf(
+		esc_html__('Selecione o produto que será exibido em destaque na loja. Gerencie produtos em %s.', 'tenores'),
+		sprintf(
+			'<a href="%s">%s</a>',
+			esc_url(admin_url('edit.php?post_type=product')),
+			esc_html__('Produtos', 'tenores')
+		)
+	);
+	echo '</p>';
+}
+
 function tenores_render_image_upload_field(array $args): void
 {
 	$settings = tenores_get_theme_settings();
@@ -527,6 +638,11 @@ function tenores_sanitize_theme_settings($input): array
 	$output['webinar_enabled']     = !empty($input['webinar_enabled']) ? 1 : 0;
 	$output['webinar_date']        = isset($input['webinar_date']) ? sanitize_text_field($input['webinar_date']) : '';
 	$output['webinar_url']         = isset($input['webinar_url']) ? esc_url_raw($input['webinar_url']) : '';
+
+	$output['featured_course_product']  = isset($input['featured_course_product']) ? absint($input['featured_course_product']) : '';
+	$output['featured_course_banner']   = isset($input['featured_course_banner']) ? absint($input['featured_course_banner']) : 0;
+	$output['featured_course_title']    = isset($input['featured_course_title']) ? sanitize_text_field($input['featured_course_title']) : '';
+	$output['featured_course_subtitle'] = isset($input['featured_course_subtitle']) ? sanitize_textarea_field($input['featured_course_subtitle']) : '';
 
 	return $output;
 }

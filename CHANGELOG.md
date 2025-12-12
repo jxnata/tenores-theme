@@ -44,6 +44,16 @@ Todas as principais alterações no tema serão documentadas nesse arquivo
 -   Criado shortcode [tenores_oferta] para exibir a seção de oferta em qualquer página ou post
 -   Adicionada seção "Shortcodes Disponíveis" na página de configurações do tema com informações sobre o shortcode
 
+## 0.0.8 - 2025-12-12
+
+-   Adicionado suporte ao WooCommerce para venda de cursos
+-   Criada seção "Curso em Destaque" nas configurações do tema com seleção de produto, banner promocional, título e subtítulo
+-   Implementada página da loja personalizada com banner do curso em destaque e grid de produtos estilizado
+-   Implementada página do produto personalizada com banner hero, card de investimento flutuante e seções de conteúdo
+-   Adicionados campos personalizados aos produtos: duração, parcelamento, desconto, instrutor, metodologia e datas das aulas
+-   Adicionados estilos CSS customizados para páginas WooCommerce
+-   Removidos estilos e elementos padrão do WooCommerce para design personalizado
+
 ## 0.0.7 - 2025-12-10
 
 -   Alterado campo "Banner" nas configurações do tema de campo de texto para upload de imagem
