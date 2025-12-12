@@ -40,19 +40,19 @@
 
     <?php if (!empty($settings['footer_menu_primary'])): ?>
         <div class="w-full border-t border-primary">
-            <div class="container mx-auto py-10">
+            <div class="container mx-auto py-10 px-4">
                 <?php
                 wp_nav_menu([
                     'menu'         => $settings['footer_menu_primary'],
                     'container'   => false,
-                    'menu_class'  => 'text-sm flex items-center justify-center gap-8 md:gap-16',
+                    'menu_class'  => 'text-sm flex flex-wrap items-center justify-center gap-4 sm:gap-6 md:gap-8 lg:gap-16',
                     'fallback_cb' => false,
                     'items_wrap'  => '<ul class="%2$s">%3$s</ul>',
                     'walker'      => new class extends Walker_Nav_Menu {
                         function start_el(&$output, $item, $depth = 0, $args = null, $id = 0)
                         {
                             $output .= sprintf(
-                                '<li><a href="%s" class="hover:text-primary !no-underline transition-colors duration-300">%s</a></li>',
+                                '<li class="text-center"><a href="%s" class="hover:text-primary !no-underline transition-colors duration-300 whitespace-nowrap">%s</a></li>',
                                 esc_url($item->url),
                                 esc_html($item->title)
                             );
@@ -66,19 +66,19 @@
 
     <?php if (!empty($settings['footer_menu_secondary'])): ?>
         <div class="w-full border-t border-primary">
-            <div class="container mx-auto py-10">
+            <div class="container mx-auto py-10 px-4">
                 <?php
                 wp_nav_menu([
                     'menu'         => $settings['footer_menu_secondary'],
                     'container'   => false,
-                    'menu_class'  => 'text-sm flex items-center justify-center gap-8 md:gap-16',
+                    'menu_class'  => 'text-sm flex flex-wrap items-center justify-center gap-4 sm:gap-6 md:gap-8 lg:gap-16',
                     'fallback_cb' => false,
                     'items_wrap'  => '<ul class="%2$s">%3$s</ul>',
                     'walker'      => new class extends Walker_Nav_Menu {
                         function start_el(&$output, $item, $depth = 0, $args = null, $id = 0)
                         {
                             $output .= sprintf(
-                                '<li><a href="%s" class="hover:text-primary !no-underline transition-colors duration-300">%s</a></li>',
+                                '<li class="text-center"><a href="%s" class="hover:text-primary !no-underline transition-colors duration-300 whitespace-nowrap">%s</a></li>',
                                 esc_url($item->url),
                                 esc_html($item->title)
                             );
@@ -91,12 +91,12 @@
     <?php endif; ?>
 
     <div class="w-full border-t border-primary">
-        <div class="container mx-auto py-10">
-            <div class="text-sm flex items-center justify-center gap-8 md:gap-16">
-                <a href="mailto:<?php echo esc_url($settings['contact_email']); ?>" class="hover:text-primary !no-underline transition-colors duration-300">
+        <div class="container mx-auto py-10 px-4">
+            <div class="text-sm flex flex-wrap items-center justify-center gap-4 sm:gap-6 md:gap-8 lg:gap-16">
+                <a href="mailto:<?php echo esc_url($settings['contact_email']); ?>" class="hover:text-primary !no-underline transition-colors duration-300 text-center whitespace-nowrap">
                     <?php echo esc_html($settings['contact_email']); ?>
                 </a>
-                <a href="tel:<?php echo esc_url($settings['contact_phone']); ?>" class="hover:text-primary !no-underline transition-colors duration-300">
+                <a href="tel:<?php echo esc_url($settings['contact_phone']); ?>" class="hover:text-primary !no-underline transition-colors duration-300 text-center whitespace-nowrap">
                     <?php echo esc_html($settings['contact_phone']); ?>
                 </a>
             </div>
@@ -114,6 +114,25 @@
 
 </footer>
 </div>
+
+<?php
+// Botão flutuante do carrinho
+if (class_exists('WooCommerce')) {
+    $cart_count = WC()->cart->get_cart_contents_count();
+    $cart_url = wc_get_cart_url();
+    $ajax_url = admin_url('admin-ajax.php');
+?>
+    <div id="floating-cart-container" data-ajax-url="<?php echo esc_url($ajax_url); ?>" style="<?php echo $cart_count > 0 ? '' : 'display: none;'; ?>">
+        <a href="<?php echo esc_url($cart_url); ?>" class="floating-cart-button" aria-label="<?php echo esc_attr__('Ver carrinho', 'tenores'); ?>">
+            <i data-lucide="shopping-cart" class="size-6"></i>
+            <span class="floating-cart-badge" data-cart-count="<?php echo esc_attr($cart_count); ?>">
+                <?php echo esc_html($cart_count > 0 ? $cart_count : '0'); ?>
+            </span>
+        </a>
+    </div>
+<?php
+}
+?>
 
 <?php wp_footer(); ?>
 </body>

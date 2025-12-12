@@ -181,3 +181,889 @@ body.admin-bar header.fixed {
 .woocommerce-breadcrumb {
 	display: none;
 }
+
+/* ===== Contact Form 7 - Página de Contato ===== */
+.contact-left {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+}
+
+.contact-left h3 {
+	font-size: var(--text-3xl);
+	font-weight: 700;
+	color: var(--color-dark);
+	margin-bottom: 1.5rem;
+	line-height: 1.3;
+}
+
+.contact-left p {
+	font-size: var(--text-xl);
+	color: var(--color-dark);
+	line-height: 1.6;
+}
+
+.contact-right {
+	width: 100%;
+}
+
+/* Contact Form 7 - Labels */
+.wpcf7-form label {
+	display: block;
+	font-size: var(--text-base);
+	font-weight: 600;
+	color: var(--color-dark);
+	margin-bottom: 0.5rem;
+	letter-spacing: 0.05em;
+}
+
+/* Contact Form 7 - Asterisk for required fields */
+.wpcf7-form .required-asterisk {
+	color: var(--color-primary);
+	font-weight: 700;
+}
+
+/* Contact Form 7 - Input fields */
+.wpcf7-form input[type='text'],
+.wpcf7-form input[type='email'],
+.wpcf7-form input[type='tel'],
+.wpcf7-form input[type='url'],
+.wpcf7-form input[type='number'],
+.wpcf7-form textarea,
+.wpcf7-form select {
+	width: 100%;
+	padding: 1rem 1.25rem;
+	font-size: var(--text-base);
+	color: var(--color-dark);
+	background-color: #fff;
+	border: 1px solid var(--color-dark);
+	border-radius: 10px;
+	outline: none;
+	transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.wpcf7-form input[type='text']::placeholder,
+.wpcf7-form input[type='email']::placeholder,
+.wpcf7-form input[type='tel']::placeholder,
+.wpcf7-form input[type='url']::placeholder,
+.wpcf7-form input[type='number']::placeholder,
+.wpcf7-form textarea::placeholder {
+	color: #9ca3af;
+}
+
+.wpcf7-form input[type='text']:focus,
+.wpcf7-form input[type='email']:focus,
+.wpcf7-form input[type='tel']:focus,
+.wpcf7-form input[type='url']:focus,
+.wpcf7-form input[type='number']:focus,
+.wpcf7-form textarea:focus,
+.wpcf7-form select:focus {
+	border-color: var(--color-primary);
+	box-shadow: 0 0 0 3px rgba(255, 106, 0, 0.1);
+}
+
+/* Contact Form 7 - Textarea */
+.wpcf7-form textarea {
+	min-height: 180px;
+	resize: vertical;
+}
+
+/* Contact Form 7 - Form row spacing */
+.wpcf7-form p {
+	margin-bottom: 1.25rem;
+}
+
+/* Contact Form 7 - Checkbox */
+.wpcf7-form .wpcf7-acceptance {
+	display: flex;
+	align-items: flex-start;
+	gap: 0.75rem;
+}
+
+.wpcf7-form input[type='checkbox'] {
+	appearance: none;
+	-webkit-appearance: none;
+	width: 1.25rem;
+	height: 1.25rem;
+	min-width: 1.25rem;
+	border: 2px solid var(--color-dark);
+	border-radius: 4px;
+	background-color: #fff;
+	cursor: pointer;
+	margin-top: 0.125rem;
+	transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.wpcf7-form input[type='checkbox']:checked {
+	background-color: var(--color-primary);
+	border-color: var(--color-primary);
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+	background-size: 14px;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+.wpcf7-form .wpcf7-acceptance .wpcf7-list-item-label {
+	font-size: var(--text-sm);
+	color: var(--color-dark);
+	line-height: 1.5;
+}
+
+.wpcf7-form .wpcf7-acceptance .wpcf7-list-item-label a {
+	color: var(--color-primary);
+	text-decoration: underline;
+	font-weight: 600;
+}
+
+/* Contact Form 7 - Submit button */
+.wpcf7-form input[type='submit'] {
+	width: 100%;
+	padding: 1rem 2rem;
+	font-size: var(--text-base);
+	font-weight: 700;
+	color: #fff;
+	background-color: var(--color-primary);
+	border: none;
+	border-radius: 10px;
+	cursor: pointer;
+	transition: background-color 0.2s ease, transform 0.1s ease;
+	margin-top: 0.5rem;
+}
+
+.wpcf7-form input[type='submit']:hover {
+	background-color: #e55f00;
+}
+
+.wpcf7-form input[type='submit']:active {
+	transform: scale(0.98);
+}
+
+/* Contact Form 7 - Helper text (reCAPTCHA notice) */
+.wpcf7-form .recaptcha-notice {
+	font-size: var(--text-sm);
+	color: #6b7280;
+	margin-top: 1rem;
+	margin-bottom: 1.5rem;
+}
+
+.wpcf7-form .recaptcha-notice a {
+	color: var(--color-dark);
+	text-decoration: underline;
+}
+
+/* Contact Form 7 - Validation messages */
+.wpcf7-form .wpcf7-not-valid-tip {
+	color: #dc2626;
+	font-size: var(--text-sm);
+	margin-top: 0.25rem;
+}
+
+.wpcf7-form .wpcf7-response-output {
+	padding: 1rem;
+	margin-top: 1rem;
+	border-radius: 8px;
+	font-size: var(--text-sm);
+}
+
+.wpcf7-form.invalid .wpcf7-response-output,
+.wpcf7-form.unaccepted .wpcf7-response-output {
+	background-color: #fef2f2;
+	border: 1px solid #fecaca;
+	color: #dc2626;
+}
+
+.wpcf7-form.sent .wpcf7-response-output {
+	background-color: #f0fdf4;
+	border: 1px solid #bbf7d0;
+	color: #16a34a;
+}
+
+/* ===== WooCommerce - Páginas de Login e Registro ===== */
+
+/* Container principal centralizado - apenas para login/registro */
+.woocommerce-account.woocommerce-account-logged-out .woocommerce {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	min-height: 60vh;
+	padding: 2rem 1rem;
+}
+
+/* Quando não há navegação (página de login), centralizar */
+.woocommerce-account .woocommerce:not(:has(.woocommerce-MyAccount-navigation)) {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	min-height: 60vh;
+	padding: 2rem 1rem;
+}
+
+/* Box de login/registro com fundo secundário (teal) */
+.woocommerce-account.woocommerce-account-logged-out .woocommerce > .u-columns,
+.woocommerce-account.woocommerce-account-logged-out .woocommerce > #customer_login,
+.woocommerce-account.woocommerce-account-logged-out .woocommerce > form.login,
+.woocommerce-account.woocommerce-account-logged-out .woocommerce > form.register,
+.woocommerce-account.woocommerce-account-logged-out .woocommerce .woocommerce-form-login,
+.woocommerce-account.woocommerce-account-logged-out .woocommerce .woocommerce-form-register {
+	width: 100%;
+	max-width: 480px;
+	background-color: var(--color-secondary);
+	border-radius: 16px;
+	padding: 2.5rem;
+}
+
+/* Quando não há navegação, aplicar estilos de login */
+.woocommerce-account .woocommerce:not(:has(.woocommerce-MyAccount-navigation)) > .u-columns,
+.woocommerce-account .woocommerce:not(:has(.woocommerce-MyAccount-navigation)) > #customer_login,
+.woocommerce-account .woocommerce:not(:has(.woocommerce-MyAccount-navigation)) > form.login,
+.woocommerce-account .woocommerce:not(:has(.woocommerce-MyAccount-navigation)) > form.register,
+.woocommerce-account .woocommerce:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce-form-login,
+.woocommerce-account .woocommerce:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce-form-register {
+	width: 100%;
+	max-width: 480px;
+	background-color: var(--color-secondary);
+	border-radius: 16px;
+	padding: 2.5rem;
+}
+
+/* Esconder coluna de registro se mostrar login separado */
+.woocommerce-account.woocommerce-account-logged-out #customer_login .u-column2,
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) #customer_login .u-column2 {
+	display: none;
+}
+
+.woocommerce-account.woocommerce-account-logged-out #customer_login .u-column1,
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) #customer_login .u-column1 {
+	width: 100%;
+	max-width: none;
+	padding: 0;
+	margin: 0;
+}
+
+/* Títulos dos formulários - apenas login/registro */
+.woocommerce-account.woocommerce-account-logged-out .woocommerce h2,
+.woocommerce-account.woocommerce-account-logged-out .woocommerce .woocommerce-form-login h2,
+.woocommerce-account.woocommerce-account-logged-out .woocommerce .woocommerce-form-register h2,
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce h2,
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce .woocommerce-form-login h2,
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce .woocommerce-form-register h2 {
+	font-size: var(--text-2xl);
+	font-weight: 600;
+	color: var(--color-dark);
+	margin-bottom: 0.5rem;
+	letter-spacing: 0.02em;
+	margin-top: 1rem;
+}
+
+/* Subtítulo opcional */
+.woocommerce-account.woocommerce-account-logged-out .woocommerce .form-subtitle,
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce .form-subtitle {
+	font-size: var(--text-base);
+	color: var(--color-dark);
+	margin-bottom: 1.5rem;
+}
+
+/* Labels dos campos - apenas login/registro */
+.woocommerce-account.woocommerce-account-logged-out .woocommerce form label,
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce form label {
+	display: block;
+	font-size: var(--text-base);
+	font-weight: 600;
+	color: var(--color-dark);
+	margin-bottom: 0.5rem;
+	letter-spacing: 0.02em;
+}
+
+/* Asterisco para campos obrigatórios - apenas login/registro */
+.woocommerce-account.woocommerce-account-logged-out .woocommerce form label .required,
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce form label .required {
+	color: var(--color-primary);
+	font-weight: 700;
+}
+
+/* Campos de input - apenas login/registro */
+.woocommerce-account.woocommerce-account-logged-out .woocommerce form input[type='text'],
+.woocommerce-account.woocommerce-account-logged-out .woocommerce form input[type='email'],
+.woocommerce-account.woocommerce-account-logged-out .woocommerce form input[type='password'],
+.woocommerce-account.woocommerce-account-logged-out .woocommerce form input[type='tel'],
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce form input[type='text'],
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce form input[type='email'],
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce form input[type='password'],
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce form input[type='tel'] {
+	width: 100%;
+	padding: 1rem 1.25rem;
+	font-size: var(--text-base);
+	color: var(--color-dark);
+	background-color: #fff;
+	border: 1px solid var(--color-dark);
+	border-radius: 10px;
+	outline: none;
+	transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.woocommerce-account.woocommerce-account-logged-out .woocommerce form input[type='text']::placeholder,
+.woocommerce-account.woocommerce-account-logged-out .woocommerce form input[type='email']::placeholder,
+.woocommerce-account.woocommerce-account-logged-out .woocommerce form input[type='password']::placeholder,
+.woocommerce-account.woocommerce-account-logged-out .woocommerce form input[type='tel']::placeholder,
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce form input[type='text']::placeholder,
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce form input[type='email']::placeholder,
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce form input[type='password']::placeholder,
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce form input[type='tel']::placeholder {
+	color: #9ca3af;
+}
+
+.woocommerce-account.woocommerce-account-logged-out .woocommerce form input[type='text']:focus,
+.woocommerce-account.woocommerce-account-logged-out .woocommerce form input[type='email']:focus,
+.woocommerce-account.woocommerce-account-logged-out .woocommerce form input[type='password']:focus,
+.woocommerce-account.woocommerce-account-logged-out .woocommerce form input[type='tel']:focus,
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce form input[type='text']:focus,
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce form input[type='email']:focus,
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce form input[type='password']:focus,
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce form input[type='tel']:focus {
+	border-color: var(--color-primary);
+	box-shadow: 0 0 0 3px rgba(255, 106, 0, 0.15);
+}
+
+/* Espaçamento entre campos - apenas login/registro */
+.woocommerce-account.woocommerce-account-logged-out .woocommerce form .form-row,
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce form .form-row {
+	margin-bottom: 1.25rem;
+}
+
+/* Wrapper do campo de senha com ícone */
+.woocommerce-account.woocommerce-account-logged-out .woocommerce form .password-input,
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce form .password-input {
+	position: relative;
+}
+
+.woocommerce-account.woocommerce-account-logged-out .woocommerce form .show-password-input,
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce form .show-password-input {
+	position: absolute;
+	right: 1rem;
+	top: 50%;
+	transform: translateY(-50%);
+	cursor: pointer;
+	color: var(--color-dark);
+	opacity: 0.7;
+	transition: opacity 0.2s ease;
+}
+
+.woocommerce-account.woocommerce-account-logged-out .woocommerce form .show-password-input:hover,
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce form .show-password-input:hover {
+	opacity: 1;
+}
+
+/* Botão de submit - apenas login/registro */
+.woocommerce-account.woocommerce-account-logged-out .woocommerce form button[type='submit'],
+.woocommerce-account.woocommerce-account-logged-out .woocommerce form input[type='submit'],
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce form button[type='submit'],
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce form input[type='submit'] {
+	width: 100%;
+	padding: 1rem 2rem;
+	font-size: var(--text-base);
+	font-weight: 700;
+	color: #fff;
+	background-color: var(--color-primary);
+	border: none;
+	border-radius: 10px;
+	cursor: pointer;
+	transition: background-color 0.2s ease, transform 0.1s ease;
+	margin-top: 0.5rem;
+}
+
+.woocommerce-account.woocommerce-account-logged-out .woocommerce form button[type='submit']:hover,
+.woocommerce-account.woocommerce-account-logged-out .woocommerce form input[type='submit']:hover,
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce form button[type='submit']:hover,
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce form input[type='submit']:hover {
+	background-color: #e55f00;
+}
+
+.woocommerce-account.woocommerce-account-logged-out .woocommerce form button[type='submit']:active,
+.woocommerce-account.woocommerce-account-logged-out .woocommerce form input[type='submit']:active,
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce form button[type='submit']:active,
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce form input[type='submit']:active {
+	transform: scale(0.98);
+}
+
+/* Checkbox "Lembrar-me" */
+.woocommerce-account.woocommerce-account-logged-out .woocommerce form .woocommerce-form-login__rememberme,
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce form .woocommerce-form-login__rememberme {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	margin-bottom: 1rem;
+}
+
+.woocommerce-account.woocommerce-account-logged-out .woocommerce form input[type='checkbox'],
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce form input[type='checkbox'] {
+	appearance: none;
+	-webkit-appearance: none;
+	width: 1.25rem;
+	height: 1.25rem;
+	min-width: 1.25rem;
+	border: 1px solid var(--color-dark);
+	border-radius: 4px;
+	background-color: #fff;
+	cursor: pointer;
+	transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.woocommerce-account.woocommerce-account-logged-out .woocommerce form input[type='checkbox']:checked,
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce form input[type='checkbox']:checked {
+	background-color: var(--color-primary);
+	border-color: var(--color-primary);
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+	background-size: 14px;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+/* Links (recuperar senha, criar conta) */
+.woocommerce-account.woocommerce-account-logged-out .woocommerce form .woocommerce-LostPassword,
+.woocommerce-account.woocommerce-account-logged-out .woocommerce .woocommerce-LostPassword,
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce form .woocommerce-LostPassword,
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce .woocommerce-LostPassword {
+	margin-top: 1rem;
+}
+
+.woocommerce-account.woocommerce-account-logged-out .woocommerce a,
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce a {
+	color: var(--color-dark);
+	text-decoration: underline;
+	font-size: var(--text-sm);
+	transition: color 0.2s ease;
+}
+
+.woocommerce-account.woocommerce-account-logged-out .woocommerce a:hover,
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce a:hover {
+	color: var(--color-primary);
+}
+
+/* Separador "ou" */
+.woocommerce-account.woocommerce-account-logged-out .woocommerce .form-separator,
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce .form-separator {
+	text-align: center;
+	color: var(--color-dark);
+	font-size: var(--text-sm);
+	margin: 1.5rem 0;
+}
+
+/* Links de navegação (criar conta, já tem conta) */
+.woocommerce-account.woocommerce-account-logged-out .woocommerce .form-footer,
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce .form-footer {
+	margin-top: 1.5rem;
+	text-align: left;
+}
+
+.woocommerce-account.woocommerce-account-logged-out .woocommerce .form-footer a,
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce .form-footer a {
+	font-weight: 600;
+}
+
+/* Texto de ajuda e reCAPTCHA */
+.woocommerce-account.woocommerce-account-logged-out .woocommerce .form-help-text,
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce .form-help-text {
+	font-size: var(--text-sm);
+	color: var(--color-dark);
+	margin-top: 1rem;
+	line-height: 1.5;
+}
+
+.woocommerce-account.woocommerce-account-logged-out .woocommerce .form-help-text a,
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce .form-help-text a {
+	text-decoration: underline;
+}
+
+/* Esconder elementos desnecessários do WooCommerce padrão */
+.woocommerce-account.woocommerce-account-logged-out .woocommerce form .clear,
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce form .clear {
+	display: none;
+}
+
+.woocommerce-account .woocommerce-MyAccount-navigation li {
+	padding-left: 0;
+}
+
+/* Responsividade - Login/Registro */
+@media (max-width: 640px) {
+	.woocommerce-account.woocommerce-account-logged-out .woocommerce > .u-columns,
+	.woocommerce-account.woocommerce-account-logged-out .woocommerce > #customer_login,
+	.woocommerce-account.woocommerce-account-logged-out .woocommerce > form.login,
+	.woocommerce-account.woocommerce-account-logged-out .woocommerce > form.register,
+	.woocommerce-account.woocommerce-account-logged-out .woocommerce .woocommerce-form-login,
+	.woocommerce-account.woocommerce-account-logged-out .woocommerce .woocommerce-form-register,
+	.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce > .u-columns,
+	.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce > #customer_login,
+	.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce > form.login,
+	.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce > form.register,
+	.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce .woocommerce-form-login,
+	.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce .woocommerce-form-register {
+		padding: 1.5rem;
+		border-radius: 12px;
+	}
+
+	.woocommerce-account.woocommerce-account-logged-out .woocommerce h2,
+	.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce h2 {
+		font-size: var(--text-xl);
+	}
+}
+
+/* ===== WooCommerce - Página Minha Conta (Dashboard) ===== */
+
+/* Container principal - apenas para páginas logadas (não login/registro) */
+.woocommerce-account:not(.woocommerce-account-logged-out) .woocommerce {
+	display: block;
+	max-width: 1280px;
+	margin: 0 auto;
+	padding: 3rem 2rem;
+}
+
+/* Título principal "MINHA CONTA" */
+.woocommerce-account .woocommerce-MyAccount-content > h2,
+.woocommerce-account .entry-title {
+	font-size: var(--text-4xl);
+	font-weight: 700;
+	color: var(--color-dark);
+	margin-bottom: 2rem;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+}
+
+/* Layout: tabs no topo + conteúdo abaixo */
+.woocommerce-account .woocommerce-MyAccount-navigation-wrapper {
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+	margin-top: 2rem;
+}
+
+/* Menu de navegação como tabs horizontais */
+.woocommerce-account .woocommerce-MyAccount-navigation {
+	background-color: transparent;
+	border-bottom: 2px solid var(--color-light);
+	padding: 0;
+	overflow-x: auto;
+	-webkit-overflow-scrolling: touch;
+}
+
+.woocommerce-account .woocommerce-MyAccount-navigation ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-wrap: nowrap;
+	gap: 0.5rem;
+}
+
+.woocommerce-account .woocommerce-MyAccount-navigation li {
+	margin: 0;
+	flex-shrink: 0;
+}
+
+.woocommerce-account .woocommerce-MyAccount-navigation a {
+	display: block;
+	padding: 0.5rem 1rem;
+	font-size: var(--text-base);
+	font-weight: 600;
+	color: var(--color-dark);
+	text-decoration: none !important;
+	border-radius: 8px 8px 0 0;
+	transition: all 0.2s ease;
+	white-space: nowrap;
+	position: relative;
+	border-bottom: 3px solid transparent;
+	margin-bottom: -2px;
+}
+
+.woocommerce-account .woocommerce-MyAccount-navigation a:hover {
+	background-color: var(--color-light);
+	color: var(--color-dark);
+	border-bottom-color: var(--color-secondary);
+}
+
+.woocommerce-account .woocommerce-MyAccount-navigation .is-active a {
+	background-color: #fff;
+	color: var(--color-primary);
+	border-bottom-color: var(--color-primary);
+}
+
+.woocommerce-account .woocommerce-MyAccount-navigation .is-active a:hover {
+	background-color: #fff;
+	border-bottom-color: var(--color-primary);
+}
+
+/* Conteúdo principal */
+.woocommerce-account .woocommerce-MyAccount-content {
+	background-color: #fff;
+	border-radius: 12px;
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+	padding: 2.5rem;
+	box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Mensagem de boas-vindas */
+.woocommerce-account .woocommerce-MyAccount-content .woocommerce-info,
+.woocommerce-account .woocommerce-MyAccount-content p:first-of-type {
+	font-size: var(--text-lg);
+	color: var(--color-dark);
+	line-height: 1.7;
+	margin-bottom: 1.5rem;
+}
+
+.woocommerce-account .woocommerce-MyAccount-content .woocommerce-info a,
+.woocommerce-account .woocommerce-MyAccount-content p:first-of-type a {
+	color: var(--color-primary);
+	text-decoration: underline;
+	font-weight: 600;
+	transition: color 0.2s ease;
+}
+
+.woocommerce-account .woocommerce-MyAccount-content .woocommerce-info a:hover,
+.woocommerce-account .woocommerce-MyAccount-content p:first-of-type a:hover {
+	color: #e55f00;
+}
+
+/* Texto descritivo */
+.woocommerce-account .woocommerce-MyAccount-content p {
+	font-size: var(--text-base);
+	color: #4b5563;
+	line-height: 1.7;
+	margin-bottom: 1.25rem;
+}
+
+.woocommerce-account .woocommerce-MyAccount-content p a {
+	color: var(--color-primary);
+	text-decoration: underline;
+	font-weight: 600;
+	transition: color 0.2s ease;
+}
+
+.woocommerce-account .woocommerce-MyAccount-content p a:hover {
+	color: #e55f00;
+}
+
+/* Tabelas (pedidos, downloads, etc) */
+.woocommerce-account .woocommerce-MyAccount-content table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 1.5rem;
+}
+
+.woocommerce-account .woocommerce-MyAccount-content table thead {
+	background-color: var(--color-light);
+}
+
+.woocommerce-account .woocommerce-MyAccount-content table th {
+	padding: 1rem;
+	text-align: left;
+	font-size: var(--text-sm);
+	font-weight: 700;
+	color: var(--color-dark);
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	border-bottom: 2px solid var(--color-dark);
+}
+
+.woocommerce-account .woocommerce-MyAccount-content table td {
+	padding: 1rem;
+	font-size: var(--text-base);
+	color: var(--color-dark);
+	border-bottom: 1px solid #e5e7eb;
+}
+
+.woocommerce-account .woocommerce-MyAccount-content table tbody tr:hover {
+	background-color: #f9fafb;
+}
+
+.woocommerce-account .woocommerce-MyAccount-content table a {
+	color: var(--color-primary);
+	text-decoration: underline;
+	font-weight: 600;
+}
+
+.woocommerce-account .woocommerce-MyAccount-content table a:hover {
+	color: #e55f00;
+}
+
+/* Botões na página Minha Conta */
+.woocommerce-account .woocommerce-MyAccount-content button,
+.woocommerce-account .woocommerce-MyAccount-content input[type='submit'] {
+	display: inline-block;
+	padding: 0.75rem 1.5rem;
+	font-size: var(--text-base);
+	font-weight: 700;
+	color: #fff;
+	background-color: var(--color-primary);
+	border: none;
+	border-radius: 8px;
+	cursor: pointer;
+	text-decoration: none;
+	transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.woocommerce-account .woocommerce-MyAccount-content button:hover,
+.woocommerce-account .woocommerce-MyAccount-content input[type='submit']:hover {
+	background-color: #e55f00;
+	transform: translateY(-1px);
+}
+
+.woocommerce-account .woocommerce-MyAccount-content button:active,
+.woocommerce-account .woocommerce-MyAccount-content input[type='submit']:active {
+	transform: translateY(0);
+}
+
+/* Formulários na página Minha Conta */
+.woocommerce-account .woocommerce-MyAccount-content form {
+	margin-top: 2rem;
+}
+
+.woocommerce-account .woocommerce-MyAccount-content form .form-row {
+	margin-bottom: 1.5rem;
+}
+
+.woocommerce-account .woocommerce-MyAccount-content form label {
+	display: block;
+	font-size: var(--text-base);
+	font-weight: 600;
+	color: var(--color-dark);
+	margin-bottom: 0.5rem;
+}
+
+.woocommerce-account .woocommerce-MyAccount-content form input[type='text'],
+.woocommerce-account .woocommerce-MyAccount-content form input[type='email'],
+.woocommerce-account .woocommerce-MyAccount-content form input[type='password'],
+.woocommerce-account .woocommerce-MyAccount-content form input[type='tel'],
+.woocommerce-account .woocommerce-MyAccount-content form select,
+.woocommerce-account .woocommerce-MyAccount-content form textarea {
+	width: 100%;
+	padding: 0.875rem 1rem;
+	font-size: var(--text-base);
+	color: var(--color-dark);
+	background-color: #fff;
+	border: 1px solid #d1d5db;
+	border-radius: 8px;
+	outline: none;
+	transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.woocommerce-account .woocommerce-MyAccount-content form input:focus,
+.woocommerce-account .woocommerce-MyAccount-content form select:focus,
+.woocommerce-account .woocommerce-MyAccount-content form textarea:focus {
+	border-color: var(--color-primary);
+	box-shadow: 0 0 0 3px rgba(255, 106, 0, 0.1);
+}
+
+/* Responsividade - Página Minha Conta */
+@media (max-width: 1024px) {
+	.woocommerce-account .woocommerce-MyAccount-navigation a {
+		padding: 0.875rem 1.25rem;
+		font-size: var(--text-sm);
+	}
+}
+
+@media (max-width: 640px) {
+	.woocommerce-account:not(.woocommerce-account-logged-out) .woocommerce {
+		padding: 0;
+	}
+
+	.woocommerce-account .woocommerce-MyAccount-navigation a {
+		padding: 0.75rem 0.5rem;
+		font-size: var(--text-sm);
+	}
+
+	.woocommerce-account .woocommerce-MyAccount-content {
+		padding: 1rem;
+	}
+
+	.woocommerce-account .woocommerce-MyAccount-content > h2,
+	.woocommerce-account .entry-title {
+		font-size: var(--text-2xl);
+	}
+
+	.woocommerce-account .woocommerce-MyAccount-content table {
+		font-size: var(--text-sm);
+	}
+
+	.woocommerce-account .woocommerce-MyAccount-content table th,
+	.woocommerce-account .woocommerce-MyAccount-content table td {
+		padding: 0.75rem 0.5rem;
+	}
+}
+
+/* ===== Botão Flutuante do Carrinho ===== */
+.floating-cart-button {
+	position: fixed;
+	bottom: 2rem;
+	right: 2rem;
+	width: 3.5rem;
+	height: 3.5rem;
+	background-color: var(--color-primary);
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1);
+	z-index: 999;
+	transition: all 0.3s ease;
+	text-decoration: none !important;
+	color: #fff;
+	cursor: pointer;
+}
+
+.floating-cart-button:hover {
+	background-color: #e55f00;
+	transform: scale(1.1);
+	box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.floating-cart-button:active {
+	transform: scale(0.95);
+}
+
+.floating-cart-button i {
+	color: #fff;
+}
+
+.floating-cart-badge {
+	position: absolute;
+	top: -0.5rem;
+	right: -0.5rem;
+	background-color: var(--color-secondary);
+	color: var(--color-dark);
+	font-size: 0.75rem;
+	font-weight: 700;
+	min-width: 1.5rem;
+	height: 1.5rem;
+	border-radius: 9999px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0 0.375rem;
+	border: 2px solid #fff;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 640px) {
+	.floating-cart-button {
+		bottom: 1.5rem;
+		right: 1.5rem;
+		width: 3rem;
+		height: 3rem;
+	}
+
+	.floating-cart-button i {
+		width: 1.25rem;
+		height: 1.25rem;
+	}
+
+	.floating-cart-badge {
+		font-size: 0.625rem;
+		min-width: 1.25rem;
+		height: 1.25rem;
+		top: -0.375rem;
+		right: -0.375rem;
+	}
+}

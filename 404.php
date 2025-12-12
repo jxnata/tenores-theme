@@ -1,26 +1,43 @@
-<!DOCTYPE html>
-<html <?php language_attributes(); ?> class="no-js">
-<head>
-	<meta charset="<?php bloginfo( 'charset' ); ?>">
-	<meta name="viewport" content="width=device-width">
-	<link rel="profile" href="http://gmpg.org/xfn/11">
+<?php
 
-	<?php wp_head(); ?>
-</head>
-<body class="antialiased">
-	<div class="md:flex min-h-screen">
-		<div class="w-full md:w-1/2 flex items-center justify-center">
-			<div class="max-w-sm m-8">
-				<div class="text-5xl md:text-15xl text-dark border-light border-b">404</div>
-				<div class="w-16 h-1 bg-purple-light my-3 md:my-6"></div>
-				<p class="text-dark/90 text-2xl md:text-3xl font-light leading-relaxed mb-8"><?php _e( 'Sorry, the page you are looking for could not be found.', 'tailpress' ); ?></p>
-				<a href="<?php echo get_bloginfo( 'url' ); ?>" class="inline-flex rounded-full px-4 py-1.5 text-sm font-semibold transition bg-dark text-white hover:bg-dark/90 !no-underline">
-					<?php _e( 'Go Home', 'tailpress' ); ?>
+/**
+ * 404 error page template.
+ *
+ * @package Tenores
+ */
+
+get_header();
+?>
+
+<div class="text-dark min-h-[80vh] flex items-center justify-center py-20">
+	<div class="container mx-auto px-4">
+		<div class="max-w-3xl mx-auto text-center">
+			<h1 class="text-8xl md:text-9xl lg:text-[12rem] font-black text-primary mb-6 tracking-widest leading-none">
+				404
+			</h1>
+
+			<div class="w-24 h-1 bg-primary mx-auto mb-8"></div>
+
+			<h2 class="text-3xl md:text-4xl lg:text-5xl font-black text-dark mb-6 uppercase tracking-wider">
+				Página não encontrada
+			</h2>
+
+			<p class="text-lg md:text-xl text-dark/80 mb-10 leading-relaxed max-w-2xl mx-auto">
+				Desculpe, a página que você está procurando não foi encontrada. Ela pode ter sido movida, removida ou o endereço pode estar incorreto.
+			</p>
+
+			<div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+				<a href="<?php echo esc_url(home_url('/')); ?>" class="primary-button">
+					Voltar para a página inicial
+				</a>
+
+				<a href="javascript:history.back()" class="secondary-button">
+					Voltar à página anterior
 				</a>
 			</div>
 		</div>
 	</div>
+</div>
 
-    <?php wp_footer(); ?>
-</body>
-</html>
+<?php
+get_footer();

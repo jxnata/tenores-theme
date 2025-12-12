@@ -44,6 +44,20 @@ Todas as principais alterações no tema serão documentadas nesse arquivo
 -   Criado shortcode [tenores_oferta] para exibir a seção de oferta em qualquer página ou post
 -   Adicionada seção "Shortcodes Disponíveis" na página de configurações do tema com informações sobre o shortcode
 
+## 0.0.9 - 2025-12-12
+
+-   Adicionada estilização completa para formulários do Contact Form 7 (campos, labels, botões, checkbox)
+-   Adicionada estilização para páginas de login e registro do WooCommerce com box centralizado em cor secundária (teal)
+-   Melhorada estilização da página "Minha Conta" do WooCommerce com layout de duas colunas (menu lateral + conteúdo), menu de navegação estilizado, melhor espaçamento e tipografia seguindo o padrão visual do tema
+-   Tornados os menus do footer responsivos com flex-wrap, espaçamento adaptativo e padding horizontal em telas pequenas
+-   Estilizada página 404 seguindo o padrão visual do tema com texto em português, cores do tema (dark, primary) e botões de navegação
+-   Removidos meta fields não utilizados do WooCommerce (parcelamento, desconto, instrutor, metodologia e datas das aulas)
+-   Mantido apenas o meta field de duração do curso, exibido na página do produto no lugar das tags
+-   Adicionado botão flutuante do carrinho de compras (redondo, com ícone Lucide e badge de quantidade)
+-   Botão aparece apenas quando há produtos no carrinho
+-   Implementada atualização dinâmica da contagem do carrinho via AJAX quando produtos são adicionados/removidos
+-   Botão redireciona para a página do carrinho do WooCommerce ao clicar/tocar
+
 ## 0.0.8 - 2025-12-12
 
 -   Adicionado suporte ao WooCommerce para venda de cursos

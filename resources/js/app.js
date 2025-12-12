@@ -194,4 +194,69 @@ window.addEventListener('load', () => {
 			interval: 6000,
 		})
 	})
+
+	// Atualizar botão flutuante do carrinho
+	const updateFloatingCartButton = () => {
+		const floatingCartContainer = document.getElementById('floating-cart-container')
+		const floatingCartButton = document.querySelector('.floating-cart-button')
+		const floatingCartBadge = document.querySelector('.floating-cart-badge')
+
+		if (!floatingCartContainer || !floatingCartButton || !floatingCartBadge) {
+			return
+		}
+
+		const ajaxUrl = floatingCartContainer.getAttribute('data-ajax-url')
+
+		if (!ajaxUrl) {
+			return
+		}
+
+		// Fazer requisição AJAX para obter a contagem atualizada do carrinho
+		fetch(ajaxUrl, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded',
+			},
+			body: new URLSearchParams({
+				action: 'tenores_get_cart_count',
+			}),
+		})
+			.then((response) => response.json())
+			.then((data) => {
+				if (data.success && data.count !== undefined) {
+					const cartCount = parseInt(data.count, 10)
+
+					if (cartCount > 0) {
+						floatingCartBadge.textContent = cartCount
+						floatingCartBadge.setAttribute('data-cart-count', cartCount)
+						floatingCartContainer.style.display = 'block'
+					} else {
+						floatingCartContainer.style.display = 'none'
+					}
+				}
+			})
+			.catch((error) => {
+				console.error('Erro ao atualizar contagem do carrinho:', error)
+			})
+	}
+
+	// Atualizar quando o carrinho é modificado (eventos do WooCommerce)
+	if (typeof jQuery !== 'undefined') {
+		jQuery(document.body).on('added_to_cart removed_from_cart updated_wc_div', () => {
+			updateFloatingCartButton()
+		})
+	}
+
+	// Atualizar ícones do Lucide após mudanças no DOM
+	const observer = new MutationObserver(() => {
+		lucide.createIcons()
+	})
+
+	const floatingCartButton = document.querySelector('.floating-cart-button')
+	if (floatingCartButton) {
+		observer.observe(floatingCartButton, {
+			childList: true,
+			subtree: true,
+		})
+	}
 })

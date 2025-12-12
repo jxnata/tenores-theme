@@ -149,46 +149,6 @@ function tenores_add_course_meta_fields(): void
 		'description' => __('Informe a duração do curso.', 'tenores'),
 	]);
 
-	woocommerce_wp_text_input([
-		'id'          => '_tenores_course_installment',
-		'label'       => __('Texto do parcelamento', 'tenores'),
-		'placeholder' => __('Ex: Cupom de 20% de desconto aplicado.', 'tenores'),
-		'desc_tip'    => true,
-		'description' => __('Texto adicional sobre o parcelamento.', 'tenores'),
-	]);
-
-	woocommerce_wp_text_input([
-		'id'          => '_tenores_course_discount',
-		'label'       => __('Texto do desconto', 'tenores'),
-		'placeholder' => __('Ex: Desconto de R$ 4.320,00 à vista', 'tenores'),
-		'desc_tip'    => true,
-		'description' => __('Texto sobre o desconto à vista.', 'tenores'),
-	]);
-
-	woocommerce_wp_text_input([
-		'id'          => '_tenores_course_instructor',
-		'label'       => __('Corpo docente', 'tenores'),
-		'placeholder' => __('Ex: Gilvan B. Costa', 'tenores'),
-		'desc_tip'    => true,
-		'description' => __('Nome do instrutor ou corpo docente.', 'tenores'),
-	]);
-
-	woocommerce_wp_textarea_input([
-		'id'          => '_tenores_course_methodology',
-		'label'       => __('Metodologia e avaliação', 'tenores'),
-		'placeholder' => __('Descreva a metodologia do curso...', 'tenores'),
-		'desc_tip'    => true,
-		'description' => __('Informações sobre metodologia e avaliação.', 'tenores'),
-	]);
-
-	woocommerce_wp_textarea_input([
-		'id'          => '_tenores_course_dates',
-		'label'       => __('Datas das aulas', 'tenores'),
-		'placeholder' => __('Ex: 19, 26 e 27 de novembro e 03 de dezembro', 'tenores'),
-		'desc_tip'    => true,
-		'description' => __('Datas e horários das aulas.', 'tenores'),
-	]);
-
 	echo '</div>';
 }
 
@@ -199,24 +159,27 @@ add_action('woocommerce_product_options_general_product_data', 'tenores_add_cour
  */
 function tenores_save_course_meta_fields(int $post_id): void
 {
-	$fields = [
-		'_tenores_course_duration',
-		'_tenores_course_installment',
-		'_tenores_course_discount',
-		'_tenores_course_instructor',
-		'_tenores_course_methodology',
-		'_tenores_course_dates',
-	];
-
-	foreach ($fields as $field) {
-		if (isset($_POST[$field])) {
-			if (in_array($field, ['_tenores_course_methodology', '_tenores_course_dates'], true)) {
-				update_post_meta($post_id, $field, sanitize_textarea_field($_POST[$field]));
-			} else {
-				update_post_meta($post_id, $field, sanitize_text_field($_POST[$field]));
-			}
-		}
+	if (isset($_POST['_tenores_course_duration'])) {
+		update_post_meta($post_id, '_tenores_course_duration', sanitize_text_field($_POST['_tenores_course_duration']));
 	}
 }
 
 add_action('woocommerce_process_product_meta', 'tenores_save_course_meta_fields');
+
+/**
+ * Retorna a contagem do carrinho via AJAX.
+ */
+function tenores_get_cart_count(): void
+{
+	if (!class_exists('WooCommerce')) {
+		wp_send_json_error(['message' => 'WooCommerce não está ativo']);
+		return;
+	}
+
+	$cart_count = WC()->cart->get_cart_contents_count();
+
+	wp_send_json_success(['count' => $cart_count]);
+}
+
+add_action('wp_ajax_tenores_get_cart_count', 'tenores_get_cart_count');
+add_action('wp_ajax_nopriv_tenores_get_cart_count', 'tenores_get_cart_count');

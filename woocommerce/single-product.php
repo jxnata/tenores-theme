@@ -25,9 +25,6 @@ $main_image_id   = $product->get_image_id();
 $banner_image_id = !empty($gallery_ids) ? $gallery_ids[0] : $main_image_id;
 $banner_url      = $banner_image_id ? wp_get_attachment_image_url($banner_image_id, 'full') : '';
 
-$installment   = get_post_meta($product->get_id(), '_tenores_course_installment', true);
-$discount_text = get_post_meta($product->get_id(), '_tenores_course_discount', true);
-
 $price         = $product->get_price();
 $regular_price = $product->get_regular_price();
 $sale_price    = $product->get_sale_price();
@@ -68,21 +65,19 @@ $installment_value = $price ? wc_price($price / 12) : wc_price(0);
 					<?php endif; ?>
 
 					<?php
-					$tags = get_the_terms($product->get_id(), 'product_tag');
-					if ($tags && !is_wp_error($tags)) :
-						$tag_names = array_map(function ($tag) {
-							return $tag->name;
-						}, $tags);
+					$course_duration = get_post_meta($product->get_id(), '_tenores_course_duration', true);
+					if ($course_duration) :
 					?>
-						<div class="text-white/80 mb-8">
-							<span><?php echo esc_html(implode(', ', $tag_names)); ?></span>
+						<div class="text-white/80 mb-8 flex items-center gap-2">
+							<i data-lucide="clock" class="size-4 align-text-bottom"></i>
+							<span><?php echo esc_html($course_duration); ?></span>
 						</div>
 					<?php endif; ?>
 
 					<a
 						href="<?php echo esc_url($product->add_to_cart_url()); ?>"
 						class="primary-button px-12 py-4">
-						<?php echo esc_html($product->add_to_cart_text()); ?>
+						<?php echo esc_html_e('Investir', 'tenores'); ?>
 					</a>
 				</div>
 
@@ -120,17 +115,6 @@ $installment_value = $price ? wc_price($price / 12) : wc_price(0);
 							</p>
 						<?php endif; ?>
 
-						<?php if ($installment) : ?>
-							<p class="text-sm text-secondary mb-4">
-								<?php echo esc_html($installment); ?>
-							</p>
-						<?php endif; ?>
-
-						<?php if ($discount_text) : ?>
-							<p class="text-sm mb-1">
-								<?php echo esc_html($discount_text); ?>
-							</p>
-						<?php endif; ?>
 
 						<?php if ($sale_price && $regular_price) : ?>
 							<p class="text-sm mb-4">
@@ -166,7 +150,7 @@ $installment_value = $price ? wc_price($price / 12) : wc_price(0);
 						<a
 							href="<?php echo esc_url($product->add_to_cart_url()); ?>"
 							class="primary-button w-full">
-							<?php echo esc_html($product->add_to_cart_text()); ?>
+							<?php esc_html_e('Investir', 'tenores'); ?>
 						</a>
 					</div>
 				</div>

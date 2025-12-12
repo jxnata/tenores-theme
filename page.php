@@ -25,17 +25,17 @@ get_header();
             </section>
 
             <div class="container mx-auto my-10 sm:my-20">
-                <div class="entry-content mx-auto max-w-3xl">
+                <div class="entry-content mx-auto">
                     <?php the_content(); ?>
                 </div>
             </div>
         <?php else: ?>
             <div class="container mx-auto my-10 sm:my-20">
                 <header class="mx-auto flex max-w-5xl flex-col text-center pt-24">
-                    <h1 class="mt-6 text-5xl font-black uppercase tracking-tight [text-wrap:balance] text-dark sm:text-6xl"><?php the_title(); ?></h1>
+                    <h1 class="mt-6 text-4xl font-black uppercase tracking-tight [text-wrap:balance] text-dark sm:text-6xl"><?php the_title(); ?></h1>
                 </header>
 
-                <div class="entry-content mx-auto max-w-3xl mt-10 sm:mt-20">
+                <div class="entry-content mx-auto mt-10 sm:mt-20">
                     <?php the_content(); ?>
                 </div>
             </div>
