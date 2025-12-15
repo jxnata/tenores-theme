@@ -27,7 +27,7 @@ $settings = tenores_get_theme_settings();
         </div>
 
         <p class="text-base md:text-lg font-medium leading-relaxed text-light space-y-4 max-w-xl">
-            E dentro dela existe um potencial que pode transformar sua vida pessoal e profissional. Quando você aprende a se comunicar com confiança, clareza e emoção, descobre que falar não é apenas transmitir palavras, mas construir conexões, inspirar pessoas e abrir portas que o silêncio jamais abriria. Na escola TEMORES, ajudamos você a lapidar essa riqueza interior, dominar sua expressão e transformar sua voz na ferramenta mais poderosa que possui: a de influenciar, encantar e ser lembrado.
+            E dentro dela existe um potencial que pode transformar sua vida pessoal e profissional. Quando você aprende a se comunicar com confiança, clareza e emoção, descobre que falar não é apenas transmitir palavras, mas construir conexões, inspirar pessoas e abrir portas que o silêncio jamais abriria. Na escola TENORES, ajudamos você a lapidar essa riqueza interior, dominar sua expressão e transformar sua voz na ferramenta mais poderosa que possui: a de influenciar, encantar e ser lembrado.
     </div>
     </div>
 </section>

@@ -53,7 +53,7 @@ $featured_course = tenores_get_featured_course();
 
 		<?php tenores_shop_breadcrumb(); ?>
 
-		<h1 class="my-12 text-center text-primary text-5xl font-black uppercase tracking-tight [text-wrap:balance] sm:text-6xl">
+		<h1 class="my-12 text-center text-primary text-4xl font-black uppercase tracking-tight [text-wrap:balance] sm:text-5xl md:text-6xl">
 			<?php echo esc_html(woocommerce_page_title(false)); ?>
 		</h1>
 

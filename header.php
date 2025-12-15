@@ -66,7 +66,7 @@
                                 wp_nav_menu([
                                     'container_id'    => 'primary-menu',
                                     'container_class' => 'py-4 lg:py-0',
-                                    'menu_class'      => 'flex flex-col gap-2 lg:gap-6 lg:flex-row [&_a]:!no-underline [&_a]:text-white uppercase font-bold text-sm [&_a]:hover:text-secondary [&_a]:transition-colors [&_a]:duration-300',
+                                    'menu_class'      => 'flex flex-col gap-2 lg:gap-4 lg:flex-row [&_a]:!no-underline [&_a]:text-white uppercase font-bold text-xs [&_a]:hover:text-secondary [&_a]:transition-colors [&_a]:duration-300',
                                     'theme_location'  => 'primary',
                                     'li_class'        => '',
                                     'fallback_cb'     => false,
@@ -74,6 +74,12 @@
                                 ?>
                             <?php endif; ?>
                         </nav>
+
+                        <?php if (function_exists('wc_get_cart_url')): ?>
+                            <a href="<?php echo esc_url(wc_get_cart_url()); ?>" class="flex items-center justify-center text-white hover:text-secondary transition-colors duration-300" aria-label="<?php esc_attr_e('Ver carrinho', 'tailpress'); ?>">
+                                <span data-lucide="shopping-cart" class="size-4"></span>
+                            </a>
+                        <?php endif; ?>
 
                         <?php
                         $settings = tenores_get_theme_settings();

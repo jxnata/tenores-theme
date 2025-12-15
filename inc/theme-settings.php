@@ -17,6 +17,7 @@ function tenores_get_theme_settings(): array
 	$defaults = [
 		'banner'                      => '',
 		'headline'                    => '',
+		'installments_count'          => 12,
 		'contact_email'               => '',
 		'contact_phone'               => '',
 		'cto_url'                     => '',
@@ -121,6 +122,19 @@ function tenores_register_theme_settings(): void
 			'key'         => 'cto_url',
 			'type'        => 'url',
 			'placeholder' => 'https://exemplo.com/inscricao',
+		]
+	);
+
+	add_settings_field(
+		'tenores_installments_count',
+		__('Máximo de parcelas', 'tenores'),
+		'tenores_render_text_field',
+		'tenores_theme_settings',
+		'tenores_theme_main_section',
+		[
+			'key'         => 'installments_count',
+			'type'        => 'number',
+			'placeholder' => '12',
 		]
 	);
 
@@ -634,6 +648,7 @@ function tenores_sanitize_theme_settings($input): array
 	$output['headline']            = isset($input['headline']) ? wp_kses($input['headline'], $allowed_html) : '';
 	$output['contact_email']       = isset($input['contact_email']) ? sanitize_email($input['contact_email']) : '';
 	$output['contact_phone']       = isset($input['contact_phone']) ? sanitize_text_field($input['contact_phone']) : '';
+	$output['installments_count']  = isset($input['installments_count']) ? max(1, min(36, absint($input['installments_count']))) : 12;
 	$output['cto_url']             = isset($input['cto_url']) ? esc_url_raw($input['cto_url']) : '';
 	$output['social_linkedin']     = isset($input['social_linkedin']) ? esc_url_raw($input['social_linkedin']) : '';
 	$output['social_facebook']     = isset($input['social_facebook']) ? esc_url_raw($input['social_facebook']) : '';

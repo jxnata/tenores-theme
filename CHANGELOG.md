@@ -2,6 +2,13 @@
 
 Todas as principais alterações no tema serão documentadas nesse arquivo
 
+## 0.0.11 - 2025-12-15
+
+-   Seção de oferta passou a exibir automaticamente o desconto e o valor real do produto em destaque configurado nas opções do tema
+-   Adicionado campo de configuração \"Máximo de parcelas\" e ajustadas a seção de oferta e a página de produto para usarem o número de parcelas definido no tema
+-   Data do webinar exibida utilizando o formato de data configurado no idioma/local do site
+-   Ajustado o botão de mostrar/ocultar senha nos formulários de login/Minha Conta do WooCommerce para aparecer dentro do campo de senha, sem fundo colorido
+
 ## 0.0.11 - 2025-12-12
 
 -   Adicionadas animações simples usando classes do Tailwind CSS

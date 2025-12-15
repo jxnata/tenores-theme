@@ -63,7 +63,7 @@ function tenores_replace_home_menu_icon($title, $item, $args, $depth)
         $home_url = home_url('/');
 
         if ($item->url === $home_url || $item->url === trailingslashit($home_url)) {
-            return '<i data-lucide="home" class="size-5 hidden md:block"></i><span class="md:hidden">' . $title . '</span>';
+            return '<i data-lucide="home" class="size-4 hidden md:block"></i><span class="md:hidden">' . $title . '</span>';
         }
     }
 

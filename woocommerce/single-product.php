@@ -20,6 +20,9 @@ if (!$product || !is_a($product, 'WC_Product')) {
 	return;
 }
 
+$settings          = function_exists('tenores_get_theme_settings') ? tenores_get_theme_settings() : [];
+$installments_count = !empty($settings['installments_count']) ? max(1, (int) $settings['installments_count']) : 12;
+
 $gallery_ids     = $product->get_gallery_image_ids();
 $main_image_id   = $product->get_image_id();
 $banner_image_id = !empty($gallery_ids) ? $gallery_ids[0] : $main_image_id;
@@ -32,7 +35,7 @@ $sale_price    = $product->get_sale_price();
 $sale_price_dates_from = get_post_meta($product->get_id(), '_sale_price_dates_from', true);
 $sale_price_dates_to   = get_post_meta($product->get_id(), '_sale_price_dates_to', true);
 
-$installment_value = $price ? wc_price($price / 12) : wc_price(0);
+$installment_value = ($price && $installments_count > 0) ? wc_price($price / $installments_count) : wc_price(0);
 ?>
 
 <main>
@@ -94,7 +97,12 @@ $installment_value = $price ? wc_price($price / 12) : wc_price(0);
 						</p>
 
 						<p class="text-sm text-secondary mb-2">
-							<?php esc_html_e('No cartão em até 12x de', 'tenores'); ?>
+							<?php
+							printf(
+								esc_html__('No cartão em até %dx de', 'tenores'),
+								(int) $installments_count
+							);
+							?>
 						</p>
 
 						<p class="text-4xl md:text-5xl font-black text-white mb-2">

@@ -1,6 +1,6 @@
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
     <header class="mx-auto flex max-w-5xl flex-col text-center pt-24">
-        <h1 class="mt-6 text-5xl font-extrabold tracking-tight uppercase text-dark sm:text-6xl"><?php the_title(); ?></h1>
+        <h1 class="mt-6 text-4xl font-extrabold tracking-tight uppercase text-dark sm:text-4xl md:text-5xl"><?php the_title(); ?></h1>
 
         <?php if (! is_page()): ?>
             <time datetime="<?php echo get_the_date('c'); ?>" itemprop="datePublished" class="order-first text-sm text-zinc-950"><?php echo get_the_date(); ?></time>

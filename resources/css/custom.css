@@ -540,10 +540,17 @@ body.admin-bar header.fixed {
 
 .woocommerce-account.woocommerce-account-logged-out .woocommerce form .show-password-input,
 .woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce form .show-password-input {
+	background: none;
+	border: none;
+	padding: 0;
+	margin: 0;
 	position: absolute;
 	right: 1rem;
 	top: 50%;
 	transform: translateY(-50%);
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	cursor: pointer;
 	color: var(--color-dark);
 	opacity: 0.7;
@@ -888,8 +895,8 @@ body.admin-bar header.fixed {
 	color: #e55f00;
 }
 
-/* Botões na página Minha Conta */
-.woocommerce-account .woocommerce-MyAccount-content button,
+/* Botões na página Minha Conta (exceto botões de mostrar senha) */
+.woocommerce-account .woocommerce-MyAccount-content button:not(.show-password-input),
 .woocommerce-account .woocommerce-MyAccount-content input[type='submit'] {
 	display: inline-block;
 	padding: 0.75rem 1.5rem;
@@ -904,13 +911,13 @@ body.admin-bar header.fixed {
 	transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
-.woocommerce-account .woocommerce-MyAccount-content button:hover,
+.woocommerce-account .woocommerce-MyAccount-content button:not(.show-password-input):hover,
 .woocommerce-account .woocommerce-MyAccount-content input[type='submit']:hover {
 	background-color: #e55f00;
 	transform: translateY(-1px);
 }
 
-.woocommerce-account .woocommerce-MyAccount-content button:active,
+.woocommerce-account .woocommerce-MyAccount-content button:not(.show-password-input):active,
 .woocommerce-account .woocommerce-MyAccount-content input[type='submit']:active {
 	transform: translateY(0);
 }
@@ -947,6 +954,45 @@ body.admin-bar header.fixed {
 	border-radius: 8px;
 	outline: none;
 	transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Campo de senha com botão mostrar/ocultar na página Minha Conta */
+.woocommerce-account .woocommerce-MyAccount-content .password-input {
+	position: relative;
+	display: inline-block;
+	width: 100%;
+}
+
+.woocommerce-account .woocommerce-MyAccount-content .password-input .woocommerce-Input {
+	padding-right: 3rem;
+}
+
+.woocommerce-account .woocommerce-MyAccount-content .show-password-input {
+	background: none;
+	border: none;
+	padding: 0;
+	margin: 0;
+	position: absolute;
+	right: 1rem;
+	top: 50%;
+	transform: translateY(-50%);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	color: var(--color-dark);
+	opacity: 0.7;
+	transition: opacity 0.2s ease;
+}
+
+.woocommerce-account .woocommerce-MyAccount-content .show-password-input:hover {
+	opacity: 1;
+}
+
+.woocommerce-account .woocommerce-MyAccount-content .show-password-input::before {
+	content: attr(aria-label);
+	font-size: var(--text-sm);
+	white-space: nowrap;
 }
 
 .woocommerce-account .woocommerce-MyAccount-content form input:focus,
