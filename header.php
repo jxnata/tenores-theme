@@ -43,15 +43,21 @@
                             <?php endif; ?>
                         </div>
 
-                        <?php if (has_nav_menu('primary')): ?>
-                            <div class="lg:hidden">
+                        <div class="flex items-center gap-4 lg:hidden">
+                            <?php if (function_exists('wc_get_cart_url')): ?>
+                                <a href="<?php echo esc_url(wc_get_cart_url()); ?>" class="flex items-center justify-center text-white hover:text-secondary transition-colors duration-300" aria-label="<?php esc_attr_e('Ver carrinho', 'tailpress'); ?>">
+                                    <span data-lucide="shopping-cart" class="size-5"></span>
+                                </a>
+                            <?php endif; ?>
+
+                            <?php if (has_nav_menu('primary')): ?>
                                 <button type="button" aria-label="Toggle navigation" id="primary-menu-toggle" class="text-white">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                                     </svg>
                                 </button>
-                            </div>
-                        <?php endif; ?>
+                            <?php endif; ?>
+                        </div>
                     </div>
 
                     <div id="primary-navigation" class="hidden lg:flex lg:bg-transparent gap-6 items-center border border-white/20 lg:border-none rounded-xl p-4 lg:p-0">
@@ -76,7 +82,7 @@
                         </nav>
 
                         <?php if (function_exists('wc_get_cart_url')): ?>
-                            <a href="<?php echo esc_url(wc_get_cart_url()); ?>" class="flex items-center justify-center text-white hover:text-secondary transition-colors duration-300" aria-label="<?php esc_attr_e('Ver carrinho', 'tailpress'); ?>">
+                            <a href="<?php echo esc_url(wc_get_cart_url()); ?>" class="hidden lg:flex items-center justify-center text-white hover:text-secondary transition-colors duration-300" aria-label="<?php esc_attr_e('Ver carrinho', 'tailpress'); ?>">
                                 <span data-lucide="shopping-cart" class="size-4"></span>
                             </a>
                         <?php endif; ?>

@@ -2,7 +2,11 @@
 
 Todas as principais alterações no tema serão documentadas nesse arquivo
 
-## 0.0.11 - 2025-12-15
+## 0.0.13 - 2025-12-15
+
+-   Adicionado botão do carrinho visível no header mobile, posicionado à esquerda do botão de menu
+
+## 0.0.12 - 2025-12-15
 
 -   Seção de oferta passou a exibir automaticamente o desconto e o valor real do produto em destaque configurado nas opções do tema
 -   Adicionado campo de configuração \"Máximo de parcelas\" e ajustadas a seção de oferta e a página de produto para usarem o número de parcelas definido no tema
