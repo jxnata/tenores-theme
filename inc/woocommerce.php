@@ -183,3 +183,45 @@ function tenores_get_cart_count(): void
 
 add_action('wp_ajax_tenores_get_cart_count', 'tenores_get_cart_count');
 add_action('wp_ajax_nopriv_tenores_get_cart_count', 'tenores_get_cart_count');
+
+/**
+ * Processa o campo "Nome completo" e separa em first_name e last_name.
+ */
+function tenores_process_full_name_registration($customer_id, $new_customer_data, $password_generated): void
+{
+	if (!isset($_POST['full_name']) || empty($_POST['full_name'])) {
+		return;
+	}
+
+	$full_name = sanitize_text_field(wp_unslash($_POST['full_name']));
+	$name_parts = explode(' ', trim($full_name), 2);
+
+	$first_name = !empty($name_parts[0]) ? $name_parts[0] : '';
+	$last_name = !empty($name_parts[1]) ? $name_parts[1] : '';
+
+	if (!empty($first_name)) {
+		update_user_meta($customer_id, 'first_name', $first_name);
+		update_user_meta($customer_id, 'billing_first_name', $first_name);
+		update_user_meta($customer_id, 'shipping_first_name', $first_name);
+	}
+
+	if (!empty($last_name)) {
+		update_user_meta($customer_id, 'last_name', $last_name);
+		update_user_meta($customer_id, 'billing_last_name', $last_name);
+		update_user_meta($customer_id, 'shipping_last_name', $last_name);
+	}
+}
+
+add_action('woocommerce_created_customer', 'tenores_process_full_name_registration', 10, 3);
+
+/**
+ * Esconde o título da página quando o usuário não está logado.
+ */
+function tenores_hide_page_title_for_logged_out_users(): void
+{
+	if (!is_user_logged_in() && is_account_page()) {
+		echo '<style>.woocommerce-account .entry-title, .woocommerce-account .page-title { display: none !important; }</style>';
+	}
+}
+
+add_action('wp_head', 'tenores_hide_page_title_for_logged_out_users');

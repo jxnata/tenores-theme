@@ -19,6 +19,11 @@ body.admin-bar header.fixed {
 	}
 }
 
+/* Esconder header na página My Account quando usuário não está logado */
+body.woocommerce-account:not(.logged-in) main header {
+	display: none !important;
+}
+
 .carousel-dot {
 	width: 0.75rem;
 	height: 0.75rem;
@@ -406,12 +411,14 @@ body.admin-bar header.fixed {
 .woocommerce-account.woocommerce-account-logged-out .woocommerce > form.login,
 .woocommerce-account.woocommerce-account-logged-out .woocommerce > form.register,
 .woocommerce-account.woocommerce-account-logged-out .woocommerce .woocommerce-form-login,
-.woocommerce-account.woocommerce-account-logged-out .woocommerce .woocommerce-form-register {
+.woocommerce-account.woocommerce-account-logged-out .woocommerce .woocommerce-form-register,
+.woocommerce-account-form-wrapper {
 	width: 100%;
 	max-width: 480px;
 	background-color: var(--color-secondary);
 	border-radius: 16px;
 	padding: 2.5rem;
+	margin: 0 auto;
 }
 
 /* Quando não há navegação, aplicar estilos de login */
@@ -425,7 +432,7 @@ body.admin-bar header.fixed {
 	max-width: 480px;
 	background-color: var(--color-secondary);
 	border-radius: 16px;
-	padding: 2.5rem;
+	margin: 0 auto;
 }
 
 /* Esconder coluna de registro se mostrar login separado */
@@ -448,21 +455,24 @@ body.admin-bar header.fixed {
 .woocommerce-account.woocommerce-account-logged-out .woocommerce .woocommerce-form-register h2,
 .woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce h2,
 .woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce .woocommerce-form-login h2,
-.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce .woocommerce-form-register h2 {
-	font-size: var(--text-2xl);
-	font-weight: 600;
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce .woocommerce-form-register h2,
+.woocommerce-account-form-wrapper h2 {
+	font-size: var(--text-xl);
+	font-weight: 700;
 	color: var(--color-dark);
 	margin-bottom: 0.5rem;
 	letter-spacing: 0.02em;
-	margin-top: 1rem;
+	margin-top: 0;
 }
 
 /* Subtítulo opcional */
 .woocommerce-account.woocommerce-account-logged-out .woocommerce .form-subtitle,
-.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce .form-subtitle {
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce .form-subtitle,
+.woocommerce-account-form-wrapper .form-subtitle {
 	font-size: var(--text-base);
 	color: var(--color-dark);
 	margin-bottom: 1.5rem;
+	margin-top: 0;
 }
 
 /* Labels dos campos - apenas login/registro */
@@ -659,14 +669,39 @@ body.admin-bar header.fixed {
 
 /* Links de navegação (criar conta, já tem conta) */
 .woocommerce-account.woocommerce-account-logged-out .woocommerce .form-footer,
-.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce .form-footer {
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce .form-footer,
+.woocommerce-account-form-wrapper .form-footer-link {
 	margin-top: 1.5rem;
-	text-align: left;
+	text-align: center;
+	font-size: var(--text-sm);
 }
 
 .woocommerce-account.woocommerce-account-logged-out .woocommerce .form-footer a,
-.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce .form-footer a {
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce .form-footer a,
+.woocommerce-account-form-wrapper .form-footer-link a {
 	font-weight: 600;
+	color: var(--color-primary);
+	text-decoration: underline;
+}
+
+.woocommerce-account.woocommerce-account-logged-out .woocommerce .form-footer a:hover,
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .woocommerce .form-footer a:hover,
+.woocommerce-account-form-wrapper .form-footer-link a:hover {
+	color: #e55f00;
+}
+
+/* Política de privacidade */
+.woocommerce-account-form-wrapper .woocommerce-privacy-policy-text {
+	margin-top: 1.5rem;
+	font-size: var(--text-sm);
+	color: var(--color-dark);
+	text-align: center;
+	line-height: 1.5;
+}
+
+.woocommerce-account-form-wrapper .woocommerce-privacy-policy-text a {
+	color: var(--color-primary);
+	text-decoration: underline;
 }
 
 /* Texto de ajuda e reCAPTCHA */
@@ -736,6 +771,14 @@ body.admin-bar header.fixed {
 	margin-bottom: 2rem;
 	text-transform: uppercase;
 	letter-spacing: 0.05em;
+}
+
+/* Esconder título da página quando não logado */
+.woocommerce-account.woocommerce-account-logged-out .entry-title,
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .entry-title,
+.woocommerce-account.woocommerce-account-logged-out .page-title,
+.woocommerce-account:not(:has(.woocommerce-MyAccount-navigation)) .page-title {
+	display: none !important;
 }
 
 /* Layout: tabs no topo + conteúdo abaixo */

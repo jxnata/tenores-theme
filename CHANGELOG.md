@@ -2,6 +2,14 @@
 
 Todas as principais alterações no tema serão documentadas nesse arquivo
 
+## 0.0.14 - 2025-12-18
+
+-   Criado template customizado para formulários de login e registro do WooCommerce (form-login.php)
+-   Adicionado campo "Nome completo" no formulário de registro que é automaticamente separado em first_name e last_name
+-   Implementada função para processar e salvar nome completo separado em campos individuais durante o registro
+-   Melhorada estilização dos formulários de login/registro com centralização, melhor espaçamento e tipografia
+-   Header escondido na página "Minha Conta" quando o usuário não está logado
+
 ## 0.0.13 - 2025-12-15
 
 -   Adicionado botão do carrinho visível no header mobile, posicionado à esquerda do botão de menu
@@ -81,10 +89,10 @@ Todas as principais alterações no tema serão documentadas nesse arquivo
 
 ## 0.0.2 - 2025-12-03
 
--	Implementado o banner da home
--	Implementada a seção de webinar
--	Implementada a seção de CTO
--	Implementada a seção de benefícios
+-   Implementado o banner da home
+-   Implementada a seção de webinar
+-   Implementada a seção de CTO
+-   Implementada a seção de benefícios
 -   Implementado componente de carousel JavaScript reutilizável
 -   Aplicado o carousel à seção de benefícios da home, exibindo até 4 itens por vez com navegação em slide e paginação
 -   Implementada a seção de depoimentos com carousel
