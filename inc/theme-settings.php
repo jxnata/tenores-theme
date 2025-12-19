@@ -470,12 +470,6 @@ function tenores_render_theme_settings_page(): void
 								<code>category="slug-da-categoria"</code> - <?php esc_html_e('Filtrar por categoria (opcional)', 'tenores'); ?><br>
 								<code>tag="slug-da-tag"</code> - <?php esc_html_e('Filtrar por tag (opcional)', 'tenores'); ?>
 							</p>
-							<p class="description" style="margin-top: 10px;">
-								<strong><?php esc_html_e('Exemplos:', 'tenores'); ?></strong><br>
-								<code>[tenores_posts_membros]</code> - <?php esc_html_e('Exibe 5 posts para membros', 'tenores'); ?><br>
-								<code>[tenores_posts_membros posts="10"]</code> - <?php esc_html_e('Exibe 10 posts para membros', 'tenores'); ?><br>
-								<code>[tenores_posts_membros category="dicas" posts="3"]</code> - <?php esc_html_e('Exibe 3 posts da categoria "dicas"', 'tenores'); ?>
-							</p>
 						</td>
 					</tr>
 				</tbody>

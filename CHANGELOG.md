@@ -2,6 +2,17 @@
 
 Todas as principais alterações no tema serão documentadas nesse arquivo
 
+## 0.0.18 - 2025-12-18
+
+-   Adicionados ícones de redes sociais no lado direito do banner hero da página inicial
+-   Ícones exibidos apenas quando os links estão configurados nas configurações do tema
+-   Adicionado texto "MANTENHA-SE CONECTADO" na vertical ao lado dos ícones (oculto em dispositivos móveis)
+-   Implementado CSS customizado para texto vertical usando writing-mode
+
+## 0.0.17 - 2025-12-18
+
+-   (Versão anterior)
+
 ## 0.0.16 - 2025-12-18
 
 -   Implementado login e registro com Google OAuth
