@@ -20,6 +20,21 @@ if (!$product || !is_a($product, 'WC_Product')) {
 	return;
 }
 
+// Verificar se o usuário tem acesso ao produto
+$product_id = $product->get_id();
+if (!tenores_user_can_access_content($product_id)) {
+	$settings = function_exists('tenores_get_theme_settings') ? tenores_get_theme_settings() : [];
+	$title    = !empty($settings['member_access_title']) ? $settings['member_access_title'] : '';
+	$subtitle = !empty($settings['member_access_subtitle']) ? $settings['member_access_subtitle'] : '';
+
+	set_query_var('tenores_restricted_title', $title);
+	set_query_var('tenores_restricted_subtitle', $subtitle);
+	get_template_part('template-parts/content', 'restricted');
+
+	get_footer();
+	return;
+}
+
 $settings          = function_exists('tenores_get_theme_settings') ? tenores_get_theme_settings() : [];
 $installments_count = !empty($settings['installments_count']) ? max(1, (int) $settings['installments_count']) : 12;
 

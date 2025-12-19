@@ -34,6 +34,8 @@ function tenores_get_theme_settings(): array
 		'featured_course_banner'      => '',
 		'featured_course_title'       => '',
 		'featured_course_subtitle'    => '',
+		'member_access_title'         => __('Conteúdo Exclusivo para Membros', 'tenores'),
+		'member_access_subtitle'      => __('Este conteúdo está disponível apenas para membros registrados. Faça login ou crie uma conta para acessar.', 'tenores'),
 	];
 
 	return array_merge($defaults, $settings);
@@ -309,6 +311,38 @@ function tenores_register_theme_settings(): void
 			'placeholder' => __('Aprenda a falar com confiança, emoção e presença em qualquer situação.', 'tenores'),
 		]
 	);
+
+	add_settings_section(
+		'tenores_theme_member_access_section',
+		__('Acesso de Membros', 'tenores'),
+		'__return_false',
+		'tenores_theme_settings'
+	);
+
+	add_settings_field(
+		'tenores_member_access_title',
+		__('Título da mensagem de acesso restrito', 'tenores'),
+		'tenores_render_text_field',
+		'tenores_theme_settings',
+		'tenores_theme_member_access_section',
+		[
+			'key'         => 'member_access_title',
+			'type'        => 'text',
+			'placeholder' => __('Conteúdo Exclusivo para Membros', 'tenores'),
+		]
+	);
+
+	add_settings_field(
+		'tenores_member_access_subtitle',
+		__('Subtítulo da mensagem de acesso restrito', 'tenores'),
+		'tenores_render_textarea_field',
+		'tenores_theme_settings',
+		'tenores_theme_member_access_section',
+		[
+			'key'         => 'member_access_subtitle',
+			'placeholder' => __('Este conteúdo está disponível apenas para membros registrados. Faça login ou crie uma conta para acessar.', 'tenores'),
+		]
+	);
 }
 
 add_action('admin_init', 'tenores_register_theme_settings');
@@ -361,6 +395,29 @@ function tenores_render_theme_settings_page(): void
 							<code>[tenores_oferta]</code>
 							<p class="description">
 								<?php esc_html_e('Exibe a seção de oferta com preços e benefícios. Use este shortcode em qualquer página ou post onde desejar mostrar a oferta.', 'tenores'); ?>
+							</p>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row">
+							<label><?php esc_html_e('Posts para Membros', 'tenores'); ?></label>
+						</th>
+						<td>
+							<code>[tenores_posts_membros]</code>
+							<p class="description">
+								<?php esc_html_e('Exibe posts exclusivos para membros registrados. Usuários não logados verão a mensagem de acesso restrito. Usuários com compras também verão posts exclusivos para membros com compras.', 'tenores'); ?>
+							</p>
+							<p class="description" style="margin-top: 10px;">
+								<strong><?php esc_html_e('Atributos opcionais:', 'tenores'); ?></strong><br>
+								<code>posts="5"</code> - <?php esc_html_e('Número de posts a exibir (padrão: 5)', 'tenores'); ?><br>
+								<code>category="slug-da-categoria"</code> - <?php esc_html_e('Filtrar por categoria (opcional)', 'tenores'); ?><br>
+								<code>tag="slug-da-tag"</code> - <?php esc_html_e('Filtrar por tag (opcional)', 'tenores'); ?>
+							</p>
+							<p class="description" style="margin-top: 10px;">
+								<strong><?php esc_html_e('Exemplos:', 'tenores'); ?></strong><br>
+								<code>[tenores_posts_membros]</code> - <?php esc_html_e('Exibe 5 posts para membros', 'tenores'); ?><br>
+								<code>[tenores_posts_membros posts="10"]</code> - <?php esc_html_e('Exibe 10 posts para membros', 'tenores'); ?><br>
+								<code>[tenores_posts_membros category="dicas" posts="3"]</code> - <?php esc_html_e('Exibe 3 posts da categoria "dicas"', 'tenores'); ?>
 							</p>
 						</td>
 					</tr>
@@ -664,6 +721,9 @@ function tenores_sanitize_theme_settings($input): array
 	$output['featured_course_banner']   = isset($input['featured_course_banner']) ? absint($input['featured_course_banner']) : 0;
 	$output['featured_course_title']    = isset($input['featured_course_title']) ? sanitize_text_field($input['featured_course_title']) : '';
 	$output['featured_course_subtitle'] = isset($input['featured_course_subtitle']) ? sanitize_textarea_field($input['featured_course_subtitle']) : '';
+
+	$output['member_access_title']    = isset($input['member_access_title']) ? sanitize_text_field($input['member_access_title']) : '';
+	$output['member_access_subtitle'] = isset($input['member_access_subtitle']) ? sanitize_textarea_field($input['member_access_subtitle']) : '';
 
 	return $output;
 }
