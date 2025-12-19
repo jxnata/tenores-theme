@@ -140,9 +140,9 @@ function tenores_render_access_meta_box(WP_Post $post): void
 	$current_access = tenores_get_content_access($post->ID);
 
 	$options = [
-		TENORES_ACCESS_PUBLIC     => __('Público - Acesso livre', 'tenores'),
-		TENORES_ACCESS_MEMBERS    => __('Apenas Membros - Usuários registrados', 'tenores'),
-		TENORES_ACCESS_PURCHASERS => __('Apenas Membros com Compras - Usuários que já compraram', 'tenores'),
+		TENORES_ACCESS_PUBLIC     => __('Acesso livre', 'tenores'),
+		TENORES_ACCESS_MEMBERS    => __('Apenas Membros', 'tenores'),
+		TENORES_ACCESS_PURCHASERS => __('Apenas Membros com Compras', 'tenores'),
 	];
 ?>
 	<p>

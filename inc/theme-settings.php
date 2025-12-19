@@ -36,6 +36,9 @@ function tenores_get_theme_settings(): array
 		'featured_course_subtitle'    => '',
 		'member_access_title'         => __('Conteúdo Exclusivo para Membros', 'tenores'),
 		'member_access_subtitle'      => __('Este conteúdo está disponível apenas para membros registrados. Faça login ou crie uma conta para acessar.', 'tenores'),
+		'google_oauth_enabled'        => 0,
+		'google_oauth_client_id'      => '',
+		'google_oauth_client_secret'   => '',
 	];
 
 	return array_merge($defaults, $settings);
@@ -343,6 +346,60 @@ function tenores_register_theme_settings(): void
 			'placeholder' => __('Este conteúdo está disponível apenas para membros registrados. Faça login ou crie uma conta para acessar.', 'tenores'),
 		]
 	);
+
+	add_settings_section(
+		'tenores_theme_google_oauth_section',
+		__('Login com Google', 'tenores'),
+		'__return_false',
+		'tenores_theme_settings'
+	);
+
+	add_settings_field(
+		'tenores_google_oauth_enabled',
+		__('Ativar login com Google', 'tenores'),
+		'tenores_render_checkbox_field',
+		'tenores_theme_settings',
+		'tenores_theme_google_oauth_section',
+		[
+			'key' => 'google_oauth_enabled',
+		]
+	);
+
+	add_settings_field(
+		'tenores_google_oauth_client_id',
+		__('Client ID do Google', 'tenores'),
+		'tenores_render_text_field',
+		'tenores_theme_settings',
+		'tenores_theme_google_oauth_section',
+		[
+			'key'         => 'google_oauth_client_id',
+			'type'        => 'text',
+			'placeholder' => __('Cole aqui o Client ID do Google Cloud Console', 'tenores'),
+		]
+	);
+
+	add_settings_field(
+		'tenores_google_oauth_client_secret',
+		__('Client Secret do Google', 'tenores'),
+		'tenores_render_password_field',
+		'tenores_theme_settings',
+		'tenores_theme_google_oauth_section',
+		[
+			'key'         => 'google_oauth_client_secret',
+			'placeholder' => __('Cole aqui o Client Secret do Google Cloud Console', 'tenores'),
+		]
+	);
+
+	add_settings_field(
+		'tenores_google_oauth_redirect_uri',
+		__('URI de Redirecionamento', 'tenores'),
+		'tenores_render_readonly_field',
+		'tenores_theme_settings',
+		'tenores_theme_google_oauth_section',
+		[
+			'key' => 'google_oauth_redirect_uri',
+		]
+	);
 }
 
 add_action('admin_init', 'tenores_register_theme_settings');
@@ -594,6 +651,39 @@ function tenores_render_product_select_field(array $args): void
 	echo '</p>';
 }
 
+function tenores_render_password_field(array $args): void
+{
+	$settings    = tenores_get_theme_settings();
+	$key         = $args['key'] ?? '';
+	$placeholder = $args['placeholder'] ?? '';
+	$value       = isset($settings[$key]) ? (string) $settings[$key] : '';
+
+	printf(
+		'<input type="password" id="%1$s" name="%2$s[%1$s]" value="%3$s" class="regular-text" placeholder="%4$s" autocomplete="off" />',
+		esc_attr($key),
+		esc_attr(TENORES_SETTINGS_OPTION),
+		esc_attr($value),
+		esc_attr($placeholder)
+	);
+}
+
+function tenores_render_readonly_field(array $args): void
+{
+	$key = $args['key'] ?? '';
+
+	// A URI será gerada dinamicamente pelo módulo google-oauth.php
+	$redirect_uri = rest_url('tenores/v1/google-oauth/callback');
+
+	printf(
+		'<input type="text" id="%1$s" value="%2$s" class="regular-text" readonly />',
+		esc_attr($key),
+		esc_attr($redirect_uri)
+	);
+	echo '<p class="description">';
+	esc_html_e('Copie esta URI e adicione como URI de redirecionamento autorizada no Google Cloud Console.', 'tenores');
+	echo '</p>';
+}
+
 function tenores_render_image_upload_field(array $args): void
 {
 	$settings = tenores_get_theme_settings();
@@ -724,6 +814,10 @@ function tenores_sanitize_theme_settings($input): array
 
 	$output['member_access_title']    = isset($input['member_access_title']) ? sanitize_text_field($input['member_access_title']) : '';
 	$output['member_access_subtitle'] = isset($input['member_access_subtitle']) ? sanitize_textarea_field($input['member_access_subtitle']) : '';
+
+	$output['google_oauth_enabled']      = !empty($input['google_oauth_enabled']) ? 1 : 0;
+	$output['google_oauth_client_id']    = isset($input['google_oauth_client_id']) ? sanitize_text_field($input['google_oauth_client_id']) : '';
+	$output['google_oauth_client_secret'] = isset($input['google_oauth_client_secret']) ? sanitize_text_field($input['google_oauth_client_secret']) : '';
 
 	return $output;
 }

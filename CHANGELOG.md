@@ -2,6 +2,21 @@
 
 Todas as principais alterações no tema serão documentadas nesse arquivo
 
+## 0.0.16 - 2025-12-18
+
+-   Implementado login e registro com Google OAuth
+-   Adicionada seção "Login com Google" nas configurações do tema com campos para ativar/desativar, Client ID e Client Secret
+-   Adicionado botão "Continuar com o Google" nos formulários de login e registro do WooCommerce
+
+## 0.0.15 - 2025-12-18
+
+-   Implementado sistema de controle de acesso para conteúdo exclusivo de membros
+-   Adicionados três níveis de acesso: Público, Apenas Membros (usuários registrados) e Apenas Membros com Compras
+-   Criado meta box de controle de acesso para posts e páginas no editor do WordPress
+-   Adicionado campo de controle de acesso para produtos WooCommerce
+-   Criado shortcode [tenores_posts_membros] para exibir posts exclusivos para membros com suporte a filtros por categoria e tag
+-   Adicionados campos de configuração para título e subtítulo da mensagem de acesso restrito nas configurações do tema
+
 ## 0.0.14 - 2025-12-18
 
 -   Criado template customizado para formulários de login e registro do WooCommerce (form-login.php)

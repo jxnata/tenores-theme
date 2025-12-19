@@ -53,6 +53,7 @@ require_once __DIR__ . '/inc/custom-post-types.php';
 require_once __DIR__ . '/inc/shortcodes.php';
 require_once __DIR__ . '/inc/woocommerce.php';
 require_once __DIR__ . '/inc/member-access.php';
+require_once __DIR__ . '/inc/google-oauth.php';
 
 /**
  * Substitui o texto do link da página inicial por um ícone home (Lucide) em telas maiores que md.
