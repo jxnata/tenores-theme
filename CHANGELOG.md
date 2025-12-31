@@ -2,6 +2,14 @@
 
 Todas as principais alterações no tema serão documentadas nesse arquivo
 
+## 0.0.19 - 2025-12-30
+
+-   Personalização da página de login do WordPress (wp-login.php) seguindo o padrão visual do tema
+-   Substituição do logo padrão do WordPress pelo logo do site (quando configurado)
+-   Adicionada imagem de background (auth-bg.webp) na página de login
+-   Container do formulário com efeito glassmorphism (opacidade 70% e backdrop blur)
+-   Estilização de campos, botões e links com as cores do tema
+
 ## 0.0.18 - 2025-12-18
 
 -   Adicionados ícones de redes sociais no lado direito do banner hero da página inicial
