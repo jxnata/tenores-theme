@@ -52,6 +52,7 @@ require_once __DIR__ . '/inc/theme-settings.php';
 require_once __DIR__ . '/inc/custom-post-types.php';
 require_once __DIR__ . '/inc/shortcodes.php';
 require_once __DIR__ . '/inc/woocommerce.php';
+require_once __DIR__ . '/inc/masteriyo.php';
 require_once __DIR__ . '/inc/member-access.php';
 require_once __DIR__ . '/inc/google-oauth.php';
 require_once __DIR__ . '/inc/login-customization.php';

@@ -2,6 +2,42 @@
 
 Todas as principais alterações no tema serão documentadas nesse arquivo
 
+## 0.0.26 - 2025-12-31
+
+-   Adicionado item de menu "Cursos" no painel WordPress para acesso rápido aos cursos Masteriyo
+-   Adicionado link "Editar Conteúdo" nas ações de cada curso na listagem, levando ao editor do Masteriyo
+
+## 0.0.25 - 2025-12-31
+
+-   Adicionado meta box "Detalhes do Curso (Tenores)" na edição de cursos Masteriyo
+-   Novo campo "Descrição Curta" personalizado que substitui o campo highlights do Masteriyo
+-   Função `tenores_get_masteriyo_short_description()` com fallback para descrição do Masteriyo
+
+## 0.0.24 - 2025-12-31
+
+-   Adicionada função `tenores_format_course_duration()` para formatar duração de minutos para horas e minutos (ex: "1 hora e 15 minutos")
+-   Aplicada formatação de duração na página do curso Masteriyo
+
+## 0.0.23 - 2025-12-31
+
+-   Melhorada função de obtenção de categoria do curso Masteriyo com fallback para taxonomia WordPress
+-   Ajustado espaçamento do card de curso para exibir categoria abaixo do título corretamente
+
+## 0.0.22 - 2025-12-31
+
+-   Adicionado banner de curso em destaque na página de listagem de cursos do Masteriyo (usando mesmas configurações do WooCommerce)
+-   Implementada paginação completa com números na listagem de cursos do Masteriyo
+-   Adicionada exibição de descrição curta ou highlights no header da página do curso
+
+## 0.0.21 - 2025-12-31
+
+-   Adicionada integração com o plugin Masteriyo LMS
+-   Criado módulo `inc/masteriyo.php` com funções de suporte (breadcrumb, helpers de curso, etc.)
+-   Criado template `masteriyo/archive-course.php` para listagem de cursos com o mesmo visual da loja WooCommerce
+-   Criado template `masteriyo/content-course.php` para cards de curso no grid
+-   Criado template `masteriyo/single-course.php` e `masteriyo/content-single-course.php` para página individual do curso com o mesmo visual da página de produto WooCommerce
+-   Removidos estilos padrão do Masteriyo para design personalizado
+
 ## 0.0.19 - 2025-12-30
 
 -   Personalização da página de login do WordPress (wp-login.php) seguindo o padrão visual do tema
