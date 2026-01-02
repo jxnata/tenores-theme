@@ -313,12 +313,74 @@ function tenores_get_masteriyo_enroll_url($course): string
 		return '#';
 	}
 
-	if (method_exists($course, 'get_permalink')) {
-		return $course->get_permalink();
+	$course_id = method_exists($course, 'get_id') ? $course->get_id() : 0;
+
+	if (!$course_id) {
+		return '#';
 	}
 
-	if (method_exists($course, 'get_id')) {
-		return get_permalink($course->get_id());
+	// Verifica se o usuário pode iniciar o curso (já está inscrito)
+	if (function_exists('masteriyo_can_start_course')) {
+		if (masteriyo_can_start_course($course)) {
+			// Busca progresso do curso
+			$progress = null;
+			if (function_exists('masteriyo_get_course_progress')) {
+				$progress = masteriyo_get_course_progress($course_id, get_current_user_id());
+			}
+
+			// Se tem progresso, continua de onde parou
+			if ($progress && method_exists($course, 'continue_course_url')) {
+				return $course->continue_course_url($progress);
+			}
+
+			// Senão, inicia o curso
+			if (method_exists($course, 'start_course_url')) {
+				return $course->start_course_url();
+			}
+		}
+	}
+
+	// Se o curso é gratuito e usuário não está inscrito
+	if (tenores_is_masteriyo_course_free($course)) {
+		// Se não estiver logado, redireciona para login/registro
+		if (!is_user_logged_in()) {
+			return wc_get_page_permalink('myaccount');
+		}
+		// Se estiver logado, permite iniciar
+		if (method_exists($course, 'start_course_url')) {
+			return $course->start_course_url();
+		}
+	}
+
+	// Se o curso é pago, verifica se está integrado com WooCommerce
+	if (class_exists('Masteriyo\Addons\WcIntegration\Helper')) {
+		$product_id = \Masteriyo\Addons\WcIntegration\Helper::is_course_wc_product($course_id);
+
+		if ($product_id && function_exists('wc_get_product')) {
+			$product = wc_get_product($product_id);
+			if ($product) {
+				// Verifica se já está no carrinho
+				$is_in_cart = \Masteriyo\Addons\WcIntegration\Helper::is_course_added_to_cart($course_id);
+
+				if ($is_in_cart === true) {
+					// Se já está no carrinho, redireciona para o carrinho
+					return wc_get_cart_url();
+				} else {
+					// Retorna URL para adicionar ao carrinho
+					return $product->add_to_cart_url();
+				}
+			}
+		}
+	}
+
+	// Fallback: método do Masteriyo
+	if (method_exists($course, 'add_to_cart_url')) {
+		return $course->add_to_cart_url();
+	}
+
+	// Fallback: permalink do curso
+	if (method_exists($course, 'get_permalink')) {
+		return $course->get_permalink();
 	}
 
 	return '#';
@@ -456,6 +518,231 @@ function tenores_add_course_row_actions(array $actions, $post): array
 }
 
 add_filter('post_row_actions', 'tenores_add_course_row_actions', 10, 2);
+
+/**
+ * Add "Cursos" tab to WooCommerce My Account page and remove "Dashboard" tab.
+ */
+function tenores_add_courses_my_account_tab($items): array
+{
+	if (!tenores_is_masteriyo_active()) {
+		return $items;
+	}
+
+	// Remove dashboard tab
+	unset($items['dashboard']);
+
+	// Add cursos tab as first item
+	$new_items = ['cursos' => __('Cursos', 'tenores')] + $items;
+
+	return $new_items;
+}
+
+add_filter('woocommerce_account_menu_items', 'tenores_add_courses_my_account_tab', 10, 1);
+
+/**
+ * Register "Cursos" endpoint for My Account page.
+ */
+function tenores_add_courses_endpoint(): void
+{
+	if (!tenores_is_masteriyo_active()) {
+		return;
+	}
+
+	add_rewrite_endpoint('cursos', EP_ROOT | EP_PAGES);
+}
+
+add_action('init', 'tenores_add_courses_endpoint');
+
+/**
+ * Add query vars for cursos endpoint.
+ */
+function tenores_add_courses_query_vars($vars): array
+{
+	if (!tenores_is_masteriyo_active()) {
+		return $vars;
+	}
+
+	$vars[] = 'cursos';
+	return $vars;
+}
+
+add_filter('query_vars', 'tenores_add_courses_query_vars', 0);
+
+/**
+ * Display content for "Cursos" tab in My Account page.
+ */
+function tenores_courses_my_account_content(): void
+{
+	if (!tenores_is_masteriyo_active() || !is_user_logged_in()) {
+		return;
+	}
+
+	$user_id = get_current_user_id();
+
+	// Busca cursos em que o usuário está inscrito
+	$enrolled_courses = [];
+
+	// Busca via WP_Query
+	$courses_query = new WP_Query([
+		'post_type'      => 'mto-course',
+		'post_status'    => 'publish',
+		'posts_per_page' => -1,
+		'orderby'        => 'date',
+		'order'          => 'DESC',
+	]);
+
+	foreach ($courses_query->posts as $post) {
+		if (tenores_is_user_enrolled_in_masteriyo_course($post->ID)) {
+			if (function_exists('masteriyo_get_course')) {
+				$course = masteriyo_get_course($post->ID);
+				if ($course) {
+					$enrolled_courses[] = $course;
+				}
+			}
+		}
+	}
+
+?>
+	<div class="tenores-my-account-courses">
+		<?php if (!empty($enrolled_courses)) : ?>
+			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+				<?php
+				foreach ($enrolled_courses as $course) :
+					$course_id = $course->get_id();
+					$course_name = $course->get_name();
+					$course_url = $course->get_permalink();
+					$course_image = tenores_get_masteriyo_course_image($course, 'medium');
+					$course_category = tenores_get_masteriyo_course_category($course);
+
+					// Verifica progresso do curso
+					$progress_percentage = 0;
+					$progress_obj = null;
+					$has_started = false;
+
+					// Verifica se o usuário pode iniciar/continuar o curso (já está inscrito)
+					if (function_exists('masteriyo_can_start_course')) {
+						if (masteriyo_can_start_course($course)) {
+							$has_started = true;
+						}
+					}
+
+					// Busca progresso do curso usando CourseProgressQuery como no template do Masteriyo
+					if (class_exists('\Masteriyo\Query\CourseProgressQuery')) {
+						$query = new \Masteriyo\Query\CourseProgressQuery([
+							'course_id' => $course_id,
+							'user_id'   => $user_id,
+						]);
+						$progress_obj = current($query->get_course_progress());
+
+						if ($progress_obj && is_object($progress_obj)) {
+							$has_started = true;
+
+							// Obtém o summary usando o método get_summary como no template do Masteriyo
+							if (method_exists($progress_obj, 'get_summary')) {
+								$summary = $progress_obj->get_summary('all');
+								if (is_array($summary) && isset($summary['total']['completed'], $summary['total']['total'])) {
+									$completed = (int) $summary['total']['completed'];
+									$total = (int) $summary['total']['total'];
+									if ($total > 0) {
+										$progress_percentage = ($completed / $total) * 100;
+									}
+								}
+							}
+						}
+					}
+
+					// URL para continuar o curso
+					$continue_url = '#';
+					if ($progress_obj && !is_wp_error($progress_obj) && method_exists($course, 'continue_course_url')) {
+						$continue_url = $course->continue_course_url($progress_obj);
+					} elseif (method_exists($course, 'start_course_url')) {
+						$continue_url = $course->start_course_url();
+					}
+				?>
+					<div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
+						<?php if ($course_image) : ?>
+							<a href="<?php echo esc_url($course_url); ?>" class="block">
+								<img
+									src="<?php echo esc_url($course_image); ?>"
+									alt="<?php echo esc_attr($course_name); ?>"
+									class="w-full h-48 object-cover" />
+							</a>
+						<?php endif; ?>
+
+						<div class="p-4">
+							<?php if ($course_category) : ?>
+								<span class="text-primary text-xs font-semibold uppercase tracking-wide mb-2 block">
+									<?php echo esc_html($course_category); ?>
+								</span>
+							<?php endif; ?>
+
+							<h3 class="font-bold text-lg leading-tight mb-2 !mt-0">
+								<a href="<?php echo esc_url($course_url); ?>" class="!text-dark hover:text-primary transition-colors !no-underline">
+									<?php echo esc_html($course_name); ?>
+								</a>
+							</h3>
+
+							<?php
+							// Sempre mostra progresso se o curso foi iniciado
+							if ($has_started) :
+								$display_percentage = max(0, min(100, $progress_percentage));
+							?>
+								<div class="mb-4">
+									<div class="flex justify-between items-center mb-2">
+										<span class="text-sm font-semibold text-dark"><?php esc_html_e('Progresso', 'tenores'); ?></span>
+										<span class="text-sm font-semibold text-primary"><?php echo esc_html(round($display_percentage, 0)); ?>%</span>
+									</div>
+									<div class="w-full bg-light rounded-full h-2">
+										<div
+											class="bg-primary h-2 rounded-full transition-all duration-300"
+											style="width: <?php echo esc_attr($display_percentage); ?>%"></div>
+									</div>
+								</div>
+							<?php endif; ?>
+
+							<div class="flex gap-2">
+								<a
+									href="<?php echo esc_url($continue_url); ?>"
+									class="primary-button flex-1 text-center">
+									<?php esc_html_e('Continuar', 'tenores'); ?>
+								</a>
+								<a
+									href="<?php echo esc_url($course_url); ?>"
+									class="secondary-button flex-1 text-center">
+									<?php esc_html_e('Ver Curso', 'tenores'); ?>
+								</a>
+							</div>
+						</div>
+					</div>
+				<?php endforeach; ?>
+			</div>
+		<?php else : ?>
+			<div class="text-center py-12">
+				<p class="text-zinc-600 text-lg mb-4">
+					<?php esc_html_e('Você ainda não está inscrito em nenhum curso.', 'tenores'); ?>
+				</p>
+				<a href="<?php echo esc_url(get_permalink(wc_get_page_id('shop'))); ?>" class="primary-button inline-block">
+					<?php esc_html_e('Explorar Cursos', 'tenores'); ?>
+				</a>
+			</div>
+		<?php endif; ?>
+	</div>
+<?php
+}
+
+add_action('woocommerce_account_cursos_endpoint', 'tenores_courses_my_account_content');
+
+/**
+ * Clear WooCommerce notices on page load for course pages.
+ */
+function tenores_clear_wc_notices_on_course_pages(): void
+{
+	if (is_singular('mto-course')) {
+		wc_clear_notices();
+	}
+}
+
+add_action('wp', 'tenores_clear_wc_notices_on_course_pages', 1);
 
 /**
  * Get course short description (custom field or fallback).

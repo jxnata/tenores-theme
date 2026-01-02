@@ -30,7 +30,7 @@ function tenores_get_theme_settings(): array
 		'webinar_enabled'             => 0,
 		'webinar_date'                => '',
 		'webinar_url'                 => '',
-		'featured_course_product'     => '',
+		'featured_course_masteriyo'   => '',
 		'featured_course_banner'      => '',
 		'featured_course_title'       => '',
 		'featured_course_subtitle'    => '',
@@ -269,13 +269,13 @@ function tenores_register_theme_settings(): void
 	);
 
 	add_settings_field(
-		'tenores_featured_course_product',
-		__('Produto em destaque', 'tenores'),
-		'tenores_render_product_select_field',
+		'tenores_featured_course_masteriyo',
+		__('Curso em destaque', 'tenores'),
+		'tenores_render_masteriyo_course_select_field',
 		'tenores_theme_settings',
 		'tenores_theme_featured_course_section',
 		[
-			'key' => 'featured_course_product',
+			'key' => 'featured_course_masteriyo',
 		]
 	);
 
@@ -472,6 +472,31 @@ function tenores_render_theme_settings_page(): void
 							</p>
 						</td>
 					</tr>
+					<tr>
+						<th scope="row">
+							<label><?php esc_html_e('Cursos Masteriyo', 'tenores'); ?></label>
+						</th>
+						<td>
+							<code>[tenores_cursos]</code>
+							<p class="description">
+								<?php esc_html_e('Exibe cursos do Masteriyo com o mesmo layout da página de cursos. Use este shortcode em qualquer página ou post onde desejar mostrar cursos.', 'tenores'); ?>
+							</p>
+							<p class="description" style="margin-top: 10px;">
+								<strong><?php esc_html_e('Atributos opcionais:', 'tenores'); ?></strong><br>
+								<code>posts_per_page="9"</code> - <?php esc_html_e('Número de cursos por página (padrão: 9)', 'tenores'); ?><br>
+								<code>category="slug-da-categoria"</code> - <?php esc_html_e('Filtrar por categoria de curso (opcional)', 'tenores'); ?><br>
+								<code>price="free"</code> - <?php esc_html_e('Exibir apenas cursos gratuitos', 'tenores'); ?><br>
+								<code>price="paid"</code> - <?php esc_html_e('Exibir apenas cursos pagos', 'tenores'); ?><br>
+								<code>pagination="true"</code> - <?php esc_html_e('Exibir paginação (padrão: true). Use "false" para desabilitar', 'tenores'); ?>
+							</p>
+							<p class="description" style="margin-top: 10px;">
+								<strong><?php esc_html_e('Exemplos:', 'tenores'); ?></strong><br>
+								<code>[tenores_cursos]</code> - <?php esc_html_e('Exibe 9 cursos por página com paginação', 'tenores'); ?><br>
+								<code>[tenores_cursos posts_per_page="6" price="free"]</code> - <?php esc_html_e('Exibe 6 cursos gratuitos por página', 'tenores'); ?><br>
+								<code>[tenores_cursos category="tecnologia" price="paid" pagination="false"]</code> - <?php esc_html_e('Exibe cursos pagos da categoria tecnologia sem paginação', 'tenores'); ?>
+							</p>
+						</td>
+					</tr>
 				</tbody>
 			</table>
 		</div>
@@ -645,6 +670,69 @@ function tenores_render_product_select_field(array $args): void
 	echo '</p>';
 }
 
+function tenores_render_masteriyo_course_select_field(array $args): void
+{
+	$settings = tenores_get_theme_settings();
+	$key      = $args['key'] ?? '';
+	$value    = isset($settings[$key]) ? (string) $settings[$key] : '';
+
+	// Verifica se Masteriyo está ativo
+	$is_masteriyo_active = class_exists('Masteriyo\Masteriyo') || defined('MASTERIYO_VERSION');
+
+	if (!$is_masteriyo_active) {
+		echo '<p class="description" style="color: #d63638;">';
+		esc_html_e('Masteriyo não está ativo. Ative o plugin para selecionar um curso.', 'tenores');
+		echo '</p>';
+		return;
+	}
+
+	// Busca cursos via WP_Query
+	$courses_query = new WP_Query([
+		'post_type'      => 'mto-course',
+		'post_status'    => 'publish',
+		'posts_per_page' => -1,
+		'orderby'        => 'title',
+		'order'          => 'ASC',
+	]);
+
+	$courses = $courses_query->posts;
+
+	printf(
+		'<select id="%1$s" name="%2$s[%1$s]" class="regular-text">',
+		esc_attr($key),
+		esc_attr(TENORES_SETTINGS_OPTION)
+	);
+
+	printf(
+		'<option value="">%s</option>',
+		esc_html__('-- Selecione um curso --', 'tenores')
+	);
+
+	foreach ($courses as $course) {
+		$course_id   = $course->ID;
+		$course_name = get_the_title($course_id);
+
+		printf(
+			'<option value="%1$s" %2$s>%3$s</option>',
+			esc_attr($course_id),
+			selected($value, $course_id, false),
+			esc_html($course_name)
+		);
+	}
+
+	echo '</select>';
+	echo '<p class="description">';
+	printf(
+		esc_html__('Selecione o curso que será exibido em destaque. Gerencie cursos em %s.', 'tenores'),
+		sprintf(
+			'<a href="%s">%s</a>',
+			esc_url(admin_url('edit.php?post_type=mto-course')),
+			esc_html__('Cursos', 'tenores')
+		)
+	);
+	echo '</p>';
+}
+
 function tenores_render_password_field(array $args): void
 {
 	$settings    = tenores_get_theme_settings();
@@ -801,10 +889,10 @@ function tenores_sanitize_theme_settings($input): array
 	$output['webinar_date']        = isset($input['webinar_date']) ? sanitize_text_field($input['webinar_date']) : '';
 	$output['webinar_url']         = isset($input['webinar_url']) ? esc_url_raw($input['webinar_url']) : '';
 
-	$output['featured_course_product']  = isset($input['featured_course_product']) ? absint($input['featured_course_product']) : '';
-	$output['featured_course_banner']   = isset($input['featured_course_banner']) ? absint($input['featured_course_banner']) : 0;
+	$output['featured_course_masteriyo'] = isset($input['featured_course_masteriyo']) ? absint($input['featured_course_masteriyo']) : '';
+	$output['featured_course_banner']    = isset($input['featured_course_banner']) ? absint($input['featured_course_banner']) : 0;
 	$output['featured_course_title']    = isset($input['featured_course_title']) ? sanitize_text_field($input['featured_course_title']) : '';
-	$output['featured_course_subtitle'] = isset($input['featured_course_subtitle']) ? sanitize_textarea_field($input['featured_course_subtitle']) : '';
+	$output['featured_course_subtitle']  = isset($input['featured_course_subtitle']) ? sanitize_textarea_field($input['featured_course_subtitle']) : '';
 
 	$output['member_access_title']    = isset($input['member_access_title']) ? sanitize_text_field($input['member_access_title']) : '';
 	$output['member_access_subtitle'] = isset($input['member_access_subtitle']) ? sanitize_textarea_field($input['member_access_subtitle']) : '';

@@ -27,6 +27,9 @@ $is_free       = tenores_is_masteriyo_course_free($course);
 $duration      = tenores_get_masteriyo_course_duration($course);
 $enroll_url    = tenores_get_masteriyo_enroll_url($course);
 
+$is_logged_in = is_user_logged_in();
+$button_text = '';
+
 $installment_value = '';
 if (!$is_free && $price && $installments_count > 0) {
 	if (function_exists('masteriyo_price')) {
@@ -81,18 +84,23 @@ if (!$is_free && $price && $installments_count > 0) {
 						</div>
 					<?php endif; ?>
 
+					<?php
+					if (tenores_is_user_enrolled_in_masteriyo_course($course->get_id())) {
+						$button_text = __('Continuar', 'tenores');
+					} elseif ($is_free) {
+						if (!$is_logged_in) {
+							$button_text = __('Quero meu acesso', 'tenores');
+						} else {
+							$button_text = __('Inscrever-se', 'tenores');
+						}
+					} else {
+						$button_text = __('Investir', 'tenores');
+					}
+					?>
 					<a
 						href="<?php echo esc_url($enroll_url); ?>"
-						class="primary-button px-12 py-4">
-						<?php
-						if (tenores_is_user_enrolled_in_masteriyo_course($course->get_id())) {
-							esc_html_e('Continuar', 'tenores');
-						} elseif ($is_free) {
-							esc_html_e('Inscrever-se', 'tenores');
-						} else {
-							esc_html_e('Investir', 'tenores');
-						}
-						?>
+						class="button primary-button px-12 py-4 add_to_cart_button ajax_add_to_cart">
+						<?php echo esc_html($button_text); ?>
 					</a>
 				</div>
 
@@ -161,18 +169,26 @@ if (!$is_free && $price && $installments_count > 0) {
 							<?php esc_html_e('Ver todas as opções de pagamento', 'tenores'); ?>
 						</a>
 
+						<?php
+						$is_logged_in = is_user_logged_in();
+						$button_text_sidebar = '';
+
+						if (tenores_is_user_enrolled_in_masteriyo_course($course->get_id())) {
+							$button_text_sidebar = __('Continuar', 'tenores');
+						} elseif ($is_free) {
+							if (!$is_logged_in) {
+								$button_text_sidebar = __('Quero meu acesso', 'tenores');
+							} else {
+								$button_text_sidebar = __('Inscrever-se', 'tenores');
+							}
+						} else {
+							$button_text_sidebar = __('Investir', 'tenores');
+						}
+						?>
 						<a
 							href="<?php echo esc_url($enroll_url); ?>"
-							class="primary-button w-full">
-							<?php
-							if (tenores_is_user_enrolled_in_masteriyo_course($course->get_id())) {
-								esc_html_e('Continuar', 'tenores');
-							} elseif ($is_free) {
-								esc_html_e('Inscrever-se', 'tenores');
-							} else {
-								esc_html_e('Investir', 'tenores');
-							}
-							?>
+							class="primary-button w-full add_to_cart_button ajax_add_to_cart">
+							<?php echo esc_html($button_text_sidebar); ?>
 						</a>
 					</div>
 				</div>

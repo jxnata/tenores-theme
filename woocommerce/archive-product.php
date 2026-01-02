@@ -41,7 +41,7 @@ $featured_course = tenores_get_featured_course();
 							<?php endif; ?>
 
 							<a
-								href="<?php echo esc_url($featured_course['product']->get_permalink()); ?>"
+								href="<?php echo esc_url($featured_course['url'] ?? ($featured_course['course']->get_permalink() ?? '#')); ?>"
 								class="primary-button">
 								<?php esc_html_e('Inscreva-se agora', 'tenores'); ?>
 							</a>

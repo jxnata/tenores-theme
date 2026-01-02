@@ -2,6 +2,78 @@
 
 Todas as principais alterações no tema serão documentadas nesse arquivo
 
+## 0.0.39 - 2026-01-02
+
+-   Botão "QUERO MEU ACESSO" no header agora aparece apenas para usuários deslogados
+-   Link do menu para "/minha-conta" exibe o texto "Minha Conta" quando o usuário estiver logado
+
+## 0.0.38 - 2026-01-02
+
+-   Corrigido cálculo de progresso do curso que estava sempre retornando 0%
+-   Atualizado para usar `CourseProgressQuery` do Masteriyo para obter o objeto de progresso
+-   Implementado cálculo de progresso usando `get_summary('all')` como nos templates oficiais do Masteriyo
+-   Progresso agora é calculado corretamente: `(completed / total) * 100`
+
+## 0.0.36 - 2025-12-31
+
+-   Criado shortcode `[tenores_cursos]` para exibir cursos Masteriyo com o mesmo layout da página de cursos
+-   Shortcode suporta parâmetros: posts_per_page, category, price (free/paid), pagination
+-   Adicionada documentação do shortcode na página de configurações do tema
+
+## 0.0.35 - 2025-12-31
+
+-   Adicionada verificação se produto já está no carrinho antes de tentar adicionar
+-   Se produto já estiver no carrinho, redireciona diretamente sem fazer requisição AJAX
+-   Criada função `tenores_check_cart()` para verificar status do carrinho via AJAX
+
+## 0.0.34 - 2025-12-31
+
+-   Corrigido problema de botão "Investir" que precisava ser clicado duas vezes
+-   Melhorado seletor JavaScript usando delegação de eventos para garantir captura correta
+-   Adicionada verificação de productId antes de interceptar o clique
+-   Adicionado handler `complete` para garantir reset de isProcessing em caso de erro
+
+## 0.0.33 - 2025-12-31
+
+-   Substituído campo "Produto em destaque" por "Curso em destaque" (Masteriyo) nas configurações do tema
+-   Função `tenores_get_featured_course()` atualizada para buscar curso Masteriyo ao invés de produto WooCommerce
+-   Todos os templates que usam curso em destaque atualizados para usar curso Masteriyo
+
+## 0.0.32 - 2025-12-31
+
+-   Corrigido acúmulo de mensagens de notificação do WooCommerce
+-   Adicionada limpeza automática de mensagens ao carregar página do curso
+-   Melhorado JavaScript para evitar cliques múltiplos no botão de adicionar ao carrinho
+-   Verificação se produto já está no carrinho antes de tentar adicionar novamente
+
+## 0.0.31 - 2025-12-31
+
+-   Ajustado: usuários podem visualizar a página do curso, mas precisam estar logados para acessar a página de aprendizado
+-   Página de aprendizado agora verifica login e inscrição antes de permitir acesso
+
+## 0.0.30 - 2025-12-31
+
+-   Ajustado botão de cursos gratuitos: usuários não logados veem "Quero meu acesso" e são redirecionados para login/registro
+-   Cursos gratuitos agora exigem login antes de acessar
+-   Página de aprendizado (learn.php) ajustada com identidade visual do tema (cores primary, secondary, dark, light)
+-   Adicionado CSS customizado para elementos do Masteriyo na página de aprendizado
+
+## 0.0.29 - 2025-12-31
+
+-   Implementada adição ao carrinho via AJAX para cursos pagos do Masteriyo
+-   Adiciona produto ao carrinho via AJAX e redireciona para o carrinho após sucesso
+
+## 0.0.28 - 2025-12-31
+
+-   Corrigida função `tenores_get_masteriyo_enroll_url()` para usar produto WooCommerce quando Masteriyo está integrado com WooCommerce
+-   Agora cursos pagos redirecionam corretamente para a página do produto WooCommerce
+
+## 0.0.27 - 2025-12-31
+
+-   Criado template `masteriyo/learn.php` para página de aprendizado do curso
+-   Melhorada função `tenores_get_masteriyo_enroll_url()` para usar métodos corretos do Masteriyo (start_course_url, continue_course_url, add_to_cart_url)
+-   Corrigido fluxo de inscrição e início de cursos
+
 ## 0.0.26 - 2025-12-31
 
 -   Adicionado item de menu "Cursos" no painel WordPress para acesso rápido aos cursos Masteriyo

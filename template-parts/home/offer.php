@@ -9,7 +9,7 @@
 $settings = tenores_get_theme_settings();
 
 $featured_course  = function_exists('tenores_get_featured_course') ? tenores_get_featured_course() : [];
-$featured_product = (!empty($featured_course['product']) && class_exists('WooCommerce')) ? $featured_course['product'] : null;
+$featured_masteriyo_course = (!empty($featured_course['course'])) ? $featured_course['course'] : null;
 
 $discount_percentage             = null;
 $original_price_html             = '';
@@ -18,19 +18,29 @@ $original_installment_price_html = '';
 $current_installment_price_html  = '';
 $installments_count              = !empty($settings['installments_count']) ? max(1, (int) $settings['installments_count']) : 12;
 
-if ($featured_product && is_object($featured_product) && method_exists($featured_product, 'get_regular_price')) {
-    $regular_price = (float) $featured_product->get_regular_price();
-    $sale_price    = (float) $featured_product->get_sale_price();
-    $current_price = $sale_price > 0 ? $sale_price : (float) $featured_product->get_price();
+// Calcula preços para curso Masteriyo
+if ($featured_masteriyo_course && method_exists($featured_masteriyo_course, 'get_price')) {
+    $regular_price = method_exists($featured_masteriyo_course, 'get_regular_price') ? (float) $featured_masteriyo_course->get_regular_price() : 0;
+    $current_price = (float) $featured_masteriyo_course->get_price();
 
     if ($regular_price > 0) {
-        $original_price_html             = wc_price($regular_price);
-        $original_installment_price_html = $installments_count > 0 ? wc_price($regular_price / $installments_count) : '';
+        if (function_exists('masteriyo_price')) {
+            $original_price_html             = masteriyo_price($regular_price);
+            $original_installment_price_html = $installments_count > 0 ? masteriyo_price($regular_price / $installments_count) : '';
+        } else {
+            $original_price_html             = wc_price($regular_price);
+            $original_installment_price_html = $installments_count > 0 ? wc_price($regular_price / $installments_count) : '';
+        }
     }
 
     if ($current_price > 0) {
-        $current_price_html             = wc_price($current_price);
-        $current_installment_price_html = $installments_count > 0 ? wc_price($current_price / $installments_count) : '';
+        if (function_exists('masteriyo_price')) {
+            $current_price_html             = masteriyo_price($current_price);
+            $current_installment_price_html = $installments_count > 0 ? masteriyo_price($current_price / $installments_count) : '';
+        } else {
+            $current_price_html             = wc_price($current_price);
+            $current_installment_price_html = $installments_count > 0 ? wc_price($current_price / $installments_count) : '';
+        }
     }
 
     if ($regular_price > 0 && $current_price > 0 && $current_price < $regular_price) {
@@ -47,7 +57,7 @@ if ($featured_product && is_object($featured_product) && method_exists($featured
 
         <div class="mt-8 rounded-3xl bg-tertiary text-light px-8 py-10 lg:px-10 lg:py-12 shadow-2xl shadow-black/30 w-full transition-all duration-300 hover:shadow-3xl">
             <div class="flex flex-col lg:flex-row gap-12 lg:gap-8 items-center">
-                <?php if ($featured_product) : ?>
+                <?php if ($featured_masteriyo_course) : ?>
                     <div class="w-full flex flex-col gap-2 flex-1 items-center lg:items-start">
                         <p class="w-fit text-6xl text-center lg:text-left lg:text-7xl xl:text-8xl font-black leading-tight tracking-widest border-b border-light/60 animate-pulse">
                             <?php if ($discount_percentage) : ?>

@@ -89,7 +89,7 @@
 
                         <?php
                         $settings = tenores_get_theme_settings();
-                        if (!empty($settings['cto_url'])):
+                        if (!empty($settings['cto_url']) && !is_user_logged_in()):
                         ?>
                             <a href="<?php echo esc_url($settings['cto_url']); ?>" class="primary-button">
                                 QUERO MEU ACESSO

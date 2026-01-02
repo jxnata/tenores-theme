@@ -75,3 +75,21 @@ function tenores_replace_home_menu_icon($title, $item, $args, $depth)
 }
 
 add_filter('nav_menu_item_title', 'tenores_replace_home_menu_icon', 10, 4);
+
+/**
+ * Altera o texto do link "/minha-conta" para "Minha Conta" quando o usuário estiver logado.
+ */
+function tenores_replace_my_account_menu_text($title, $item, $args, $depth)
+{
+    if (isset($args->theme_location) && $args->theme_location === 'primary' && is_user_logged_in()) {
+        $my_account_url = home_url('/minha-conta');
+        
+        if ($item->url === $my_account_url || $item->url === trailingslashit($my_account_url)) {
+            return 'Minha Conta';
+        }
+    }
+
+    return $title;
+}
+
+add_filter('nav_menu_item_title', 'tenores_replace_my_account_menu_text', 10, 4);

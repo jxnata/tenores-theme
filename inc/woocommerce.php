@@ -60,28 +60,34 @@ function tenores_get_featured_course(): array
 {
 	$settings = tenores_get_theme_settings();
 
-	$product_id = !empty($settings['featured_course_product']) ? absint($settings['featured_course_product']) : 0;
-	$banner_id  = !empty($settings['featured_course_banner']) ? absint($settings['featured_course_banner']) : 0;
-	$title      = !empty($settings['featured_course_title']) ? $settings['featured_course_title'] : '';
-	$subtitle   = !empty($settings['featured_course_subtitle']) ? $settings['featured_course_subtitle'] : '';
+	$course_id = !empty($settings['featured_course_masteriyo']) ? absint($settings['featured_course_masteriyo']) : 0;
+	$banner_id = !empty($settings['featured_course_banner']) ? absint($settings['featured_course_banner']) : 0;
+	$title     = !empty($settings['featured_course_title']) ? $settings['featured_course_title'] : '';
+	$subtitle  = !empty($settings['featured_course_subtitle']) ? $settings['featured_course_subtitle'] : '';
 
-	if (!$product_id || !class_exists('WooCommerce')) {
+	if (!$course_id || !function_exists('masteriyo_get_course')) {
 		return [];
 	}
 
-	$product = wc_get_product($product_id);
+	// Verifica se Masteriyo está ativo
+	if (!class_exists('Masteriyo\Masteriyo') && !defined('MASTERIYO_VERSION')) {
+		return [];
+	}
 
-	if (!$product) {
+	$course = masteriyo_get_course($course_id);
+
+	if (!$course) {
 		return [];
 	}
 
 	$banner_url = $banner_id ? wp_get_attachment_image_url($banner_id, 'full') : '';
 
 	return [
-		'product'   => $product,
-		'banner'    => $banner_url,
-		'title'     => $title,
-		'subtitle'  => $subtitle,
+		'course'   => $course,
+		'banner'   => $banner_url,
+		'title'    => $title,
+		'subtitle' => $subtitle,
+		'url'      => $course->get_permalink(),
 	];
 }
 
