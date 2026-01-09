@@ -156,7 +156,7 @@ if (method_exists($product, 'single_add_to_cart_text')) {
 
 						<a
 							href="<?php echo esc_url($product->add_to_cart_url()); ?>"
-							class="primary-button w-full">
+							class="primary-button w-full add_to_cart_button ajax_add_to_cart">
 							<?php echo esc_html($add_to_cart_text); ?>
 						</a>
 					</div>
