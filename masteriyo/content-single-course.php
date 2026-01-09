@@ -30,6 +30,40 @@ $enroll_url    = tenores_get_masteriyo_enroll_url($course);
 $is_logged_in = is_user_logged_in();
 $button_text = '';
 
+// Verifica controle de acesso do curso
+$course_id = method_exists($course, 'get_id') ? $course->get_id() : 0;
+$can_access_course = true;
+$access_denial_reason = 'none';
+$is_subscribers_only = false;
+$subscription_product_url = '';
+
+if ($course_id && function_exists('tenores_user_can_access_content')) {
+	$can_access_course = tenores_user_can_access_content($course_id);
+
+	if (!$can_access_course) {
+		$access_denial_reason = function_exists('tenores_get_access_denial_reason') ? tenores_get_access_denial_reason($course_id) : 'not_logged_in';
+
+		// Verifica se é apenas para assinantes
+		if (function_exists('tenores_get_content_access')) {
+			$access_level = tenores_get_content_access($course_id);
+			$is_subscribers_only = ($access_level === 'subscribers');
+		}
+
+		// Se não é assinante, busca URL do produto de assinatura
+		if ($access_denial_reason === 'not_subscriber' && $is_subscribers_only) {
+			$settings = function_exists('tenores_get_theme_settings') ? tenores_get_theme_settings() : [];
+			$subscription_product_id = !empty($settings['subscription_product_id']) ? absint($settings['subscription_product_id']) : 0;
+
+			if ($subscription_product_id && function_exists('wc_get_product')) {
+				$product = wc_get_product($subscription_product_id);
+				if ($product) {
+					$subscription_product_url = $product->get_permalink();
+				}
+			}
+		}
+	}
+}
+
 $installment_value = '';
 if (!$is_free && $price && $installments_count > 0) {
 	if (function_exists('masteriyo_price')) {
@@ -85,23 +119,46 @@ if (!$is_free && $price && $installments_count > 0) {
 					<?php endif; ?>
 
 					<?php
-					if (tenores_is_user_enrolled_in_masteriyo_course($course->get_id())) {
-						$button_text = __('Continuar', 'tenores');
-					} elseif ($is_free) {
-						if (!$is_logged_in) {
-							$button_text = __('Quero meu acesso', 'tenores');
-						} else {
-							$button_text = __('Inscrever-se', 'tenores');
-						}
+					// Se o curso é apenas para assinantes e o usuário não é assinante
+					if ($is_subscribers_only && $access_denial_reason === 'not_subscriber') {
+					?>
+						<div class="mb-4 p-4 bg-yellow-500/20 border border-yellow-500/50 rounded-lg">
+							<p class="text-white font-semibold mb-2">
+								<?php esc_html_e('Este curso é exclusivo para assinantes', 'tenores'); ?>
+							</p>
+							<p class="text-white/90 text-sm mb-4">
+								<?php esc_html_e('Você precisa ter uma assinatura ativa para se inscrever neste curso.', 'tenores'); ?>
+							</p>
+							<?php if ($subscription_product_url) : ?>
+								<a
+									href="<?php echo esc_url($subscription_product_url); ?>"
+									class="primary-button px-12 py-4 inline-block">
+									<?php esc_html_e('Assinar Agora', 'tenores'); ?>
+								</a>
+							<?php endif; ?>
+						</div>
+					<?php
 					} else {
-						$button_text = __('Investir', 'tenores');
+						if (tenores_is_user_enrolled_in_masteriyo_course($course->get_id())) {
+							$button_text = __('Continuar', 'tenores');
+						} elseif ($is_free) {
+							if (!$is_logged_in) {
+								$button_text = __('Quero meu acesso', 'tenores');
+							} else {
+								$button_text = __('Inscrever-se', 'tenores');
+							}
+						} else {
+							$button_text = __('Investir', 'tenores');
+						}
+					?>
+						<a
+							href="<?php echo esc_url($enroll_url); ?>"
+							class="button primary-button px-12 py-4 add_to_cart_button ajax_add_to_cart">
+							<?php echo esc_html($button_text); ?>
+						</a>
+					<?php
 					}
 					?>
-					<a
-						href="<?php echo esc_url($enroll_url); ?>"
-						class="button primary-button px-12 py-4 add_to_cart_button ajax_add_to_cart">
-						<?php echo esc_html($button_text); ?>
-					</a>
 				</div>
 
 				<div class="lg:col-span-1 lg:absolute lg:top-64 lg:right-12 lg:max-w-xs shadow-2xl rounded-[2.5rem]">
@@ -165,31 +222,50 @@ if (!$is_free && $price && $installments_count > 0) {
 							<?php endif; ?>
 						<?php endif; ?>
 
-						<a href="#" class="text-sm font-semibold underline mb-6 inline-block">
-							<?php esc_html_e('Ver todas as opções de pagamento', 'tenores'); ?>
-						</a>
-
 						<?php
-						$is_logged_in = is_user_logged_in();
-						$button_text_sidebar = '';
-
-						if (tenores_is_user_enrolled_in_masteriyo_course($course->get_id())) {
-							$button_text_sidebar = __('Continuar', 'tenores');
-						} elseif ($is_free) {
-							if (!$is_logged_in) {
-								$button_text_sidebar = __('Quero meu acesso', 'tenores');
-							} else {
-								$button_text_sidebar = __('Inscrever-se', 'tenores');
-							}
+						if (!$can_access_course && $access_denial_reason === 'not_subscriber') {
+							// Curso apenas para assinantes e usuário não é assinante
+						?>
+							<div class="mb-4 p-4 bg-yellow-500/20 border border-yellow-500/50 rounded-lg">
+								<p class="text-white font-semibold mb-2 text-sm">
+									<?php esc_html_e('Exclusivo para assinantes', 'tenores'); ?>
+								</p>
+								<p class="text-white/90 text-xs mb-4">
+									<?php esc_html_e('Assine para ter acesso a este curso.', 'tenores'); ?>
+								</p>
+								<?php if ($subscription_product_url) : ?>
+									<a
+										href="<?php echo esc_url($subscription_product_url); ?>"
+										class="primary-button w-full text-center block">
+										<?php esc_html_e('Assinar Agora', 'tenores'); ?>
+									</a>
+								<?php endif; ?>
+							</div>
+						<?php
 						} else {
-							$button_text_sidebar = __('Investir', 'tenores');
+							$is_logged_in = is_user_logged_in();
+							$button_text_sidebar = '';
+
+							if (tenores_is_user_enrolled_in_masteriyo_course($course->get_id())) {
+								$button_text_sidebar = __('Continuar', 'tenores');
+							} elseif ($is_free) {
+								if (!$is_logged_in) {
+									$button_text_sidebar = __('Quero meu acesso', 'tenores');
+								} else {
+									$button_text_sidebar = __('Inscrever-se', 'tenores');
+								}
+							} else {
+								$button_text_sidebar = __('Investir', 'tenores');
+							}
+						?>
+							<a
+								href="<?php echo esc_url($enroll_url); ?>"
+								class="primary-button w-full add_to_cart_button ajax_add_to_cart">
+								<?php echo esc_html($button_text_sidebar); ?>
+							</a>
+						<?php
 						}
 						?>
-						<a
-							href="<?php echo esc_url($enroll_url); ?>"
-							class="primary-button w-full add_to_cart_button ajax_add_to_cart">
-							<?php echo esc_html($button_text_sidebar); ?>
-						</a>
 					</div>
 				</div>
 			</div>

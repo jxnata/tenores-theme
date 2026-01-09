@@ -2,6 +2,13 @@
 
 Todas as principais alterações no tema serão documentadas nesse arquivo
 
+## 1.0.4 - 2026-01-09
+
+-   Implementada verificação de controle de acesso na função `tenores_get_masteriyo_enroll_url()` para impedir enroll em cursos apenas para assinantes quando o usuário não é assinante
+-   Atualizada página de visualização do curso (`content-single-course.php`) para verificar controle de acesso e exibir mensagem informativa quando o curso é exclusivo para assinantes
+-   Botão de enroll agora é substituído por mensagem e botão para assinatura quando o curso é apenas para assinantes e o usuário não é assinante
+-   Verificação de controle de acesso na página de aprendizado (`learn.php`) já estava implementada e funcionando corretamente
+
 ## 1.0.0 - 2026-01-09
 
 -   Controle de acesso dos cursos Masteriyo agora é aplicado apenas na área de aprendizado (learn.php)

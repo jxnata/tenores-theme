@@ -319,6 +319,37 @@ function tenores_get_masteriyo_enroll_url($course): string
 		return '#';
 	}
 
+	// Verifica controle de acesso do curso
+	if (function_exists('tenores_user_can_access_content')) {
+		$can_access = tenores_user_can_access_content($course_id);
+		
+		if (!$can_access) {
+			// Verifica o motivo da negação
+			$denial_reason = function_exists('tenores_get_access_denial_reason') ? tenores_get_access_denial_reason($course_id) : 'not_logged_in';
+			
+			if ($denial_reason === 'not_logged_in') {
+				// Usuário não está logado, redireciona para login
+				return wc_get_page_permalink('myaccount');
+			}
+			
+			if ($denial_reason === 'not_subscriber') {
+				// Usuário não é assinante, redireciona para produto de assinatura
+				$settings = function_exists('tenores_get_theme_settings') ? tenores_get_theme_settings() : [];
+				$subscription_product_id = !empty($settings['subscription_product_id']) ? absint($settings['subscription_product_id']) : 0;
+				
+				if ($subscription_product_id && function_exists('wc_get_product')) {
+					$product = wc_get_product($subscription_product_id);
+					if ($product) {
+						return $product->get_permalink();
+					}
+				}
+				
+				// Fallback: retorna # para desabilitar o botão
+				return '#';
+			}
+		}
+	}
+
 	// Verifica se o usuário pode iniciar o curso (já está inscrito)
 	if (function_exists('masteriyo_can_start_course')) {
 		if (masteriyo_can_start_course($course)) {
