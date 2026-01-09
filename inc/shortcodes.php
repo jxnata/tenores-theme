@@ -127,6 +127,7 @@ add_shortcode('tenores_posts_membros', 'tenores_members_posts_shortcode');
  *   - posts_per_page: Número de cursos por página (padrão: 9)
  *   - category: Slug da categoria (opcional)
  *   - price: Tipo de preço - "free" ou "paid" (opcional)
+ *   - access: Nível de acesso - "public", "members" ou "subscribers" (opcional)
  *   - pagination: Exibir paginação - "true" ou "false" (padrão: "true")
  * @return string HTML dos cursos.
  */
@@ -136,6 +137,7 @@ function tenores_courses_shortcode($atts = []): string
 		'posts_per_page' => 9,
 		'category'       => '',
 		'price'          => '',
+		'access'         => '',
 		'pagination'     => 'true',
 	], $atts, 'tenores_cursos');
 
@@ -171,10 +173,12 @@ function tenores_courses_shortcode($atts = []): string
 		];
 	}
 
+	// Meta query para filtros de preço e acesso
+	$meta_query = [];
+
 	// Filtro por preço
 	if (!empty($atts['price'])) {
 		$price_filter = strtolower(sanitize_text_field($atts['price']));
-		$meta_query = [];
 
 		if ($price_filter === 'free') {
 			$meta_query[] = [
@@ -190,10 +194,59 @@ function tenores_courses_shortcode($atts = []): string
 				'type'    => 'NUMERIC',
 			];
 		}
+	}
 
-		if (!empty($meta_query)) {
-			$query_args['meta_query'] = $meta_query;
+	// Filtro por nível de acesso
+	if (!empty($atts['access'])) {
+		$access_filter = strtolower(sanitize_text_field($atts['access']));
+
+		// Mapear valores alternativos para os valores padrão
+		$access_map = [
+			'public'     => 'public',
+			'livre'      => 'public',
+			'free'       => 'public',
+			'members'    => 'members',
+			'membros'    => 'members',
+			'registered' => 'members',
+			'registrados' => 'members',
+			'subscribers' => 'subscribers',
+			'assinantes'  => 'subscribers',
+		];
+
+		$access_value = isset($access_map[$access_filter]) ? $access_map[$access_filter] : $access_filter;
+		$valid_access = ['public', 'members', 'subscribers'];
+
+		if (in_array($access_value, $valid_access, true)) {
+			if ($access_value === 'public') {
+				// Para acesso público, inclui cursos sem meta definida OU com meta = public
+				$meta_query[] = [
+					'relation' => 'OR',
+					[
+						'key'     => '_tenores_content_access',
+						'value'   => 'public',
+						'compare' => '=',
+					],
+					[
+						'key'     => '_tenores_content_access',
+						'compare' => 'NOT EXISTS',
+					],
+				];
+			} else {
+				$meta_query[] = [
+					'key'     => '_tenores_content_access',
+					'value'   => $access_value,
+					'compare' => '=',
+				];
+			}
 		}
+	}
+
+	// Adiciona meta_query se houver filtros
+	if (!empty($meta_query)) {
+		if (count($meta_query) > 1) {
+			$meta_query['relation'] = 'AND';
+		}
+		$query_args['meta_query'] = $meta_query;
 	}
 
 	// Executa query

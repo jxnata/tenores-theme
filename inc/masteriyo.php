@@ -423,8 +423,34 @@ function tenores_render_course_meta_box($post): void
 	wp_nonce_field('tenores_course_meta_box', 'tenores_course_meta_box_nonce');
 
 	$short_description = get_post_meta($post->ID, '_tenores_course_short_description', true);
+	$current_access = function_exists('tenores_get_content_access') ? tenores_get_content_access($post->ID) : 'public';
+
+	$access_options = [
+		'public'      => __('Acesso livre', 'tenores'),
+		'members'     => __('Apenas Usuários Registrados', 'tenores'),
+		'subscribers' => __('Apenas Assinantes', 'tenores'),
+	];
 ?>
 	<table class="form-table">
+		<tr>
+			<th scope="row">
+				<label for="tenores_course_access">
+					<?php esc_html_e('Controle de Acesso', 'tenores'); ?>
+				</label>
+			</th>
+			<td>
+				<select id="tenores_course_access" name="tenores_course_access" class="regular-text">
+					<?php foreach ($access_options as $value => $label) : ?>
+						<option value="<?php echo esc_attr($value); ?>" <?php selected($current_access, $value); ?>>
+							<?php echo esc_html($label); ?>
+						</option>
+					<?php endforeach; ?>
+				</select>
+				<p class="description">
+					<?php esc_html_e('Defina quem pode acessar este curso. Assinantes são usuários com uma assinatura ativa do produto configurado nas opções do tema.', 'tenores'); ?>
+				</p>
+			</td>
+		</tr>
 		<tr>
 			<th scope="row">
 				<label for="tenores_course_short_description">
@@ -468,6 +494,17 @@ function tenores_save_course_meta_box($post_id): void
 		return;
 	}
 
+	// Salvar controle de acesso
+	if (isset($_POST['tenores_course_access'])) {
+		$access = sanitize_text_field($_POST['tenores_course_access']);
+		$valid_access = ['public', 'members', 'subscribers'];
+
+		if (in_array($access, $valid_access, true)) {
+			update_post_meta($post_id, '_tenores_content_access', $access);
+		}
+	}
+
+	// Salvar descrição curta
 	if (isset($_POST['tenores_course_short_description'])) {
 		update_post_meta(
 			$post_id,
@@ -520,7 +557,8 @@ function tenores_add_course_row_actions(array $actions, $post): array
 add_filter('post_row_actions', 'tenores_add_course_row_actions', 10, 2);
 
 /**
- * Add "Cursos" tab to WooCommerce My Account page and remove "Dashboard" tab.
+ * Customize WooCommerce My Account menu items.
+ * Keeps dashboard and adds "Cursos" tab.
  */
 function tenores_add_courses_my_account_tab($items): array
 {
@@ -528,11 +566,14 @@ function tenores_add_courses_my_account_tab($items): array
 		return $items;
 	}
 
-	// Remove dashboard tab
+	// Get dashboard item if exists
+	$dashboard = isset($items['dashboard']) ? ['dashboard' => $items['dashboard']] : [];
+
+	// Remove dashboard from original array to reorder
 	unset($items['dashboard']);
 
-	// Add cursos tab as first item
-	$new_items = ['cursos' => __('Cursos', 'tenores')] + $items;
+	// Build new items array: Dashboard first, then Cursos, then rest
+	$new_items = $dashboard + ['cursos' => __('Cursos', 'tenores')] + $items;
 
 	return $new_items;
 }

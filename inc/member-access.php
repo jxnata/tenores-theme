@@ -13,6 +13,9 @@ if (!defined('ABSPATH')) {
 // Constantes para níveis de acesso
 const TENORES_ACCESS_PUBLIC = 'public';
 const TENORES_ACCESS_MEMBERS = 'members';
+const TENORES_ACCESS_SUBSCRIBERS = 'subscribers';
+
+// Compatibilidade com valores antigos
 const TENORES_ACCESS_PURCHASERS = 'purchasers';
 
 // Meta key para armazenar nível de acesso
@@ -22,7 +25,7 @@ const TENORES_CONTENT_ACCESS_META = '_tenores_content_access';
  * Retorna o nível de acesso de um conteúdo.
  *
  * @param int $post_id ID do post/página/produto
- * @return string Nível de acesso (public, members, purchasers)
+ * @return string Nível de acesso (public, members, subscribers)
  */
 function tenores_get_content_access(int $post_id): string
 {
@@ -32,16 +35,103 @@ function tenores_get_content_access(int $post_id): string
 		return TENORES_ACCESS_PUBLIC;
 	}
 
-	$valid_access = [TENORES_ACCESS_PUBLIC, TENORES_ACCESS_MEMBERS, TENORES_ACCESS_PURCHASERS];
+	// Compatibilidade com valores antigos
+	if ($access === TENORES_ACCESS_PURCHASERS) {
+		$access = TENORES_ACCESS_SUBSCRIBERS;
+	}
+
+	$valid_access = [TENORES_ACCESS_PUBLIC, TENORES_ACCESS_MEMBERS, TENORES_ACCESS_SUBSCRIBERS];
 
 	return in_array($access, $valid_access, true) ? $access : TENORES_ACCESS_PUBLIC;
 }
 
 /**
- * Verifica se um usuário tem compras no WooCommerce.
+ * Verifica se um usuário tem uma assinatura ativa.
+ * Usa o plugin WPSwings Subscriptions for WooCommerce.
+ *
+ * @param int $user_id ID do usuário
+ * @param int|null $product_id ID do produto de assinatura específico (opcional)
+ * @return bool True se o usuário tem uma assinatura ativa
+ */
+function tenores_user_has_active_subscription(int $user_id, ?int $product_id = null): bool
+{
+	if (!class_exists('WooCommerce')) {
+		return false;
+	}
+
+	// Se não foi especificado produto, busca nas configurações do tema
+	if ($product_id === null) {
+		$settings = tenores_get_theme_settings();
+		$product_id = !empty($settings['subscription_product_id']) ? absint($settings['subscription_product_id']) : 0;
+	}
+
+	// Busca assinaturas do usuário via WPSwings Subscriptions
+	$args = [
+		'type'       => 'wps_subscriptions',
+		'meta_query' => [
+			[
+				'key'   => 'wps_customer_id',
+				'value' => $user_id,
+			],
+		],
+		'return' => 'ids',
+		'limit'  => -1,
+	];
+
+	$subscriptions = wc_get_orders($args);
+
+	if (empty($subscriptions) || !is_array($subscriptions)) {
+		return false;
+	}
+
+	foreach ($subscriptions as $subscription_id) {
+		// Verifica status da assinatura
+		$status = get_post_meta($subscription_id, 'wps_subscription_status', true);
+
+		if ($status !== 'active') {
+			continue;
+		}
+
+		// Se não precisa filtrar por produto específico, já encontrou uma ativa
+		if (empty($product_id)) {
+			return true;
+		}
+
+		// Verifica se a assinatura é do produto especificado
+		$parent_order_id = get_post_meta($subscription_id, 'wps_parent_order', true);
+
+		if ($parent_order_id) {
+			$parent_order = wc_get_order($parent_order_id);
+
+			if ($parent_order) {
+				foreach ($parent_order->get_items() as $item) {
+					/** @var WC_Order_Item_Product $item */
+					$item_product_id = method_exists($item, 'get_product_id') ? $item->get_product_id() : 0;
+					$item_variation_id = method_exists($item, 'get_variation_id') ? $item->get_variation_id() : 0;
+
+					if ($item_product_id == $product_id || $item_variation_id == $product_id) {
+						return true;
+					}
+				}
+			}
+		}
+
+		// Fallback: verificar diretamente o produto na assinatura
+		$subscription_product_id = get_post_meta($subscription_id, 'product_id', true);
+		if ($subscription_product_id == $product_id) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+/**
+ * Verifica se um usuário tem compras no WooCommerce (função mantida para compatibilidade).
  *
  * @param int $user_id ID do usuário
  * @return bool True se o usuário tem pelo menos uma compra concluída
+ * @deprecated Use tenores_user_has_active_subscription() instead
  */
 function tenores_user_has_purchases(int $user_id): bool
 {
@@ -49,7 +139,6 @@ function tenores_user_has_purchases(int $user_id): bool
 		return false;
 	}
 
-	// Verificar se a função existe (WooCommerce 3.0+)
 	if (function_exists('wc_get_customer_order_count')) {
 		$order_count = wc_get_customer_order_count($user_id);
 		if ($order_count > 0) {
@@ -57,7 +146,6 @@ function tenores_user_has_purchases(int $user_id): bool
 		}
 	}
 
-	// Verificação adicional: buscar orders com status completed
 	$orders = wc_get_orders([
 		'customer_id' => $user_id,
 		'status'      => 'wc-completed',
@@ -99,12 +187,54 @@ function tenores_user_can_access_content(int $post_id, ?int $user_id = null): bo
 		return true;
 	}
 
-	// Membros com compras: precisa ter pelo menos uma compra
-	if ($access_level === TENORES_ACCESS_PURCHASERS) {
-		return tenores_user_has_purchases($user_id);
+	// Apenas assinantes: precisa ter uma assinatura ativa
+	if ($access_level === TENORES_ACCESS_SUBSCRIBERS) {
+		return tenores_user_has_active_subscription($user_id);
 	}
 
 	return false;
+}
+
+/**
+ * Retorna o motivo pelo qual o usuário não pode acessar o conteúdo.
+ *
+ * @param int $post_id ID do post/página/produto
+ * @param int|null $user_id ID do usuário (null para usuário atual)
+ * @return string Motivo: 'none' (pode acessar), 'not_logged_in', 'not_member', 'not_subscriber'
+ */
+function tenores_get_access_denial_reason(int $post_id, ?int $user_id = null): string
+{
+	$access_level = tenores_get_content_access($post_id);
+
+	// Conteúdo público sempre acessível
+	if ($access_level === TENORES_ACCESS_PUBLIC) {
+		return 'none';
+	}
+
+	// Se não especificou usuário, usar o atual
+	if ($user_id === null) {
+		$user_id = get_current_user_id();
+	}
+
+	// Se não está logado
+	if (!$user_id || !is_user_logged_in()) {
+		return 'not_logged_in';
+	}
+
+	// Apenas membros: usuário logado pode acessar
+	if ($access_level === TENORES_ACCESS_MEMBERS) {
+		return 'none';
+	}
+
+	// Apenas assinantes: verifica se tem assinatura ativa
+	if ($access_level === TENORES_ACCESS_SUBSCRIBERS) {
+		if (tenores_user_has_active_subscription($user_id)) {
+			return 'none';
+		}
+		return 'not_subscriber';
+	}
+
+	return 'none';
 }
 
 /**
@@ -140,9 +270,9 @@ function tenores_render_access_meta_box(WP_Post $post): void
 	$current_access = tenores_get_content_access($post->ID);
 
 	$options = [
-		TENORES_ACCESS_PUBLIC     => __('Acesso livre', 'tenores'),
-		TENORES_ACCESS_MEMBERS    => __('Apenas Membros', 'tenores'),
-		TENORES_ACCESS_PURCHASERS => __('Apenas Membros com Compras', 'tenores'),
+		TENORES_ACCESS_PUBLIC      => __('Acesso livre', 'tenores'),
+		TENORES_ACCESS_MEMBERS     => __('Apenas Usuários Registrados', 'tenores'),
+		TENORES_ACCESS_SUBSCRIBERS => __('Apenas Assinantes', 'tenores'),
 	];
 ?>
 	<p>
@@ -161,7 +291,7 @@ function tenores_render_access_meta_box(WP_Post $post): void
 		</select>
 	</p>
 	<p class="description">
-		<?php esc_html_e('Defina quem pode acessar este conteúdo. Membros são usuários registrados no site (mesmo sistema do WooCommerce).', 'tenores'); ?>
+		<?php esc_html_e('Defina quem pode acessar este conteúdo. Assinantes são usuários com uma assinatura ativa do produto configurado nas opções do tema.', 'tenores'); ?>
 	</p>
 <?php
 }
@@ -191,7 +321,7 @@ function tenores_save_access_meta(int $post_id): void
 	// Salvar valor
 	if (isset($_POST['tenores_content_access_field'])) {
 		$access = sanitize_text_field($_POST['tenores_content_access_field']);
-		$valid_access = [TENORES_ACCESS_PUBLIC, TENORES_ACCESS_MEMBERS, TENORES_ACCESS_PURCHASERS];
+		$valid_access = [TENORES_ACCESS_PUBLIC, TENORES_ACCESS_MEMBERS, TENORES_ACCESS_SUBSCRIBERS];
 
 		if (in_array($access, $valid_access, true)) {
 			update_post_meta($post_id, TENORES_CONTENT_ACCESS_META, $access);
@@ -216,9 +346,9 @@ function tenores_add_product_access_field(): void
 	$current_access = tenores_get_content_access($post->ID);
 
 	$options = [
-		TENORES_ACCESS_PUBLIC     => __('Público - Acesso livre', 'tenores'),
-		TENORES_ACCESS_MEMBERS    => __('Apenas Membros - Usuários registrados', 'tenores'),
-		TENORES_ACCESS_PURCHASERS => __('Apenas Membros com Compras - Usuários que já compraram', 'tenores'),
+		TENORES_ACCESS_PUBLIC      => __('Público - Acesso livre', 'tenores'),
+		TENORES_ACCESS_MEMBERS     => __('Apenas Usuários Registrados', 'tenores'),
+		TENORES_ACCESS_SUBSCRIBERS => __('Apenas Assinantes', 'tenores'),
 	];
 
 	echo '<div class="options_group">';
@@ -229,7 +359,7 @@ function tenores_add_product_access_field(): void
 		'options'     => $options,
 		'value'       => $current_access,
 		'desc_tip'    => true,
-		'description' => __('Defina quem pode acessar este produto. Membros são usuários registrados no site.', 'tenores'),
+		'description' => __('Defina quem pode acessar este produto. Assinantes são usuários com assinatura ativa.', 'tenores'),
 	]);
 
 	echo '</div>';
@@ -250,7 +380,7 @@ function tenores_save_product_access_field(int $post_id): void
 
 	if (isset($_POST['tenores_content_access_field'])) {
 		$access = sanitize_text_field($_POST['tenores_content_access_field']);
-		$valid_access = [TENORES_ACCESS_PUBLIC, TENORES_ACCESS_MEMBERS, TENORES_ACCESS_PURCHASERS];
+		$valid_access = [TENORES_ACCESS_PUBLIC, TENORES_ACCESS_MEMBERS, TENORES_ACCESS_SUBSCRIBERS];
 
 		if (in_array($access, $valid_access, true)) {
 			update_post_meta($post_id, TENORES_CONTENT_ACCESS_META, $access);

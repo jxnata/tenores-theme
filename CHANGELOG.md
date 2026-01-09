@@ -2,6 +2,22 @@
 
 Todas as principais alterações no tema serão documentadas nesse arquivo
 
+## 0.0.40 - 2026-01-09
+
+-   Implementado sistema de controle de acesso por assinatura (substitui "membros com compras")
+-   Adicionado suporte ao plugin WPSwings Subscriptions for WooCommerce para verificação de assinaturas ativas
+-   Nova função `tenores_user_has_active_subscription()` para verificar se usuário tem assinatura ativa do produto configurado
+-   Nova função `tenores_get_access_denial_reason()` para identificar o motivo da restrição de acesso
+-   Adicionado campo de seleção de produto de assinatura nas configurações do tema
+-   Adicionadas mensagens configuráveis para assinantes e não-assinantes na página Minha Conta
+-   Adicionado campo de seleção de página de cursos nas configurações do tema
+-   Adicionado controle de acesso (livre, usuários registrados, assinantes) nos cursos Masteriyo
+-   Atualizado template de conteúdo restrito com botões diferenciados (login vs assinar)
+-   Criado template dashboard.php para página Minha Conta com conteúdo condicional baseado em status de assinatura
+-   Dashboard exibe mensagem de incentivo para não-assinantes e boas-vindas com navegação rápida para assinantes
+-   Menu Minha Conta agora mantém aba Dashboard junto com aba Cursos
+-   Adicionado parâmetro `access` ao shortcode `[tenores_cursos]` para filtrar cursos por nível de acesso (public, members, subscribers)
+
 ## 0.0.39 - 2026-01-02
 
 -   Botão "QUERO MEU ACESSO" no header agora aparece apenas para usuários deslogados

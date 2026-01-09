@@ -36,6 +36,14 @@ function tenores_get_theme_settings(): array
 		'featured_course_subtitle'    => '',
 		'member_access_title'         => __('Conteúdo Exclusivo para Membros', 'tenores'),
 		'member_access_subtitle'      => __('Este conteúdo está disponível apenas para membros registrados. Faça login ou crie uma conta para acessar.', 'tenores'),
+		'subscription_product_id'     => '',
+		'subscriber_access_title'     => __('Conteúdo Exclusivo para Assinantes', 'tenores'),
+		'subscriber_access_subtitle'  => __('Este conteúdo está disponível apenas para assinantes. Assine agora para ter acesso completo.', 'tenores'),
+		'myaccount_non_subscriber_title'   => __('Seja um Assinante!', 'tenores'),
+		'myaccount_non_subscriber_message' => __('Assine agora e tenha acesso a todos os cursos e conteúdos exclusivos da plataforma.', 'tenores'),
+		'myaccount_subscriber_title'       => __('Bem-vindo, Assinante!', 'tenores'),
+		'myaccount_subscriber_message'     => __('Você já é um assinante ativo. Aproveite todos os cursos e conteúdos exclusivos disponíveis.', 'tenores'),
+		'courses_page_id'             => '',
 		'google_oauth_enabled'        => 0,
 		'google_oauth_client_id'      => '',
 		'google_oauth_client_secret'   => '',
@@ -323,8 +331,19 @@ function tenores_register_theme_settings(): void
 	);
 
 	add_settings_field(
+		'tenores_subscription_product_id',
+		__('Produto de Assinatura', 'tenores'),
+		'tenores_render_subscription_product_select_field',
+		'tenores_theme_settings',
+		'tenores_theme_member_access_section',
+		[
+			'key' => 'subscription_product_id',
+		]
+	);
+
+	add_settings_field(
 		'tenores_member_access_title',
-		__('Título da mensagem de acesso restrito', 'tenores'),
+		__('Título da mensagem para não-logados', 'tenores'),
 		'tenores_render_text_field',
 		'tenores_theme_settings',
 		'tenores_theme_member_access_section',
@@ -337,13 +356,106 @@ function tenores_register_theme_settings(): void
 
 	add_settings_field(
 		'tenores_member_access_subtitle',
-		__('Subtítulo da mensagem de acesso restrito', 'tenores'),
+		__('Subtítulo da mensagem para não-logados', 'tenores'),
 		'tenores_render_textarea_field',
 		'tenores_theme_settings',
 		'tenores_theme_member_access_section',
 		[
 			'key'         => 'member_access_subtitle',
 			'placeholder' => __('Este conteúdo está disponível apenas para membros registrados. Faça login ou crie uma conta para acessar.', 'tenores'),
+		]
+	);
+
+	add_settings_field(
+		'tenores_subscriber_access_title',
+		__('Título da mensagem para não-assinantes', 'tenores'),
+		'tenores_render_text_field',
+		'tenores_theme_settings',
+		'tenores_theme_member_access_section',
+		[
+			'key'         => 'subscriber_access_title',
+			'type'        => 'text',
+			'placeholder' => __('Conteúdo Exclusivo para Assinantes', 'tenores'),
+		]
+	);
+
+	add_settings_field(
+		'tenores_subscriber_access_subtitle',
+		__('Subtítulo da mensagem para não-assinantes', 'tenores'),
+		'tenores_render_textarea_field',
+		'tenores_theme_settings',
+		'tenores_theme_member_access_section',
+		[
+			'key'         => 'subscriber_access_subtitle',
+			'placeholder' => __('Este conteúdo está disponível apenas para assinantes. Assine agora para ter acesso completo.', 'tenores'),
+		]
+	);
+
+	add_settings_section(
+		'tenores_theme_myaccount_section',
+		__('Página Minha Conta', 'tenores'),
+		'__return_false',
+		'tenores_theme_settings'
+	);
+
+	add_settings_field(
+		'tenores_courses_page_id',
+		__('Página de Cursos', 'tenores'),
+		'tenores_render_page_select_field',
+		'tenores_theme_settings',
+		'tenores_theme_myaccount_section',
+		[
+			'key' => 'courses_page_id',
+		]
+	);
+
+	add_settings_field(
+		'tenores_myaccount_non_subscriber_title',
+		__('Título para não-assinantes', 'tenores'),
+		'tenores_render_text_field',
+		'tenores_theme_settings',
+		'tenores_theme_myaccount_section',
+		[
+			'key'         => 'myaccount_non_subscriber_title',
+			'type'        => 'text',
+			'placeholder' => __('Seja um Assinante!', 'tenores'),
+		]
+	);
+
+	add_settings_field(
+		'tenores_myaccount_non_subscriber_message',
+		__('Mensagem para não-assinantes', 'tenores'),
+		'tenores_render_textarea_field',
+		'tenores_theme_settings',
+		'tenores_theme_myaccount_section',
+		[
+			'key'         => 'myaccount_non_subscriber_message',
+			'placeholder' => __('Assine agora e tenha acesso a todos os cursos e conteúdos exclusivos da plataforma.', 'tenores'),
+		]
+	);
+
+	add_settings_field(
+		'tenores_myaccount_subscriber_title',
+		__('Título para assinantes', 'tenores'),
+		'tenores_render_text_field',
+		'tenores_theme_settings',
+		'tenores_theme_myaccount_section',
+		[
+			'key'         => 'myaccount_subscriber_title',
+			'type'        => 'text',
+			'placeholder' => __('Bem-vindo, Assinante!', 'tenores'),
+		]
+	);
+
+	add_settings_field(
+		'tenores_myaccount_subscriber_message',
+		__('Mensagem para assinantes', 'tenores'),
+		'tenores_render_textarea_field',
+		'tenores_theme_settings',
+		'tenores_theme_myaccount_section',
+		[
+			'key'         => 'myaccount_subscriber_message',
+			'placeholder' => __('Você já é um assinante ativo. Aproveite todos os cursos e conteúdos exclusivos disponíveis.', 'tenores'),
 		]
 	);
 
@@ -487,13 +599,17 @@ function tenores_render_theme_settings_page(): void
 								<code>category="slug-da-categoria"</code> - <?php esc_html_e('Filtrar por categoria de curso (opcional)', 'tenores'); ?><br>
 								<code>price="free"</code> - <?php esc_html_e('Exibir apenas cursos gratuitos', 'tenores'); ?><br>
 								<code>price="paid"</code> - <?php esc_html_e('Exibir apenas cursos pagos', 'tenores'); ?><br>
+								<code>access="public"</code> - <?php esc_html_e('Exibir apenas cursos de acesso livre', 'tenores'); ?><br>
+								<code>access="members"</code> - <?php esc_html_e('Exibir apenas cursos para usuários registrados', 'tenores'); ?><br>
+								<code>access="subscribers"</code> - <?php esc_html_e('Exibir apenas cursos para assinantes', 'tenores'); ?><br>
 								<code>pagination="true"</code> - <?php esc_html_e('Exibir paginação (padrão: true). Use "false" para desabilitar', 'tenores'); ?>
 							</p>
 							<p class="description" style="margin-top: 10px;">
 								<strong><?php esc_html_e('Exemplos:', 'tenores'); ?></strong><br>
 								<code>[tenores_cursos]</code> - <?php esc_html_e('Exibe 9 cursos por página com paginação', 'tenores'); ?><br>
 								<code>[tenores_cursos posts_per_page="6" price="free"]</code> - <?php esc_html_e('Exibe 6 cursos gratuitos por página', 'tenores'); ?><br>
-								<code>[tenores_cursos category="tecnologia" price="paid" pagination="false"]</code> - <?php esc_html_e('Exibe cursos pagos da categoria tecnologia sem paginação', 'tenores'); ?>
+								<code>[tenores_cursos access="subscribers"]</code> - <?php esc_html_e('Exibe apenas cursos exclusivos para assinantes', 'tenores'); ?><br>
+								<code>[tenores_cursos category="tecnologia" access="public"]</code> - <?php esc_html_e('Exibe cursos gratuitos da categoria tecnologia', 'tenores'); ?>
 							</p>
 						</td>
 					</tr>
@@ -665,6 +781,104 @@ function tenores_render_product_select_field(array $args): void
 			'<a href="%s">%s</a>',
 			esc_url(admin_url('edit.php?post_type=product')),
 			esc_html__('Produtos', 'tenores')
+		)
+	);
+	echo '</p>';
+}
+
+function tenores_render_subscription_product_select_field(array $args): void
+{
+	$settings = tenores_get_theme_settings();
+	$key      = $args['key'] ?? '';
+	$value    = isset($settings[$key]) ? (string) $settings[$key] : '';
+
+	if (!class_exists('WooCommerce')) {
+		echo '<p class="description" style="color: #d63638;">';
+		esc_html_e('WooCommerce não está ativo. Ative o plugin para selecionar um produto.', 'tenores');
+		echo '</p>';
+		return;
+	}
+
+	// Busca produtos do tipo subscription (WPSwings Subscriptions for WooCommerce)
+	$products = wc_get_products([
+		'status'  => 'publish',
+		'limit'   => -1,
+		'orderby' => 'title',
+		'order'   => 'ASC',
+		'type'    => ['subscription', 'simple', 'variable'],
+	]);
+
+	printf(
+		'<select id="%1$s" name="%2$s[%1$s]" class="regular-text">',
+		esc_attr($key),
+		esc_attr(TENORES_SETTINGS_OPTION)
+	);
+
+	printf(
+		'<option value="">%s</option>',
+		esc_html__('-- Selecione um produto de assinatura --', 'tenores')
+	);
+
+	foreach ($products as $product) {
+		// Verifica se o produto tem assinatura habilitada (WPSwings)
+		$is_subscription = get_post_meta($product->get_id(), '_wps_sfw_product', true) === 'yes';
+
+		// Mostra apenas produtos com assinatura ou todos se não houver nenhum com assinatura
+		if ($is_subscription) {
+			printf(
+				'<option value="%1$s" %2$s>%3$s</option>',
+				esc_attr($product->get_id()),
+				selected($value, $product->get_id(), false),
+				esc_html($product->get_name())
+			);
+		}
+	}
+
+	echo '</select>';
+	echo '<p class="description">';
+	esc_html_e('Selecione o produto de assinatura que o usuário precisa ter ativo para acessar conteúdo restrito a assinantes.', 'tenores');
+	echo '</p>';
+}
+
+function tenores_render_page_select_field(array $args): void
+{
+	$settings = tenores_get_theme_settings();
+	$key      = $args['key'] ?? '';
+	$value    = isset($settings[$key]) ? (string) $settings[$key] : '';
+
+	$pages = get_pages([
+		'sort_column' => 'post_title',
+		'sort_order'  => 'ASC',
+	]);
+
+	printf(
+		'<select id="%1$s" name="%2$s[%1$s]" class="regular-text">',
+		esc_attr($key),
+		esc_attr(TENORES_SETTINGS_OPTION)
+	);
+
+	printf(
+		'<option value="">%s</option>',
+		esc_html__('-- Selecione uma página --', 'tenores')
+	);
+
+	foreach ($pages as $page) {
+		printf(
+			'<option value="%1$s" %2$s>%3$s</option>',
+			esc_attr($page->ID),
+			selected($value, $page->ID, false),
+			esc_html($page->post_title)
+		);
+	}
+
+	echo '</select>';
+	echo '<p class="description">';
+	printf(
+		esc_html__('Selecione a página. Gerencie páginas em %s.', 'tenores'),
+		sprintf(
+			'<a href="%s">%s</a>',
+			esc_url(admin_url('edit.php?post_type=page')),
+			esc_html__('Páginas', 'tenores')
 		)
 	);
 	echo '</p>';
@@ -896,6 +1110,16 @@ function tenores_sanitize_theme_settings($input): array
 
 	$output['member_access_title']    = isset($input['member_access_title']) ? sanitize_text_field($input['member_access_title']) : '';
 	$output['member_access_subtitle'] = isset($input['member_access_subtitle']) ? sanitize_textarea_field($input['member_access_subtitle']) : '';
+
+	$output['subscription_product_id']     = isset($input['subscription_product_id']) ? absint($input['subscription_product_id']) : '';
+	$output['subscriber_access_title']     = isset($input['subscriber_access_title']) ? sanitize_text_field($input['subscriber_access_title']) : '';
+	$output['subscriber_access_subtitle']  = isset($input['subscriber_access_subtitle']) ? sanitize_textarea_field($input['subscriber_access_subtitle']) : '';
+
+	$output['myaccount_non_subscriber_title']   = isset($input['myaccount_non_subscriber_title']) ? sanitize_text_field($input['myaccount_non_subscriber_title']) : '';
+	$output['myaccount_non_subscriber_message'] = isset($input['myaccount_non_subscriber_message']) ? sanitize_textarea_field($input['myaccount_non_subscriber_message']) : '';
+	$output['myaccount_subscriber_title']       = isset($input['myaccount_subscriber_title']) ? sanitize_text_field($input['myaccount_subscriber_title']) : '';
+	$output['myaccount_subscriber_message']     = isset($input['myaccount_subscriber_message']) ? sanitize_textarea_field($input['myaccount_subscriber_message']) : '';
+	$output['courses_page_id']                  = isset($input['courses_page_id']) ? absint($input['courses_page_id']) : '';
 
 	$output['google_oauth_enabled']      = !empty($input['google_oauth_enabled']) ? 1 : 0;
 	$output['google_oauth_client_id']    = isset($input['google_oauth_client_id']) ? sanitize_text_field($input['google_oauth_client_id']) : '';
