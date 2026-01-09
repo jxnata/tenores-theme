@@ -2,8 +2,10 @@
 
 Todas as principais alterações no tema serão documentadas nesse arquivo
 
-## 0.0.40 - 2026-01-09
+## 1.0.0 - 2026-01-09
 
+-   Controle de acesso dos cursos Masteriyo agora é aplicado apenas na área de aprendizado (learn.php)
+-   Usuários logados sem permissão de assinante são redirecionados para o produto de assinatura configurado no tema ao tentar acessar área de aprendizado
 -   Implementado sistema de controle de acesso por assinatura (substitui "membros com compras")
 -   Adicionado suporte ao plugin WPSwings Subscriptions for WooCommerce para verificação de assinaturas ativas
 -   Nova função `tenores_user_has_active_subscription()` para verificar se usuário tem assinatura ativa do produto configurado
