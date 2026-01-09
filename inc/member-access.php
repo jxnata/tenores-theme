@@ -402,6 +402,19 @@ function tenores_filter_public_posts_only(WP_Query $query): void
 		return;
 	}
 
+	// Não aplicar em cursos do Masteriyo - eles devem aparecer na listagem independente do controle de acesso
+	$post_type = $query->get('post_type');
+
+	// Verifica se é um archive de cursos do Masteriyo
+	if (is_post_type_archive('mto-course')) {
+		return;
+	}
+
+	// Verifica se o post_type da query é mto-course
+	if ($post_type === 'mto-course' || (is_array($post_type) && in_array('mto-course', $post_type, true))) {
+		return;
+	}
+
 	// Aplicar apenas em páginas de blog (home, archive, category, tag, etc.)
 	if (!is_home() && !is_archive() && !is_category() && !is_tag() && !is_author() && !is_search()) {
 		return;

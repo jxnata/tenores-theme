@@ -5,6 +5,8 @@ Todas as principais alterações no tema serão documentadas nesse arquivo
 ## 1.0.0 - 2026-01-09
 
 -   Controle de acesso dos cursos Masteriyo agora é aplicado apenas na área de aprendizado (learn.php)
+-   Página do curso (single-course.php) agora é sempre pública para permitir visualização e compra
+-   Corrigido filtro de posts públicos para não afetar a listagem de cursos do Masteriyo - todos os cursos aparecem na listagem independente do controle de acesso
 -   Usuários logados sem permissão de assinante são redirecionados para o produto de assinatura configurado no tema ao tentar acessar área de aprendizado
 -   Implementado sistema de controle de acesso por assinatura (substitui "membros com compras")
 -   Adicionado suporte ao plugin WPSwings Subscriptions for WooCommerce para verificação de assinaturas ativas
