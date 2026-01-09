@@ -146,21 +146,21 @@ if ($has_subscription) {
 					<?php esc_html_e('O que você pode fazer aqui', 'tenores'); ?>
 				</h3>
 				<ul class="space-y-3 text-zinc-600">
-					<li class="flex items-start gap-3">
+					<li class="flex items-center gap-3">
 						<i data-lucide="user" class="size-5 text-primary mt-0.5 flex-shrink-0"></i>
-						<span>
+						<span class="mt-0">
 							<?php esc_html_e('Editar seus dados pessoais e informações de perfil.', 'tenores'); ?>
 						</span>
 					</li>
-					<li class="flex items-start gap-3">
+					<li class="flex items-center gap-3">
 						<i data-lucide="map-pin" class="size-5 text-primary mt-0.5 flex-shrink-0"></i>
-						<span>
+						<span class="mt-0">
 							<?php esc_html_e('Atualizar seus endereços de entrega e cobrança.', 'tenores'); ?>
 						</span>
 					</li>
-					<li class="flex items-start gap-3">
+					<li class="flex items-center gap-3">
 						<i data-lucide="shopping-bag" class="size-5 text-primary mt-0.5 flex-shrink-0"></i>
-						<span>
+						<span class="mt-0">
 							<?php esc_html_e('Visualizar seu histórico de pedidos.', 'tenores'); ?>
 						</span>
 					</li>

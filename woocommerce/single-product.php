@@ -50,7 +50,20 @@ $sale_price    = $product->get_sale_price();
 $sale_price_dates_from = get_post_meta($product->get_id(), '_sale_price_dates_from', true);
 $sale_price_dates_to   = get_post_meta($product->get_id(), '_sale_price_dates_to', true);
 
-$installment_value = ($price && $installments_count > 0) ? wc_price($price / $installments_count) : wc_price(0);
+// Verificar se é produto de assinatura (WPSwings)
+$is_subscription = get_post_meta($product->get_id(), '_wps_sfw_product', true) === 'yes';
+// Preço formatado: valor total com período se for assinatura
+$display_price = $price ? wc_price($price) : wc_price(0);
+
+// Texto do botão de compra (padrão do WooCommerce)
+$add_to_cart_text = '';
+if (method_exists($product, 'single_add_to_cart_text')) {
+	$add_to_cart_text = $product->single_add_to_cart_text();
+} elseif (method_exists($product, 'add_to_cart_text')) {
+	$add_to_cart_text = $product->add_to_cart_text();
+} else {
+	$add_to_cart_text = __('Adicionar ao carrinho', 'woocommerce');
+}
 ?>
 
 <main>
@@ -66,11 +79,7 @@ $installment_value = ($price && $installments_count > 0) ? wc_price($price / $in
 		<?php endif; ?>
 
 		<div class="relative container mx-auto">
-			<div class="!text-white">
-				<?php tenores_shop_breadcrumb(); ?>
-			</div>
-
-			<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-16">
+			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 				<div class="lg:col-span-2">
 					<h1 class="text-3xl md:text-4xl font-extrabold text-white my-6">
 						<?php echo esc_html($product->get_name()); ?>
@@ -82,24 +91,14 @@ $installment_value = ($price && $installments_count > 0) ? wc_price($price / $in
 						</div>
 					<?php endif; ?>
 
-					<?php
-					$course_duration = get_post_meta($product->get_id(), '_tenores_course_duration', true);
-					if ($course_duration) :
-					?>
-						<div class="text-white/80 mb-8 flex items-center gap-2">
-							<i data-lucide="clock" class="size-4 align-text-bottom"></i>
-							<span><?php echo esc_html($course_duration); ?></span>
-						</div>
-					<?php endif; ?>
-
 					<a
 						href="<?php echo esc_url($product->add_to_cart_url()); ?>"
 						class="primary-button px-12 py-4">
-						<?php echo esc_html_e('Investir', 'tenores'); ?>
+						<?php echo esc_html($add_to_cart_text); ?>
 					</a>
 				</div>
 
-				<div class="lg:col-span-1 lg:absolute lg:top-64 lg:right-12 lg:max-w-xs shadow-2xl rounded-[2.5rem]">
+				<div class="md:max-w-xs shadow-2xl rounded-[2.5rem]">
 					<div class="bg-dark p-6 pt-16 text-white relative overflow-hidden rounded-[2.5rem]">
 						<div class="bg-secondary w-full h-10 absolute top-0 left-0"></div>
 
@@ -107,21 +106,12 @@ $installment_value = ($price && $installments_count > 0) ? wc_price($price / $in
 							<?php esc_html_e('Investimento', 'tenores'); ?>
 						</h3>
 
-						<p class="text-sm mb-1">
-							<?php esc_html_e('Valores válidos para 2026', 'tenores'); ?>
-						</p>
-
-						<p class="text-sm text-secondary mb-2">
-							<?php
-							printf(
-								esc_html__('No cartão em até %dx de', 'tenores'),
-								(int) $installments_count
-							);
-							?>
+						<p class="text-sm font-semibold mb-1">
+							<?php esc_html_e('Assinatura mensal de apenas', 'tenores'); ?>
 						</p>
 
 						<p class="text-4xl md:text-5xl font-black text-white mb-2">
-							<?php echo wp_kses_post($installment_value); ?>
+							<?php echo wp_kses_post($display_price); ?>
 						</p>
 
 						<?php if ($sale_price && $regular_price && $regular_price > 0) : ?>
@@ -173,7 +163,7 @@ $installment_value = ($price && $installments_count > 0) ? wc_price($price / $in
 						<a
 							href="<?php echo esc_url($product->add_to_cart_url()); ?>"
 							class="primary-button w-full">
-							<?php esc_html_e('Investir', 'tenores'); ?>
+							<?php echo esc_html($add_to_cart_text); ?>
 						</a>
 					</div>
 				</div>

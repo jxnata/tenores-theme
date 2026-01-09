@@ -643,6 +643,21 @@ function tenores_courses_my_account_content(): void
 		}
 	}
 
+	$settings = tenores_get_theme_settings();
+
+	// Get courses page URL
+	$courses_url = '';
+	$courses_page_id = !empty($settings['courses_page_id']) ? absint($settings['courses_page_id']) : 0;
+
+	if ($courses_page_id) {
+		$courses_url = get_permalink($courses_page_id);
+	}
+
+	// Fallback to Masteriyo courses page
+	if (empty($courses_url) && function_exists('masteriyo_get_page_permalink')) {
+		$courses_url = masteriyo_get_page_permalink('courses');
+	}
+
 ?>
 	<div class="tenores-my-account-courses">
 		<?php if (!empty($enrolled_courses)) : ?>
@@ -762,7 +777,7 @@ function tenores_courses_my_account_content(): void
 				<p class="text-zinc-600 text-lg mb-4">
 					<?php esc_html_e('Você ainda não está inscrito em nenhum curso.', 'tenores'); ?>
 				</p>
-				<a href="<?php echo esc_url(get_permalink(wc_get_page_id('shop'))); ?>" class="primary-button inline-block">
+				<a href="<?= $courses_url ?> ?>" class="primary-button inline-block">
 					<?php esc_html_e('Explorar Cursos', 'tenores'); ?>
 				</a>
 			</div>
