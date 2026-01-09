@@ -121,7 +121,7 @@ if ($has_subscription) {
 
 		<?php else : ?>
 			<div class="mb-6">
-				<i data-lucide="sparkles" class="size-16 mx-auto text-primary mb-4"></i>
+				<i data-lucide="crown" class="size-16 mx-auto text-primary mb-4"></i>
 			</div>
 
 			<h2 class="text-2xl md:text-3xl font-bold text-dark mb-4">
@@ -135,32 +135,32 @@ if ($has_subscription) {
 			<?php if (!empty($subscription_url)) : ?>
 				<div class="mb-8">
 					<a href="<?php echo esc_url($subscription_url); ?>" class="primary-button inline-flex items-center gap-2 px-8 py-3">
-						<i data-lucide="crown" class="size-5"></i>
+						<i data-lucide="arrow-right" class="size-5"></i>
 						<?php esc_html_e('Assinar Agora', 'tenores'); ?>
 					</a>
 				</div>
 			<?php endif; ?>
 
 			<div class="bg-light rounded-lg p-6 text-left">
-				<h3 class="font-semibold text-dark mb-4">
+				<h3 class="font-semibold text-dark mb-4 !mt-0">
 					<?php esc_html_e('O que você pode fazer aqui', 'tenores'); ?>
 				</h3>
 				<ul class="space-y-3 text-zinc-600">
 					<li class="flex items-center gap-3">
 						<i data-lucide="user" class="size-5 text-primary mt-0.5 flex-shrink-0"></i>
-						<span class="mt-0">
+						<span class="!mt-0">
 							<?php esc_html_e('Editar seus dados pessoais e informações de perfil.', 'tenores'); ?>
 						</span>
 					</li>
 					<li class="flex items-center gap-3">
 						<i data-lucide="map-pin" class="size-5 text-primary mt-0.5 flex-shrink-0"></i>
-						<span class="mt-0">
+						<span class="!mt-0">
 							<?php esc_html_e('Atualizar seus endereços de entrega e cobrança.', 'tenores'); ?>
 						</span>
 					</li>
 					<li class="flex items-center gap-3">
 						<i data-lucide="shopping-bag" class="size-5 text-primary mt-0.5 flex-shrink-0"></i>
-						<span class="mt-0">
+						<span class="!mt-0">
 							<?php esc_html_e('Visualizar seu histórico de pedidos.', 'tenores'); ?>
 						</span>
 					</li>

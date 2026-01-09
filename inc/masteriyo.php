@@ -777,7 +777,7 @@ function tenores_courses_my_account_content(): void
 				<p class="text-zinc-600 text-lg mb-4">
 					<?php esc_html_e('Você ainda não está inscrito em nenhum curso.', 'tenores'); ?>
 				</p>
-				<a href="<?= $courses_url ?> ?>" class="primary-button inline-block">
+				<a href="<?= $courses_url ?>" class="primary-button inline-block">
 					<?php esc_html_e('Explorar Cursos', 'tenores'); ?>
 				</a>
 			</div>

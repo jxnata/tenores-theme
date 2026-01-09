@@ -90,12 +90,6 @@ if (method_exists($product, 'single_add_to_cart_text')) {
 							<?php echo wp_kses_post($product->get_short_description()); ?>
 						</div>
 					<?php endif; ?>
-
-					<a
-						href="<?php echo esc_url($product->add_to_cart_url()); ?>"
-						class="primary-button px-12 py-4">
-						<?php echo esc_html($add_to_cart_text); ?>
-					</a>
 				</div>
 
 				<div class="md:max-w-xs shadow-2xl rounded-[2.5rem]">
