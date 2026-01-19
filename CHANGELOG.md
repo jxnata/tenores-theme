@@ -2,6 +2,11 @@
 
 Todas as principais alterações no tema serão documentadas nesse arquivo
 
+## 1.0.9 - 2026-01-19
+
+-   Mostrar webinar apenas se a data for no futuro
+-   Correção na seção de oferta na home, para exibir o preço correto da assinatura
+
 ## 1.0.8 - 2026-01-19
 
 -   Seção de oferta (offer.php) agora exibe o preço mensal do produto de assinatura configurado nas configurações do tema ao invés do preço do curso em destaque

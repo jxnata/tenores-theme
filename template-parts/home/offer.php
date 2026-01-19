@@ -36,11 +36,12 @@ if ($subscription_product_id && function_exists('wc_get_product')) {
         </p>
 
         <div class="mt-8 rounded-3xl bg-tertiary text-light px-8 py-10 lg:px-10 lg:py-12 shadow-2xl shadow-black/30 w-full transition-all duration-300 hover:shadow-3xl">
-            <div class="flex flex-col lg:flex-row gap-12 lg:gap-8 items-center">
+            <div class="flex flex-col-reverse lg:flex-row gap-12 lg:gap-8 items-center">
                 <?php if ($subscription_price_html) : ?>
-                    <div class="w-full flex flex-col gap-2 flex-1 items-center lg:items-start">
-                        <p class="mt-1 text-2xl md:text-3xl lg:text-4xl font-regular tracking-tight text-light/60">
-                            <span class="font-bold text-light"><?php echo wp_kses_post($subscription_price_html); ?></span>/mês
+                    <div class="w-full flex flex-col gap-2 flex-1 items-center">
+                        <p class="font-medium text-white/70">Por apenas</p>
+                        <p class="mt-1 text-xl md:text-2xl lg:text-3xl font-bold tracking-tight text-light/80">
+                            <span class="font-black text-5xl md:text-6xl lg:text-7xl text-primary"><?php echo wp_kses_post($subscription_price_html); ?></span>/mês
                         </p>
                     </div>
                 <?php endif; ?>
