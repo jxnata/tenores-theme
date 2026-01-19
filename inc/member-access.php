@@ -59,67 +59,48 @@ function tenores_user_has_active_subscription(int $user_id, ?int $product_id = n
 		return false;
 	}
 
-	// Se não foi especificado produto, busca nas configurações do tema
-	if ($product_id === null) {
-		$settings = tenores_get_theme_settings();
-		$product_id = !empty($settings['subscription_product_id']) ? absint($settings['subscription_product_id']) : 0;
-	}
+	// Busca pedidos pagos ou completos do usuário
+	$orders = wc_get_orders([
+		'customer_id' => $user_id,
+		'status'      => ['wc-completed', 'wc-processing'],
+		'limit'       => -1,
+		'return'      => 'ids',
+	]);
 
-	// Busca assinaturas do usuário via WPSwings Subscriptions
-	$args = [
-		'type'       => 'wps_subscriptions',
-		'meta_query' => [
-			[
-				'key'   => 'wps_customer_id',
-				'value' => $user_id,
-			],
-		],
-		'return' => 'ids',
-		'limit'  => -1,
-	];
-
-	$subscriptions = wc_get_orders($args);
-
-	if (empty($subscriptions) || !is_array($subscriptions)) {
+	if (empty($orders) || !is_array($orders)) {
 		return false;
 	}
 
-	foreach ($subscriptions as $subscription_id) {
-		// Verifica status da assinatura
-		$status = get_post_meta($subscription_id, 'wps_subscription_status', true);
+	// Percorre os pedidos procurando por assinaturas
+	foreach ($orders as $order_id) {
+		// Verifica se o pedido tem o campo wps_subscription_id
+		$subscription_id = get_post_meta($order_id, 'wps_subscription_id', true);
 
-		if ($status !== 'active') {
+		if (empty($subscription_id)) {
 			continue;
 		}
 
-		// Se não precisa filtrar por produto específico, já encontrou uma ativa
-		if (empty($product_id)) {
-			return true;
+		// Busca a assinatura usando o ID
+		$subscription = get_post($subscription_id);
+
+		if (!$subscription) {
+			continue;
 		}
 
-		// Verifica se a assinatura é do produto especificado
-		$parent_order_id = get_post_meta($subscription_id, 'wps_parent_order', true);
+		// Verifica o status da assinatura
+		$status = get_post_meta($subscription_id, 'wps_subscription_status', true);
 
-		if ($parent_order_id) {
-			$parent_order = wc_get_order($parent_order_id);
-
-			if ($parent_order) {
-				foreach ($parent_order->get_items() as $item) {
-					/** @var WC_Order_Item_Product $item */
-					$item_product_id = method_exists($item, 'get_product_id') ? $item->get_product_id() : 0;
-					$item_variation_id = method_exists($item, 'get_variation_id') ? $item->get_variation_id() : 0;
-
-					if ($item_product_id == $product_id || $item_variation_id == $product_id) {
-						return true;
-					}
-				}
+		if ($status === 'active') {
+			// Se não precisa filtrar por produto específico, já encontrou uma ativa
+			if (empty($product_id)) {
+				return true;
 			}
-		}
 
-		// Fallback: verificar diretamente o produto na assinatura
-		$subscription_product_id = get_post_meta($subscription_id, 'product_id', true);
-		if ($subscription_product_id == $product_id) {
-			return true;
+			// Verifica se a assinatura é do produto especificado
+			$subscription_product_id = get_post_meta($subscription_id, 'product_id', true);
+			if ($subscription_product_id == $product_id) {
+				return true;
+			}
 		}
 	}
 

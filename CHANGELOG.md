@@ -2,6 +2,13 @@
 
 Todas as principais alterações no tema serão documentadas nesse arquivo
 
+## 1.0.6 - 2026-01-19
+
+-   Na página de curso Masteriyo, quando o usuário está deslogado e o curso é gratuito, o box de "Investimento" agora exibe o valor mensal do produto de assinatura ao invés de "Gratuito"
+-   Implementada busca automática do produto de assinatura configurado nas configurações do tema quando usuário não está logado e curso é gratuito
+-   Exibição simplificada mostrando apenas o valor mensal da assinatura, sem informações de parcelamento ou desconto
+-   Simplificada função `tenores_user_has_active_subscription()` para buscar assinaturas via pedidos pagos/completos do usuário, verificando campo `wps_subscription_id` e status da assinatura
+
 ## 1.0.4 - 2026-01-09
 
 -   Implementada verificação de controle de acesso na função `tenores_get_masteriyo_enroll_url()` para impedir enroll em cursos apenas para assinantes quando o usuário não é assinante

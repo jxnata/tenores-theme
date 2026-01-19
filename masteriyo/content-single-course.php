@@ -36,6 +36,9 @@ $can_access_course = true;
 $access_denial_reason = 'none';
 $is_subscribers_only = false;
 $subscription_product_url = '';
+$subscription_product_price = '';
+$subscription_product_regular_price = '';
+$subscription_installment_value = '';
 
 if ($course_id && function_exists('tenores_user_can_access_content')) {
 	$can_access_course = tenores_user_can_access_content($course_id);
@@ -58,6 +61,29 @@ if ($course_id && function_exists('tenores_user_can_access_content')) {
 				$product = wc_get_product($subscription_product_id);
 				if ($product) {
 					$subscription_product_url = $product->get_permalink();
+				}
+			}
+		}
+	}
+}
+
+// Se usuário não está logado e curso é gratuito, busca preço do produto de assinatura
+if (!$is_logged_in && $is_free) {
+	$settings = function_exists('tenores_get_theme_settings') ? tenores_get_theme_settings() : [];
+	$subscription_product_id = !empty($settings['subscription_product_id']) ? absint($settings['subscription_product_id']) : 0;
+
+	if ($subscription_product_id && function_exists('wc_get_product')) {
+		$subscription_product = wc_get_product($subscription_product_id);
+		if ($subscription_product) {
+			$subscription_product_price = $subscription_product->get_price();
+
+			if ($subscription_product_price) {
+				if (function_exists('masteriyo_price')) {
+					$subscription_monthly_price = masteriyo_price($subscription_product_price);
+				} elseif (function_exists('wc_price')) {
+					$subscription_monthly_price = wc_price($subscription_product_price);
+				} else {
+					$subscription_monthly_price = 'R$ ' . number_format($subscription_product_price, 2, ',', '.');
 				}
 			}
 		}
@@ -169,7 +195,15 @@ if (!$is_free && $price && $installments_count > 0) {
 							<?php esc_html_e('Investimento', 'tenores'); ?>
 						</h3>
 
-						<?php if ($is_free) : ?>
+						<?php if ($is_free && (!$is_logged_in && $subscription_product_price)) : ?>
+							<p class="text-sm mb-1">
+								<?php esc_html_e('Assinatura mensal de apenas', 'tenores'); ?>
+							</p>
+
+							<p class="text-4xl md:text-5xl font-black text-white mb-4">
+								<?php echo wp_kses_post($subscription_monthly_price); ?>
+							</p>
+						<?php elseif ($is_free) : ?>
 							<p class="text-4xl md:text-5xl font-black text-secondary mb-4">
 								<?php esc_html_e('Gratuito', 'tenores'); ?>
 							</p>
