@@ -10,6 +10,8 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
+use Automattic\WooCommerce\Utilities\OrderUtil;
+
 // Constantes para níveis de acesso
 const TENORES_ACCESS_PUBLIC = 'public';
 const TENORES_ACCESS_MEMBERS = 'members';
@@ -59,52 +61,51 @@ function tenores_user_has_active_subscription(int $user_id, ?int $product_id = n
 		return false;
 	}
 
-	// Busca pedidos pagos ou completos do usuário
-	$orders = wc_get_orders([
-		'customer_id' => $user_id,
-		'status'      => ['wc-completed', 'wc-processing'],
-		'limit'       => -1,
-		'return'      => 'ids',
-	]);
-
-	if (empty($orders) || !is_array($orders)) {
+	if (! function_exists('wps_sfw_get_meta_data')) {
 		return false;
 	}
 
-	// Percorre os pedidos procurando por assinaturas
-	foreach ($orders as $order_id) {
-		// Verifica se o pedido tem o campo wps_subscription_id
-		$subscription_id = get_post_meta($order_id, 'wps_subscription_id', true);
+	$is_hpos = OrderUtil::custom_orders_table_usage_is_enabled();
 
-		if (empty($subscription_id)) {
-			continue;
-		}
-
-		// Busca a assinatura usando o ID
-		$subscription = get_post($subscription_id);
-
-		if (!$subscription) {
-			continue;
-		}
-
-		// Verifica o status da assinatura
-		$status = get_post_meta($subscription_id, 'wps_subscription_status', true);
-
-		if ($status === 'active') {
-			// Se não precisa filtrar por produto específico, já encontrou uma ativa
-			if (empty($product_id)) {
-				return true;
-			}
-
-			// Verifica se a assinatura é do produto especificado
-			$subscription_product_id = get_post_meta($subscription_id, 'product_id', true);
-			if ($subscription_product_id == $product_id) {
-				return true;
-			}
-		}
+	if ($is_hpos) {
+		$args = array(
+			'return' => 'ids',
+			'type'   => 'wps_subscriptions',
+			'limit'  => -1,
+			'meta_query' => array(
+				'relation' => 'AND',
+				array(
+					'key'   => 'wps_customer_id',
+					'value' => $user_id,
+				),
+				array(
+					'key'   => 'wps_subscription_status',
+					'value' => 'active',
+				),
+			),
+		);
+		$subscriptions = wc_get_orders($args);
+	} else {
+		$args = array(
+			'numberposts' => -1,
+			'post_type'   => 'wps_subscriptions',
+			'post_status' => 'wc-wps_renewal',
+			'meta_query' => array(
+				'relation' => 'AND',
+				array(
+					'key'   => 'wps_customer_id',
+					'value' => $user_id,
+				),
+				array(
+					'key'   => 'wps_subscription_status',
+					'value' => 'active',
+				),
+			),
+		);
+		$subscriptions = get_posts($args);
 	}
 
-	return false;
+	return ! empty($subscriptions);
 }
 
 /**
