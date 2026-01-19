@@ -8,43 +8,23 @@
 
 $settings = tenores_get_theme_settings();
 
-$featured_course  = function_exists('tenores_get_featured_course') ? tenores_get_featured_course() : [];
-$featured_masteriyo_course = (!empty($featured_course['course'])) ? $featured_course['course'] : null;
+$subscription_price_html = '';
+$subscription_product_id = !empty($settings['subscription_product_id']) ? absint($settings['subscription_product_id']) : 0;
 
-$discount_percentage             = null;
-$original_price_html             = '';
-$current_price_html              = '';
-$original_installment_price_html = '';
-$current_installment_price_html  = '';
-$installments_count              = !empty($settings['installments_count']) ? max(1, (int) $settings['installments_count']) : 12;
+// Busca o preço do produto de assinatura
+if ($subscription_product_id && function_exists('wc_get_product')) {
+    $subscription_product = wc_get_product($subscription_product_id);
 
-// Calcula preços para curso Masteriyo
-if ($featured_masteriyo_course && method_exists($featured_masteriyo_course, 'get_price')) {
-    $regular_price = method_exists($featured_masteriyo_course, 'get_regular_price') ? (float) $featured_masteriyo_course->get_regular_price() : 0;
-    $current_price = (float) $featured_masteriyo_course->get_price();
+    if ($subscription_product) {
+        $subscription_price = (float) $subscription_product->get_price();
 
-    if ($regular_price > 0) {
-        if (function_exists('masteriyo_price')) {
-            $original_price_html             = masteriyo_price($regular_price);
-            $original_installment_price_html = $installments_count > 0 ? masteriyo_price($regular_price / $installments_count) : '';
-        } else {
-            $original_price_html             = wc_price($regular_price);
-            $original_installment_price_html = $installments_count > 0 ? wc_price($regular_price / $installments_count) : '';
+        if ($subscription_price > 0) {
+            if (function_exists('wc_price')) {
+                $subscription_price_html = wc_price($subscription_price);
+            } else {
+                $subscription_price_html = 'R$ ' . number_format($subscription_price, 2, ',', '.');
+            }
         }
-    }
-
-    if ($current_price > 0) {
-        if (function_exists('masteriyo_price')) {
-            $current_price_html             = masteriyo_price($current_price);
-            $current_installment_price_html = $installments_count > 0 ? masteriyo_price($current_price / $installments_count) : '';
-        } else {
-            $current_price_html             = wc_price($current_price);
-            $current_installment_price_html = $installments_count > 0 ? wc_price($current_price / $installments_count) : '';
-        }
-    }
-
-    if ($regular_price > 0 && $current_price > 0 && $current_price < $regular_price) {
-        $discount_percentage = (int) round((($regular_price - $current_price) / $regular_price) * 100);
     }
 }
 ?>
@@ -57,27 +37,10 @@ if ($featured_masteriyo_course && method_exists($featured_masteriyo_course, 'get
 
         <div class="mt-8 rounded-3xl bg-tertiary text-light px-8 py-10 lg:px-10 lg:py-12 shadow-2xl shadow-black/30 w-full transition-all duration-300 hover:shadow-3xl">
             <div class="flex flex-col lg:flex-row gap-12 lg:gap-8 items-center">
-                <?php if ($featured_masteriyo_course) : ?>
+                <?php if ($subscription_price_html) : ?>
                     <div class="w-full flex flex-col gap-2 flex-1 items-center lg:items-start">
-                        <p class="w-fit text-6xl text-center lg:text-left lg:text-7xl xl:text-8xl font-black leading-tight tracking-widest border-b border-light/60 animate-pulse">
-                            <?php if ($discount_percentage) : ?>
-                                <?php echo esc_html($discount_percentage); ?>% OFF
-                            <?php endif; ?>
-                        </p>
-                        <p class="mt-4 text-sm md:text-lg font-semibold tracking-wider">
-                            <?php if ($original_installment_price_html && $current_installment_price_html) : ?>
-                                De <?php echo esc_html($installments_count); ?>x de <span class="line-through text-light/60"><?php echo wp_kses_post($original_installment_price_html); ?></span> por
-                            <?php endif; ?>
-                        </p>
                         <p class="mt-1 text-2xl md:text-3xl lg:text-4xl font-regular tracking-tight text-light/60">
-                            <?php if ($current_installment_price_html) : ?>
-                                <?php echo esc_html($installments_count); ?>x de <span class="font-bold text-light"><?php echo wp_kses_post($current_installment_price_html); ?></span>/mês
-                            <?php endif; ?>
-                        </p>
-                        <p class="mt-1 text-base md:text-lg text-primary font-semibold">
-                            <?php if ($current_price_html) : ?>
-                                ou à vista de <?php echo wp_kses_post($current_price_html); ?>
-                            <?php endif; ?>
+                            <span class="font-bold text-light"><?php echo wp_kses_post($subscription_price_html); ?></span>/mês
                         </p>
                     </div>
                 <?php endif; ?>

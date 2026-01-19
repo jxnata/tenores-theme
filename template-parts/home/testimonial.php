@@ -37,7 +37,7 @@ $testimonial_query = new WP_Query([
                 data-carousel="true"
                 data-carousel-visible="1"
                 data-carousel-step="1"
-                data-carousel-interval="6000">
+                data-carousel-interval="3000">
                 <div class="flex flex-row transition-transform duration-500 ease-out will-change-transform" data-carousel-track>
                     <?php while ($testimonial_query->have_posts()) : $testimonial_query->the_post(); ?>
                         <div class="px-2 w-full">

@@ -2,6 +2,10 @@
 
 Todas as principais alterações no tema serão documentadas nesse arquivo
 
+## 1.0.8 - 2026-01-19
+
+-   Seção de oferta (offer.php) agora exibe o preço mensal do produto de assinatura configurado nas configurações do tema ao invés do preço do curso em destaque
+
 ## 1.0.6 - 2026-01-19
 
 -   Na página de curso Masteriyo, quando o usuário está deslogado e o curso é gratuito, o box de "Investimento" agora exibe o valor mensal do produto de assinatura ao invés de "Gratuito"

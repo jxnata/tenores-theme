@@ -12,7 +12,7 @@ class Carousel {
 		this.defaultVisibleItems = this.hasFixedVisibleItems ? visibleFromData : options.visibleItems || 1
 		this.visibleItems = this.defaultVisibleItems
 		this.step = !Number.isNaN(stepFromData) ? stepFromData : options.step || 1
-		this.interval = !Number.isNaN(intervalFromData) ? intervalFromData : options.interval || 5000
+		this.interval = !Number.isNaN(intervalFromData) ? intervalFromData : options.interval || 3000
 
 		this.totalItems = this.items.length
 		this.maxIndex = Math.max(0, this.totalItems - this.visibleItems)

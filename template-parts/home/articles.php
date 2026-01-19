@@ -29,7 +29,7 @@ $articles_query = new WP_Query([
             class="mt-10"
             data-carousel="true"
             data-carousel-step="1"
-            data-carousel-interval="6000">
+            data-carousel-interval="5000">
             <div class="flex flex-row transition-transform duration-500 ease-out will-change-transform" data-carousel-track>
                 <?php if ($articles_query->have_posts()) : ?>
                     <?php while ($articles_query->have_posts()) : $articles_query->the_post(); ?>
