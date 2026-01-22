@@ -60,6 +60,7 @@ function tenores_get_featured_course(): array
 {
 	$settings = tenores_get_theme_settings();
 
+	$cto_url = $settings['cto_url'];
 	$course_id = !empty($settings['featured_course_masteriyo']) ? absint($settings['featured_course_masteriyo']) : 0;
 	$banner_id = !empty($settings['featured_course_banner']) ? absint($settings['featured_course_banner']) : 0;
 	$title     = !empty($settings['featured_course_title']) ? $settings['featured_course_title'] : '';
@@ -87,7 +88,7 @@ function tenores_get_featured_course(): array
 		'banner'   => $banner_url,
 		'title'    => $title,
 		'subtitle' => $subtitle,
-		'url'      => $course->get_permalink(),
+		'url'      => $cto_url,
 	];
 }
 
